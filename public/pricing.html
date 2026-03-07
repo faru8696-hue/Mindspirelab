@@ -207,7 +207,7 @@ footer{background:var(--dark2);color:#fff;padding:60px 5% 30px}
     <h1 class="stitle">Simple, transparent pricing</h1>
     <p class="ssub">Choose the plan that fits your goals. Start free with Unit 1, or unlock everything with a paid plan.</p>
     
-    <div class="pricing-grid">
+    <div class="pricing-grid" style="max-width:1100px;grid-template-columns:repeat(auto-fill,minmax(260px,1fr))">
       <!-- FREE -->
       <div class="price-card">
         <div class="price-name">Free Forever</div>
@@ -234,14 +234,14 @@ footer{background:var(--dark2);color:#fff;padding:60px 5% 30px}
         <div class="price-popular">⭐ Most Popular</div>
         <div class="price-name">Platform Access</div>
         <div style="display:flex;align-items:baseline;gap:4px;margin-bottom:4px">
-          <div class="price-amount">$19</div>
+          <div class="price-amount">$25</div>
         </div>
         <div class="price-period">per month</div>
         <div class="price-sub">Full platform for self-study students</div>
         <div class="price-note">💡 Unlock all 9 units + custom test builder. Cancel anytime.</div>
         <ul class="price-features">
           <li><i class="fas fa-check"></i> All 9 AP Chemistry units</li>
-          <li><i class="fas fa-check"></i> 500+ MCQ &amp; FRQ practice questions</li>
+          <li><i class="fas fa-check"></i> 116+ MCQ &amp; FRQ practice questions</li>
           <li><i class="fas fa-check"></i> <strong>Custom test builder</strong> (choose topics, types, count)</li>
           <li><i class="fas fa-check"></i> PYQ 2021–2025 College Board questions</li>
           <li><i class="fas fa-check"></i> Full mastery tracking dashboard</li>
@@ -249,30 +249,46 @@ footer{background:var(--dark2);color:#fff;padding:60px 5% 30px}
           <li><i class="fas fa-check"></i> All lessons &amp; AP reference tools</li>
           <li class="muted"><i class="fas fa-times"></i> 1-on-1 tutoring sessions</li>
         </ul>
-        <a href="https://wa.me/19162927162?text=Hi%20Faridah!%20I%20want%20to%20subscribe%20to%20the%20Platform%20Access%20plan" target="_blank" class="btn-primary" style="width:100%;justify-content:center"><i class="fab fa-whatsapp"></i> Get Platform Access</a>
+        <a href="https://wa.me/19162927162?text=Hi%20Faridah!%20I%20want%20to%20subscribe%20to%20the%20Platform%20Access%20plan%20-%20%2425%2Fmonth" target="_blank" class="btn-primary" style="width:100%;justify-content:center"><i class="fab fa-whatsapp"></i> Get Platform Access</a>
       </div>
 
       <!-- TUTORING + PLATFORM -->
       <div class="price-card">
-        <div class="price-name">Tutoring + Platform</div>
+        <div class="price-name">1-on-1 Tutoring</div>
         <div style="display:flex;align-items:baseline;gap:4px;margin-bottom:4px">
-          <div class="price-amount">$79</div>
+          <div class="price-amount">$125</div>
         </div>
-        <div class="price-period">per month (4 sessions)</div>
-        <div class="price-sub">Best for maximum score improvement</div>
+        <div class="price-period">per hour</div>
+        <div class="price-sub">Personalised sessions with Faridah</div>
         <ul class="price-features">
-          <li><i class="fas fa-check"></i> Everything in Platform Access</li>
-          <li><i class="fas fa-check"></i> 4 live 1-on-1 sessions/month (60 min each)</li>
+          <li><i class="fas fa-check"></i> Live 1-on-1 session (60 min)</li>
+          <li><i class="fas fa-check"></i> Platform Access included</li>
           <li><i class="fas fa-check"></i> Personalized study plan &amp; roadmap</li>
           <li><i class="fas fa-check"></i> WhatsApp support between sessions</li>
           <li><i class="fas fa-check"></i> Exam strategy &amp; FRQ coaching</li>
-          <li><i class="fas fa-check"></i> Progress reports &amp; parent updates</li>
           <li><i class="fas fa-check"></i> Homework review &amp; test prep</li>
+          <li><i class="fas fa-check"></i> Flexible scheduling</li>
         </ul>
-        <a href="https://wa.me/19162927162?text=Hi%20Faridah!%20I%20want%20to%20start%20the%20Tutoring%20%2B%20Platform%20plan" target="_blank" class="btn-wa" style="width:100%;justify-content:center"><i class="fab fa-whatsapp"></i> Book Now</a>
+        <a href="https://wa.me/19162927162?text=Hi%20Faridah!%20I%20want%20to%20book%20a%201-on-1%20tutoring%20session%20-%20%24125%2Fhr" target="_blank" class="btn-wa" style="width:100%;justify-content:center"><i class="fab fa-whatsapp"></i> Book a Session</a>
       </div>
     </div>
     
+    <!-- GROUP LESSONS -->
+    <div style="max-width:600px;margin:32px auto 0;background:linear-gradient(135deg,#1e1b4b,#2d2a6e);border-radius:20px;padding:36px 32px;color:#fff;text-align:center">
+      <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(245,158,11,.2);border:1px solid rgba(245,158,11,.4);color:#fbbf24;padding:6px 16px;border-radius:20px;font-size:12px;font-weight:700;margin-bottom:16px">👥 GROUP LESSONS</div>
+      <div style="font-size:32px;font-weight:900;margin-bottom:4px">$499<span style="font-size:16px;font-weight:500;opacity:.7">/month</span></div>
+      <div style="font-size:15px;opacity:.8;margin-bottom:20px">Group lessons — 3 times a week</div>
+      <ul style="list-style:none;display:flex;flex-direction:column;gap:10px;margin-bottom:24px;text-align:left">
+        <li style="display:flex;align-items:center;gap:10px;font-size:14px"><i class="fas fa-check" style="color:#34d399"></i> 3 live group sessions per week</li>
+        <li style="display:flex;align-items:center;gap:10px;font-size:14px"><i class="fas fa-check" style="color:#34d399"></i> Platform Access included</li>
+        <li style="display:flex;align-items:center;gap:10px;font-size:14px"><i class="fas fa-check" style="color:#34d399"></i> Collaborative problem-solving</li>
+        <li style="display:flex;align-items:center;gap:10px;font-size:14px"><i class="fas fa-check" style="color:#34d399"></i> Shared study resources</li>
+        <li style="display:flex;align-items:center;gap:10px;font-size:14px"><i class="fas fa-check" style="color:#34d399"></i> WhatsApp group support</li>
+        <li style="display:flex;align-items:center;gap:10px;font-size:14px"><i class="fas fa-check" style="color:#34d399"></i> Exam prep &amp; review sessions</li>
+      </ul>
+      <a href="https://wa.me/19162927162?text=Hi%20Faridah!%20I%20want%20to%20join%20the%20Group%20Lessons%20-%20%24499%2Fmonth" target="_blank" style="display:inline-flex;align-items:center;gap:8px;background:#25d366;color:#fff;padding:14px 32px;border-radius:12px;font-weight:700;font-size:15px;text-decoration:none"><i class="fab fa-whatsapp"></i> Join Group Lessons</a>
+    </div>
+
     <!-- FAQ -->
     <div style="max-width:700px;margin:60px auto 0;text-align:left">
       <h3 style="font-size:24px;font-weight:900;color:var(--dark);margin-bottom:24px;text-align:center">Frequently Asked Questions</h3>
