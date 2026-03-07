@@ -1,13 +1,11 @@
-# Cloudflare Pages _redirects
-# Redirect www to non-www for main domain
-https://www.mindspirelab.com/* https://mindspirelab.com/:splat 301
+# Cloudflare Workers _redirects
+# Only relative source paths with relative destination paths are allowed
+# www redirect is handled via Cloudflare DNS/domain settings, not _redirects
 
-# Redirect www apchem to non-www
-https://www.apchem.mindspirelab.com/* https://apchem.mindspirelab.com/:splat 301
-
-# Fix broken legacy routes on main site → redirect to apchem platform
-/practice https://apchem.mindspirelab.com/ 302
-/lessons https://apchem.mindspirelab.com/ 302
-/signup https://apchem.mindspirelab.com/ 302
-/login https://apchem.mindspirelab.com/ 302
-/build-test https://apchem.mindspirelab.com/ 302
+# Fix broken legacy routes on main site -> redirect to apchem platform
+/practice /apchem/ 302
+/lessons /apchem/ 302
+/signup /apchem/ 302
+/login /apchem/ 302
+/build-test /apchem/ 302
+/reference /apchem/ 302
