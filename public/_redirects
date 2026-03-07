@@ -1,3 +1,13 @@
-# Redirect www to non-www (Cloudflare Pages handles this)
+# Cloudflare Pages _redirects
+# Redirect www to non-www for main domain
 https://www.mindspirelab.com/* https://mindspirelab.com/:splat 301
+
+# Redirect www apchem to non-www
 https://www.apchem.mindspirelab.com/* https://apchem.mindspirelab.com/:splat 301
+
+# Fix broken legacy routes on main site → redirect to apchem platform
+/practice https://apchem.mindspirelab.com/ 302
+/lessons https://apchem.mindspirelab.com/ 302
+/signup https://apchem.mindspirelab.com/ 302
+/login https://apchem.mindspirelab.com/ 302
+/build-test https://apchem.mindspirelab.com/ 302
