@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>AP Chemistry Practice Platform | MindSpire Lab</title>
+<meta name="description" content="Build custom AP Chemistry tests, practice 500+ MCQ & FRQ questions, and track your mastery. Unit 1 free for everyone."/>
+<link rel="icon" href="/favicon.ico"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet"/>
+<script src="/questions.js"></script>
+<style>
+:root{--p:#6c63ff;--pd:#4f46e5;--grn:#10b981;--org:#f59e0b;--dark:#0f172a;--dark2:#1e293b;--text:#374151;--muted:#6b7280;--border:#e5e7eb;--bg:#f8fafc;--red:#ef4444}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',sans-serif;color:var(--text);background:var(--bg);line-height:1.6}
+a{text-decoration:none;color:inherit}
+
+/* TOP NAV */
+.top-nav{position:fixed;top:0;left:0;right:0;z-index:200;background:#fff;border-bottom:1px solid var(--border);padding:0 24px;height:56px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 1px 8px rgba(0,0,0,.06)}
+.top-nav .brand{display:flex;align-items:center;gap:10px;font-weight:900;font-size:16px;color:var(--dark)}
+.top-nav .brand svg{width:32px;height:32px}
+.top-nav .nav-right{display:flex;align-items:center;gap:12px}
+.back-btn{font-size:13px;color:var(--muted);display:flex;align-items:center;gap:6px;padding:6px 12px;border-radius:8px;border:1px solid var(--border);transition:.2s}
+.back-btn:hover{background:var(--bg);color:var(--dark)}
+.access-badge{font-size:12px;font-weight:700;padding:4px 12px;border-radius:20px;border:1.5px solid}
+.access-badge.free{background:#dcfce7;color:#16a34a;border-color:#86efac}
+.access-badge.locked{background:#fef3c7;color:#d97706;border-color:#fcd34d;cursor:pointer}
+
+/* LAYOUT */
+.layout{display:flex;min-height:100vh;padding-top:56px}
+
+/* SIDEBAR */
+.sidebar{width:280px;min-width:280px;background:#fff;border-right:1px solid var(--border);padding:24px 0;overflow-y:auto;position:sticky;top:56px;height:calc(100vh - 56px)}
+.sidebar-section{padding:0 16px;margin-bottom:24px}
+.sidebar-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:10px;padding:0 8px}
+.sidebar-item{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:10px;font-size:14px;font-weight:500;color:var(--text);cursor:pointer;transition:.15s;margin-bottom:2px}
+.sidebar-item:hover{background:var(--bg);color:var(--dark)}
+.sidebar-item.active{background:rgba(108,99,255,.1);color:var(--p);font-weight:700}
+.sidebar-item .item-icon{width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+.sidebar-item .item-badge{margin-left:auto;font-size:11px;font-weight:700;padding:2px 8px;border-radius:10px}
+.sidebar-item .free-badge{background:#dcfce7;color:#16a34a}
+.sidebar-item .lock-badge{background:#fef3c7;color:#d97706}
+
+/* MAIN CONTENT */
+.main{flex:1;overflow-x:hidden}
+
+/* TABS */
+.tabs{background:#fff;border-bottom:1px solid var(--border);padding:0 32px;display:flex;gap:0}
+.tab{padding:14px 20px;font-size:14px;font-weight:600;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;transition:.15s;display:flex;align-items:center;gap:7px}
+.tab:hover{color:var(--dark)}
+.tab.active{color:var(--p);border-bottom-color:var(--p)}
+.tab-panel{display:none;padding:32px}
+.tab-panel.active{display:block}
+
+/* HERO BANNER */
+.platform-hero{background:linear-gradient(135deg,#0f0c29,#1e1b4b);border-radius:16px;padding:36px;margin-bottom:32px;position:relative;overflow:hidden}
+.platform-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 30% 50%,rgba(108,99,255,.3),transparent 60%)}
+.platform-hero h1{font-size:28px;font-weight:900;color:#fff;margin-bottom:8px;position:relative}
+.platform-hero p{font-size:15px;color:rgba(255,255,255,.65);margin-bottom:24px;position:relative}
+.hero-stats{display:flex;gap:24px;flex-wrap:wrap;position:relative}
+.hstat{text-align:center;background:rgba(255,255,255,.08);padding:12px 20px;border-radius:12px;border:1px solid rgba(255,255,255,.1)}
+.hstat-num{font-size:22px;font-weight:900;color:#fff}
+.hstat-lbl{font-size:11px;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.5px;margin-top:2px}
+
+/* TEST BUILDER */
+.builder-card{background:#fff;border:1px solid var(--border);border-radius:16px;padding:28px}
+.builder-title{font-size:20px;font-weight:900;color:var(--dark);margin-bottom:6px}
+.builder-sub{font-size:14px;color:var(--muted);margin-bottom:28px}
+.builder-section{margin-bottom:28px}
+.builder-section h3{font-size:14px;font-weight:700;color:var(--dark);margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.unit-chips{display:flex;flex-wrap:wrap;gap:10px}
+.unit-chip{display:flex;align-items:center;gap:8px;padding:10px 16px;border:2px solid var(--border);border-radius:12px;cursor:pointer;transition:.15s;font-size:13px;font-weight:600;background:#fff}
+.unit-chip:hover{border-color:rgba(108,99,255,.4);background:rgba(108,99,255,.04)}
+.unit-chip.selected{border-color:var(--p);background:rgba(108,99,255,.08);color:var(--p)}
+.unit-chip.locked-chip{opacity:.6;cursor:pointer}
+.unit-chip .chip-lock{font-size:11px;color:var(--org)}
+.type-chips{display:flex;gap:12px;flex-wrap:wrap}
+.type-chip{padding:10px 20px;border:2px solid var(--border);border-radius:10px;cursor:pointer;font-size:13px;font-weight:700;transition:.15s;background:#fff}
+.type-chip:hover{border-color:rgba(108,99,255,.4)}
+.type-chip.selected{border-color:var(--p);background:rgba(108,99,255,.08);color:var(--p)}
+.count-slider{width:100%;margin-top:8px}
+.count-display{font-size:24px;font-weight:900;color:var(--p);margin-bottom:8px}
+.build-btn{background:linear-gradient(135deg,var(--p),var(--pd));color:#fff;padding:14px 32px;border-radius:12px;font-weight:700;font-size:15px;border:none;cursor:pointer;transition:.2s;display:inline-flex;align-items:center;gap:8px}
+.build-btn:hover{transform:translateY(-2px);box-shadow:0 8px 25px rgba(108,99,255,.4)}
+.build-btn:disabled{opacity:.5;cursor:not-allowed;transform:none;box-shadow:none}
+
+/* QUESTION CARD */
+.question-area{max-width:780px}
+.q-progress{background:#fff;border:1px solid var(--border);border-radius:12px;padding:16px 20px;margin-bottom:20px;display:flex;align-items:center;gap:16px}
+.q-progress-bar{flex:1;height:6px;background:var(--bg);border-radius:3px;overflow:hidden}
+.q-progress-fill{height:100%;background:linear-gradient(90deg,var(--p),var(--pd));border-radius:3px;transition:.3s}
+.q-card{background:#fff;border:1px solid var(--border);border-radius:16px;padding:28px;margin-bottom:16px}
+.q-meta{display:flex;align-items:center;gap:8px;margin-bottom:16px;flex-wrap:wrap}
+.q-tag{font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px}
+.q-unit{background:rgba(108,99,255,.1);color:var(--p)}
+.q-type-mcq{background:#dcfce7;color:#16a34a}
+.q-type-frq{background:#dbeafe;color:#2563eb}
+.q-diff-easy{background:#dcfce7;color:#16a34a}
+.q-diff-medium{background:#fef3c7;color:#d97706}
+.q-diff-hard{background:#fee2e2;color:var(--red)}
+.q-text{font-size:16px;color:var(--dark);line-height:1.7;margin-bottom:20px;white-space:pre-line}
+.mcq-choices{display:flex;flex-direction:column;gap:10px;margin-bottom:20px}
+.mcq-choice{display:flex;align-items:flex-start;gap:12px;padding:12px 16px;border:2px solid var(--border);border-radius:10px;cursor:pointer;transition:.15s;font-size:14px}
+.mcq-choice:hover{border-color:rgba(108,99,255,.4);background:rgba(108,99,255,.03)}
+.mcq-choice.selected{border-color:var(--p);background:rgba(108,99,255,.06)}
+.mcq-choice.correct{border-color:var(--grn);background:#dcfce7}
+.mcq-choice.wrong{border-color:var(--red);background:#fee2e2}
+.choice-letter{width:26px;height:26px;border-radius:6px;background:var(--bg);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;color:var(--muted)}
+.mcq-choice.selected .choice-letter{background:var(--p);color:#fff}
+.frq-area textarea{width:100%;min-height:160px;padding:14px;border:1.5px solid var(--border);border-radius:10px;font-family:inherit;font-size:14px;resize:vertical;outline:none;transition:.2s}
+.frq-area textarea:focus{border-color:var(--p);box-shadow:0 0 0 3px rgba(108,99,255,.1)}
+.q-actions{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.btn{padding:10px 20px;border-radius:10px;font-weight:700;font-size:14px;border:none;cursor:pointer;transition:.2s;display:inline-flex;align-items:center;gap:7px}
+.btn-submit{background:linear-gradient(135deg,var(--p),var(--pd));color:#fff}
+.btn-submit:hover{transform:translateY(-1px);box-shadow:0 4px 12px rgba(108,99,255,.4)}
+.btn-next{background:var(--bg);color:var(--dark);border:1px solid var(--border)}
+.btn-next:hover{background:#e5e7eb}
+.btn-skip{background:transparent;color:var(--muted);font-size:13px;padding:8px 14px}
+.explanation-box{background:#f0fdf4;border:1.5px solid #86efac;border-radius:12px;padding:16px;margin-top:16px}
+.explanation-box h4{font-size:13px;font-weight:700;color:#16a34a;margin-bottom:6px}
+.explanation-box p{font-size:14px;color:var(--text);line-height:1.6;white-space:pre-line}
+.answer-box{background:#dbeafe;border:1.5px solid #93c5fd;border-radius:12px;padding:16px;margin-top:16px}
+.answer-box h4{font-size:13px;font-weight:700;color:#2563eb;margin-bottom:8px}
+.answer-box pre{font-size:13px;color:var(--dark);line-height:1.7;white-space:pre-wrap;font-family:inherit}
+
+/* RESULTS */
+.results-card{background:#fff;border:1px solid var(--border);border-radius:16px;padding:36px;text-align:center;max-width:600px}
+.score-circle{width:120px;height:120px;border-radius:50%;background:linear-gradient(135deg,var(--p),var(--pd));display:flex;align-items:center;justify-content:center;margin:0 auto 20px;font-size:32px;font-weight:900;color:#fff}
+.results-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:24px 0}
+.result-stat{background:var(--bg);border-radius:12px;padding:16px}
+.result-stat .num{font-size:24px;font-weight:900;color:var(--dark)}
+.result-stat .lbl{font-size:12px;color:var(--muted)}
+
+/* LOCK OVERLAY */
+.lock-overlay{background:rgba(255,255,255,.95);border:2px dashed var(--border);border-radius:16px;padding:48px 36px;text-align:center}
+.lock-icon{font-size:48px;margin-bottom:16px}
+.lock-title{font-size:22px;font-weight:900;color:var(--dark);margin-bottom:8px}
+.lock-sub{font-size:15px;color:var(--muted);margin-bottom:24px;max-width:400px;margin-left:auto;margin-right:auto}
+.btn-unlock{background:linear-gradient(135deg,var(--p),var(--pd));color:#fff;padding:12px 28px;border-radius:12px;font-weight:700;font-size:15px;border:none;cursor:pointer;display:inline-flex;align-items:center;gap:8px;transition:.2s}
+.btn-unlock:hover{transform:translateY(-2px);box-shadow:0 8px 25px rgba(108,99,255,.4)}
+
+/* TOAST */
+.toast{position:fixed;bottom:24px;right:24px;background:var(--dark2);color:#fff;padding:12px 20px;border-radius:12px;font-size:14px;font-weight:600;z-index:9999;transform:translateY(80px);opacity:0;transition:.3s}
+.toast.show{transform:translateY(0);opacity:1}
+
+/* MOBILE */
+@media(max-width:768px){
+  .sidebar{display:none}
+  .tab-panel{padding:16px}
+  .hero-stats{gap:12px}
+  .hstat{padding:10px 14px}
+  .builder-card{padding:20px}
+}
+</style>
+</head>
+<body>
+
+<!-- TOP NAV -->
+<nav class="top-nav">
+  <div class="brand">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 36" fill="none">
+      <defs><linearGradient id="lg" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#a78bfa"/><stop offset="100%" stop-color="#4f46e5"/></linearGradient></defs>
+      <rect width="36" height="36" rx="10" fill="url(#lg)"/>
+      <circle cx="18" cy="18" r="3" fill="white" opacity=".95"/>
+      <ellipse cx="18" cy="18" rx="10.5" ry="4" stroke="white" stroke-width="1.6" fill="none" opacity=".9"/>
+      <ellipse cx="18" cy="18" rx="10.5" ry="4" stroke="white" stroke-width="1.6" fill="none" opacity=".9" transform="rotate(60 18 18)"/>
+      <ellipse cx="18" cy="18" rx="10.5" ry="4" stroke="white" stroke-width="1.6" fill="none" opacity=".9" transform="rotate(120 18 18)"/>
+      <circle cx="28.5" cy="18" r="1.8" fill="#f59e0b"/>
+    </svg>
+    MindSpire Lab
+  </div>
+  <div class="nav-right">
+    <a href="https://mindspirelab.com" class="back-btn"><i class="fas fa-arrow-left"></i> Main Site</a>
+    <div id="accessBadge" class="access-badge free" onclick="showAccessModal()">
+      <i class="fas fa-unlock"></i> <span id="accessText">Free Access</span>
+    </div>
+  </div>
+</nav>
+
+<!-- LAYOUT -->
+<div class="layout">
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-title">Navigation</div>
+      <div class="sidebar-item active" onclick="showTab('builder')" id="nav-builder">
+        <div class="item-icon" style="background:#ede9fe">🧪</div>
+        <span>Build a Test</span>
+      </div>
+      <div class="sidebar-item" onclick="showTab('practice')" id="nav-practice">
+        <div class="item-icon" style="background:#dcfce7">📝</div>
+        <span>Quick Practice</span>
+      </div>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-title">Units</div>
+      <div id="unitSidebar"></div>
+    </div>
+    <div class="sidebar-section">
+      <div style="background:linear-gradient(135deg,#f0fdf4,#dcfce7);border:1px solid #86efac;border-radius:12px;padding:14px">
+        <div style="font-size:13px;font-weight:700;color:#16a34a;margin-bottom:4px">✅ Unit 1 — FREE!</div>
+        <div style="font-size:12px;color:#166534">18 questions included for everyone</div>
+      </div>
+    </div>
+    <div class="sidebar-section">
+      <div style="background:linear-gradient(135deg,#ede9fe,#ddd6fe);border:1px solid #c4b5fd;border-radius:12px;padding:14px;cursor:pointer" onclick="showAccessModal()">
+        <div style="font-size:13px;font-weight:700;color:var(--p);margin-bottom:4px">🔒 Units 2–9</div>
+        <div style="font-size:12px;color:#5b21b6;margin-bottom:8px">Unlock 43+ more questions</div>
+        <div style="background:var(--p);color:#fff;padding:6px 14px;border-radius:8px;font-size:12px;font-weight:700;text-align:center">Get Access →</div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+    <!-- TABS -->
+    <div class="tabs">
+      <div class="tab active" onclick="showTab('builder')" id="tab-builder"><i class="fas fa-flask"></i> Build a Test</div>
+      <div class="tab" onclick="showTab('practice')" id="tab-practice"><i class="fas fa-bolt"></i> Quick Practice</div>
+    </div>
+
+    <!-- BUILD A TEST PANEL -->
+    <div class="tab-panel active" id="panel-builder">
+      <div class="platform-hero">
+        <h1>🧪 Build Your Custom AP Chem Test</h1>
+        <p>Choose your topics, question types, and how many questions — just like SaveMyExams. <span style="color:#34d399;font-weight:700">Unit 1 is free!</span></p>
+        <div class="hero-stats">
+          <div class="hstat"><div class="hstat-num" id="stat-total">61</div><div class="hstat-lbl">Total Questions</div></div>
+          <div class="hstat"><div class="hstat-num">18</div><div class="hstat-lbl">Free (Unit 1)</div></div>
+          <div class="hstat"><div class="hstat-num">9</div><div class="hstat-lbl">AP Units</div></div>
+          <div class="hstat"><div class="hstat-num">2021–25</div><div class="hstat-lbl">PYQ Coverage</div></div>
+        </div>
+      </div>
+
+      <div class="builder-card">
+        <div class="builder-title">Configure Your Test</div>
+        <div class="builder-sub">Select units, question types, and count to build your custom practice test.</div>
+
+        <!-- STEP 1: Units -->
+        <div class="builder-section">
+          <h3><span style="background:var(--p);color:#fff;padding:2px 10px;border-radius:20px;font-size:12px">STEP 1</span> Select Units</h3>
+          <div class="unit-chips" id="unitChips"></div>
+        </div>
+
+        <!-- STEP 2: Question Type -->
+        <div class="builder-section">
+          <h3><span style="background:var(--p);color:#fff;padding:2px 10px;border-radius:20px;font-size:12px">STEP 2</span> Question Types</h3>
+          <div class="type-chips">
+            <div class="type-chip selected" onclick="toggleType(this,'MCQ')">
+              <i class="fas fa-list-ul"></i> MCQ (Multiple Choice)
+            </div>
+            <div class="type-chip selected" onclick="toggleType(this,'FRQ')">
+              <i class="fas fa-pen"></i> FRQ (Free Response)
+            </div>
+            <div class="type-chip selected" onclick="toggleType(this,'Both')" style="display:none"></div>
+          </div>
+        </div>
+
+        <!-- STEP 3: Count -->
+        <div class="builder-section">
+          <h3><span style="background:var(--p);color:#fff;padding:2px 10px;border-radius:20px;font-size:12px">STEP 3</span> Number of Questions</h3>
+          <div class="count-display" id="countDisplay">10 questions</div>
+          <input type="range" class="count-slider" id="countSlider" min="5" max="40" value="10" step="5" oninput="updateCount(this.value)"/>
+          <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-top:4px">
+            <span>5</span><span>10</span><span>20</span><span>30</span><span>40</span>
+          </div>
+          <div style="margin-top:12px;font-size:13px;color:var(--muted)" id="availableMsg"></div>
+        </div>
+
+        <!-- BUILD BUTTON -->
+        <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap">
+          <button class="build-btn" onclick="buildTest()" id="buildBtn">
+            <i class="fas fa-play"></i> Start Test
+          </button>
+          <div style="font-size:13px;color:var(--muted)" id="buildMsg"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PRACTICE PANEL -->
+    <div class="tab-panel" id="panel-practice">
+      <div class="platform-hero">
+        <h1>⚡ Quick Practice</h1>
+        <p>Jump straight into AP Chemistry questions — random mix from all your available units.</p>
+      </div>
+      <div id="practiceArea"></div>
+    </div>
+
+    <!-- TEST AREA (hidden initially) -->
+    <div id="testArea" style="display:none;padding:32px">
+      <div style="display:flex;align-items:center;gap:16px;margin-bottom:24px;flex-wrap:wrap">
+        <h2 style="font-size:20px;font-weight:900;color:var(--dark)" id="testTitle">Your Custom Test</h2>
+        <button onclick="exitTest()" style="margin-left:auto;background:var(--bg);border:1px solid var(--border);padding:8px 16px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;color:var(--muted)">
+          <i class="fas fa-times"></i> Exit Test
+        </button>
+      </div>
+      <div class="question-area">
+        <div class="q-progress">
+          <div style="font-size:13px;font-weight:600;color:var(--dark)" id="qProgressText">Question 1 of 10</div>
+          <div class="q-progress-bar">
+            <div class="q-progress-fill" id="qProgressFill" style="width:10%"></div>
+          </div>
+          <div style="font-size:13px;font-weight:700;color:var(--grn)" id="qScore">0 ✓</div>
+        </div>
+        <div id="questionContainer"></div>
+      </div>
+    </div>
+
+    <!-- RESULTS AREA (hidden initially) -->
+    <div id="resultsArea" style="display:none;padding:32px">
+      <div class="results-card">
+        <div class="score-circle" id="scoreCircle">0%</div>
+        <h2 style="font-size:24px;font-weight:900;color:var(--dark);margin-bottom:8px">Test Complete!</h2>
+        <p style="color:var(--muted);margin-bottom:24px" id="resultMsg"></p>
+        <div class="results-stats">
+          <div class="result-stat"><div class="num" id="statCorrect">0</div><div class="lbl">Correct</div></div>
+          <div class="result-stat"><div class="num" id="statWrong">0</div><div class="lbl">Incorrect</div></div>
+          <div class="result-stat"><div class="num" id="statSkipped">0</div><div class="lbl">Skipped</div></div>
+        </div>
+        <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+          <button onclick="showTab('builder')" class="build-btn" style="padding:11px 22px;font-size:14px">
+            <i class="fas fa-redo"></i> Build New Test
+          </button>
+          <button onclick="reviewTest()" style="background:var(--bg);border:1px solid var(--border);padding:11px 22px;border-radius:10px;font-weight:700;font-size:14px;cursor:pointer">
+            <i class="fas fa-eye"></i> Review Answers
+          </button>
+        </div>
+        <div id="upgradePrompt" style="display:none;margin-top:24px;background:linear-gradient(135deg,#ede9fe,#ddd6fe);border:1px solid #c4b5fd;border-radius:12px;padding:20px">
+          <div style="font-size:16px;font-weight:800;color:var(--p);margin-bottom:8px">🚀 Want 43+ more questions?</div>
+          <div style="font-size:14px;color:#5b21b6;margin-bottom:14px">Unlock Units 2–9 with a paid plan. Custom tests from any topic combination.</div>
+          <a href="https://mindspirelab.com/pricing" style="background:var(--p);color:#fff;padding:10px 22px;border-radius:10px;font-size:13px;font-weight:700;display:inline-flex;align-items:center;gap:7px"><i class="fas fa-unlock"></i> View Plans</a>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- ACCESS MODAL -->
+<div id="accessModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:1000;display:none;align-items:center;justify-content:center;padding:20px">
+  <div style="background:#fff;border-radius:20px;padding:36px;max-width:460px;width:100%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.3)">
+    <div style="font-size:48px;margin-bottom:16px">🔒</div>
+    <h2 style="font-size:24px;font-weight:900;color:var(--dark);margin-bottom:8px">Unlock Full Access</h2>
+    <p style="color:var(--muted);margin-bottom:8px">Units 2–9 are available on paid plans.</p>
+    <p style="font-size:14px;color:var(--text);margin-bottom:24px">Enter your access code (received after payment) or contact Faridah to get one.</p>
+    <div style="display:flex;gap:10px;margin-bottom:16px">
+      <input type="text" id="accessCodeInput" placeholder="Enter access code..." style="flex:1;padding:12px 14px;border:1.5px solid var(--border);border-radius:10px;font-size:14px;outline:none;transition:.2s" onfocus="this.style.borderColor='var(--p)'"/>
+      <button onclick="validateCode()" style="background:var(--p);color:#fff;padding:12px 20px;border-radius:10px;font-weight:700;border:none;cursor:pointer;white-space:nowrap">Unlock</button>
+    </div>
+    <div id="codeMsg" style="font-size:13px;margin-bottom:16px;min-height:20px"></div>
+    <div style="border-top:1px solid var(--border);padding-top:20px">
+      <p style="font-size:13px;color:var(--muted);margin-bottom:12px">Don't have a code yet?</p>
+      <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+        <a href="https://wa.me/19162927162?text=Hi!%20I%20want%20to%20unlock%20the%20AP%20Chemistry%20platform." target="_blank" style="background:#25d366;color:#fff;padding:10px 18px;border-radius:10px;font-size:13px;font-weight:700;display:inline-flex;align-items:center;gap:7px"><i class="fab fa-whatsapp"></i> WhatsApp Faridah</a>
+        <a href="https://mindspirelab.com/pricing" style="background:var(--bg);border:1px solid var(--border);color:var(--dark);padding:10px 18px;border-radius:10px;font-size:13px;font-weight:700;display:inline-flex;align-items:center;gap:7px"><i class="fas fa-tag"></i> View Plans</a>
+      </div>
+    </div>
+    <button onclick="closeModal()" style="position:absolute;top:16px;right:16px;background:var(--bg);border:1px solid var(--border);width:32px;height:32px;border-radius:8px;cursor:pointer;font-size:14px;color:var(--muted)">✕</button>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ─── STATE ───────────────────────────────────────────────────────────────────
+let isPaidUser = false;
+let selectedUnits = [1]; // default: Unit 1 free
+let selectedTypes = ['MCQ', 'FRQ'];
+let questionCount = 10;
+let currentTest = [];
+let currentQ = 0;
+let score = 0;
+let skipped = 0;
+let submitted = [];
+let reviewMode = false;
+
+// Check for saved access
+const savedAccess = localStorage.getItem('msl_access');
+if (savedAccess === 'paid_2026') {
+  isPaidUser = true;
+  updateAccessUI();
+}
+
+// ─── INIT ─────────────────────────────────────────────────────────────────
+window.addEventListener('DOMContentLoaded', () => {
+  renderUnitChips();
+  renderUnitSidebar();
+  renderPractice();
+  updateAvailable();
+});
+
+function updateAccessUI() {
+  const badge = document.getElementById('accessBadge');
+  const text = document.getElementById('accessText');
+  if (isPaidUser) {
+    badge.className = 'access-badge free';
+    text.textContent = 'Full Access';
+    badge.onclick = null;
+    badge.style.cursor = 'default';
+  }
+}
+
+// ─── UNIT CHIPS ───────────────────────────────────────────────────────────
+function renderUnitChips() {
+  const container = document.getElementById('unitChips');
+  container.innerHTML = UNITS.map(u => {
+    const canUse = u.free || isPaidUser;
+    const isSelected = selectedUnits.includes(u.id);
+    const count = AP_QUESTIONS.filter(q => q.unit === u.id && canAccess(q, isPaidUser)).length;
+    return `<div class="unit-chip ${isSelected ? 'selected' : ''} ${!canUse ? 'locked-chip' : ''}" 
+                 onclick="toggleUnit(${u.id})" id="chip-${u.id}"
+                 style="border-color:${isSelected ? u.color : ''}${isSelected ? '' : ''};${isSelected ? `background:${u.color}15;color:${u.color}` : ''}">
+      <span>${u.icon}</span>
+      <span>Unit ${u.id}</span>
+      ${!u.free && !isPaidUser ? '<span class="chip-lock">🔒</span>' : `<span style="font-size:11px;opacity:.6">${count}q</span>`}
+    </div>`;
+  }).join('');
+}
+
+function renderUnitSidebar() {
+  const container = document.getElementById('unitSidebar');
+  container.innerHTML = UNITS.map(u => {
+    const canUse = u.free || isPaidUser;
+    const isSelected = selectedUnits.includes(u.id);
+    return `<div class="sidebar-item ${isSelected ? 'active' : ''}" onclick="toggleUnit(${u.id})" id="snav-${u.id}">
+      <div class="item-icon" style="background:${u.color}20">${u.icon}</div>
+      <span style="font-size:13px">Unit ${u.id}</span>
+      <span class="item-badge ${u.free ? 'free-badge' : 'lock-badge'}">${u.free ? 'Free' : '🔒'}</span>
+    </div>`;
+  }).join('');
+}
+
+function toggleUnit(unitId) {
+  const unit = UNITS.find(u => u.id === unitId);
+  if (!unit.free && !isPaidUser) {
+    showAccessModal();
+    return;
+  }
+  if (selectedUnits.includes(unitId)) {
+    if (selectedUnits.length > 1) selectedUnits = selectedUnits.filter(u => u !== unitId);
+    else { showToast('Select at least one unit!'); return; }
+  } else {
+    selectedUnits.push(unitId);
+  }
+  renderUnitChips();
+  renderUnitSidebar();
+  updateAvailable();
+}
+
+// ─── TYPE SELECTION ───────────────────────────────────────────────────────
+function toggleType(el, type) {
+  el.classList.toggle('selected');
+  selectedTypes = [];
+  document.querySelectorAll('.type-chip').forEach(c => {
+    if (c.classList.contains('selected') && c.textContent.includes('MCQ')) selectedTypes.push('MCQ');
+    if (c.classList.contains('selected') && c.textContent.includes('FRQ')) selectedTypes.push('FRQ');
+  });
+  if (selectedTypes.length === 0) { el.classList.add('selected'); selectedTypes.push(type); }
+  updateAvailable();
+}
+
+// ─── COUNT SLIDER ─────────────────────────────────────────────────────────
+function updateCount(val) {
+  questionCount = parseInt(val);
+  document.getElementById('countDisplay').textContent = `${val} questions`;
+  updateAvailable();
+}
+
+function updateAvailable() {
+  const pool = getQuestions({units: selectedUnits, types: selectedTypes, isPaidUser});
+  const msg = document.getElementById('availableMsg');
+  const buildMsg = document.getElementById('buildMsg');
+  const buildBtn = document.getElementById('buildBtn');
+  msg.textContent = `${pool.length} questions available matching your selection`;
+  if (pool.length === 0) {
+    buildMsg.textContent = '⚠️ No questions match — try changing your filters';
+    buildBtn.disabled = true;
+  } else {
+    buildMsg.textContent = pool.length < questionCount ? `⚡ Will use all ${pool.length} available questions` : '';
+    buildBtn.disabled = false;
+  }
+}
+
+// ─── BUILD TEST ───────────────────────────────────────────────────────────
+function buildTest() {
+  const pool = getQuestions({units: selectedUnits, types: selectedTypes, count: questionCount, isPaidUser});
+  if (pool.length === 0) { showToast('No questions available!'); return; }
+  currentTest = pool;
+  currentQ = 0;
+  score = 0;
+  skipped = 0;
+  submitted = new Array(pool.length).fill(null);
+  reviewMode = false;
+  
+  document.getElementById('testTitle').textContent = `Custom Test — ${pool.length} Questions`;
+  document.querySelectorAll('.tab-panel').forEach(p => p.style.display = 'none');
+  document.getElementById('testArea').style.display = 'block';
+  document.getElementById('resultsArea').style.display = 'none';
+  
+  renderQuestion();
+}
+
+function exitTest() {
+  document.getElementById('testArea').style.display = 'none';
+  showTab('builder');
+}
+
+// ─── RENDER QUESTION ──────────────────────────────────────────────────────
+function renderQuestion() {
+  const q = currentTest[currentQ];
+  const total = currentTest.length;
+  const pct = Math.round(((currentQ + 1) / total) * 100);
+  
+  document.getElementById('qProgressText').textContent = `Question ${currentQ + 1} of ${total}`;
+  document.getElementById('qProgressFill').style.width = `${pct}%`;
+  document.getElementById('qScore').textContent = `${score} ✓`;
+  
+  const unitInfo = UNITS.find(u => u.id === q.unit);
+  
+  let html = `
+    <div class="q-card">
+      <div class="q-meta">
+        <span class="q-tag q-unit">${unitInfo?.icon} Unit ${q.unit}</span>
+        <span class="q-tag q-type-${q.type.toLowerCase()}">${q.type}</span>
+        <span class="q-tag q-diff-${q.difficulty.toLowerCase()}">${q.difficulty}</span>
+        <span style="font-size:12px;color:var(--muted);margin-left:4px">${q.topic}</span>
+      </div>
+      <div class="q-text">${q.q}</div>`;
+  
+  if (q.type === 'MCQ') {
+    html += `<div class="mcq-choices">`;
+    q.choices.forEach((c, i) => {
+      const letter = c[0];
+      const text = c.slice(3);
+      const state = submitted[currentQ];
+      let cls = '';
+      if (state !== null) {
+        if (letter === q.answer) cls = 'correct';
+        else if (letter === state) cls = 'wrong';
+      }
+      html += `<div class="mcq-choice ${cls}" onclick="selectChoice('${letter}')" id="choice-${letter}">
+        <div class="choice-letter">${letter}</div>
+        <div>${text}</div>
+      </div>`;
+    });
+    html += `</div>`;
+  } else {
+    // FRQ
+    html += `<div class="frq-area">
+      <textarea id="frqAnswer" placeholder="Write your answer here... Show all your work for full credit." ${submitted[currentQ] !== null ? 'disabled' : ''}>${submitted[currentQ] ? submitted[currentQ] : ''}</textarea>
+    </div>`;
+  }
+  
+  // Show explanation if submitted
+  if (submitted[currentQ] !== null) {
+    if (q.type === 'MCQ') {
+      const correct = submitted[currentQ] === q.answer;
+      html += `<div class="explanation-box" style="${correct ? '' : 'background:#fff1f2;border-color:#fca5a5'}">
+        <h4 style="color:${correct ? '#16a34a' : '#ef4444'}">${correct ? '✅ Correct!' : `❌ Incorrect. Correct answer: ${q.answer}`}</h4>
+        <p>${q.explanation}</p>
+      </div>`;
+    } else {
+      html += `<div class="answer-box">
+        <h4>✅ Model Answer</h4>
+        <pre>${q.answer}</pre>
+      </div>
+      <div class="explanation-box">
+        <h4>📝 Scoring Notes</h4>
+        <p>${q.explanation}</p>
+      </div>`;
+    }
+  }
+  
+  html += `</div>`;
+  
+  // Actions
+  html += `<div class="q-actions">`;
+  if (submitted[currentQ] === null) {
+    if (q.type === 'MCQ') {
+      html += `<button class="btn btn-submit" onclick="submitAnswer()" id="submitBtn" disabled><i class="fas fa-check"></i> Submit Answer</button>`;
+    } else {
+      html += `<button class="btn btn-submit" onclick="submitFRQ()"><i class="fas fa-check"></i> Check Answer</button>`;
+    }
+    html += `<button class="btn btn-skip" onclick="skipQuestion()"><i class="fas fa-forward"></i> Skip</button>`;
+  } else {
+    if (currentQ < currentTest.length - 1) {
+      html += `<button class="btn btn-next" onclick="nextQuestion()"><i class="fas fa-arrow-right"></i> Next Question</button>`;
+    } else {
+      html += `<button class="btn btn-submit" onclick="showResults()"><i class="fas fa-flag-checkered"></i> Finish Test</button>`;
+    }
+  }
+  html += `</div>`;
+  
+  document.getElementById('questionContainer').innerHTML = html;
+  
+  // Re-highlight selected choice
+  if (submitted[currentQ] !== null && q.type === 'MCQ') {
+    // Already handled by class in rendering
+  }
+}
+
+function selectChoice(letter) {
+  if (submitted[currentQ] !== null) return;
+  document.querySelectorAll('.mcq-choice').forEach(c => c.classList.remove('selected'));
+  const chosen = document.getElementById(`choice-${letter}`);
+  if (chosen) chosen.classList.add('selected');
+  document.getElementById('submitBtn').disabled = false;
+  document.getElementById('submitBtn').setAttribute('data-choice', letter);
+}
+
+function submitAnswer() {
+  const btn = document.getElementById('submitBtn');
+  const choice = btn.getAttribute('data-choice');
+  if (!choice) return;
+  const q = currentTest[currentQ];
+  submitted[currentQ] = choice;
+  if (choice === q.answer) score++;
+  renderQuestion();
+}
+
+function submitFRQ() {
+  const answer = document.getElementById('frqAnswer')?.value || '';
+  submitted[currentQ] = answer || '(no answer provided)';
+  renderQuestion();
+}
+
+function skipQuestion() {
+  submitted[currentQ] = 'SKIPPED';
+  skipped++;
+  if (currentQ < currentTest.length - 1) {
+    currentQ++;
+    renderQuestion();
+  } else {
+    showResults();
+  }
+}
+
+function nextQuestion() {
+  currentQ++;
+  renderQuestion();
+}
+
+function showResults() {
+  document.getElementById('testArea').style.display = 'none';
+  document.getElementById('resultsArea').style.display = 'block';
+  
+  const mcqTotal = currentTest.filter(q => q.type === 'MCQ').length;
+  const correct = submitted.filter((s, i) => s === currentTest[i]?.answer).length;
+  const wrong = submitted.filter((s, i) => s !== 'SKIPPED' && s !== null && s !== currentTest[i]?.answer).length;
+  const actualSkipped = submitted.filter(s => s === 'SKIPPED').length;
+  const pct = mcqTotal > 0 ? Math.round((correct / mcqTotal) * 100) : 0;
+  
+  document.getElementById('scoreCircle').textContent = `${pct}%`;
+  document.getElementById('scoreCircle').style.background = pct >= 70 ? 'linear-gradient(135deg,#10b981,#059669)' : pct >= 50 ? 'linear-gradient(135deg,#f59e0b,#d97706)' : 'linear-gradient(135deg,#ef4444,#dc2626)';
+  document.getElementById('statCorrect').textContent = correct;
+  document.getElementById('statWrong').textContent = wrong;
+  document.getElementById('statSkipped').textContent = actualSkipped;
+  
+  const msg = pct >= 80 ? '🎉 Excellent! You\'re well prepared for this material.' :
+              pct >= 65 ? '👍 Good work! Keep practicing to improve further.' :
+              pct >= 50 ? '📚 Keep studying. Review the explanations carefully.' :
+              '💪 Don\'t give up! Review the material and try again.';
+  document.getElementById('resultMsg').textContent = msg;
+  
+  if (!isPaidUser) {
+    document.getElementById('upgradePrompt').style.display = 'block';
+  }
+}
+
+function reviewTest() {
+  reviewMode = true;
+  currentQ = 0;
+  document.getElementById('resultsArea').style.display = 'none';
+  document.getElementById('testArea').style.display = 'block';
+  document.getElementById('testTitle').textContent = 'Review — Your Answers';
+  renderQuestion();
+}
+
+// ─── QUICK PRACTICE ───────────────────────────────────────────────────────
+function renderPractice() {
+  const pool = getQuestions({isPaidUser, count: 5});
+  if (pool.length === 0) {
+    document.getElementById('practiceArea').innerHTML = '<div class="lock-overlay"><div class="lock-icon">📚</div><div class="lock-title">No questions available</div></div>';
+    return;
+  }
+  let html = `<div style="margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px">
+    <div style="font-size:15px;font-weight:700;color:var(--dark)">Quick Practice — ${pool.length} random questions</div>
+    <button onclick="renderPractice()" style="background:var(--bg);border:1px solid var(--border);padding:8px 14px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer"><i class="fas fa-refresh"></i> New Set</button>
+  </div>`;
+  
+  pool.forEach((q, idx) => {
+    const unitInfo = UNITS.find(u => u.id === q.unit);
+    html += `<div class="q-card" style="margin-bottom:16px" id="pq-${idx}">
+      <div class="q-meta">
+        <span class="q-tag q-unit">${unitInfo?.icon} Unit ${q.unit}</span>
+        <span class="q-tag q-type-${q.type.toLowerCase()}">${q.type}</span>
+        <span class="q-tag q-diff-${q.difficulty.toLowerCase()}">${q.difficulty}</span>
+      </div>
+      <div class="q-text">${q.q}</div>`;
+    
+    if (q.type === 'MCQ') {
+      html += `<div class="mcq-choices" id="pchoices-${idx}">`;
+      q.choices.forEach(c => {
+        const letter = c[0];
+        html += `<div class="mcq-choice" onclick="practiceSelect(${idx},'${letter}','${q.answer}')" id="pc-${idx}-${letter}">
+          <div class="choice-letter">${letter}</div>
+          <div>${c.slice(3)}</div>
+        </div>`;
+      });
+      html += `</div>`;
+    } else {
+      html += `<div class="frq-area"><textarea id="pfrq-${idx}" placeholder="Write your answer here..."></textarea></div>
+        <button onclick="practiceCheckFRQ(${idx},'${escStr(q.answer)}','${escStr(q.explanation)}')" style="background:var(--p);color:#fff;padding:8px 16px;border-radius:8px;font-size:13px;font-weight:700;border:none;cursor:pointer;margin-top:8px">Check Answer</button>`;
+    }
+    html += `<div id="pexp-${idx}"></div></div>`;
+  });
+  
+  document.getElementById('practiceArea').innerHTML = html;
+}
+
+function escStr(s) { return (s || '').replace(/'/g, "&#39;").replace(/\n/g, '\\n'); }
+
+function practiceSelect(idx, letter, correct) {
+  document.querySelectorAll(`#pchoices-${idx} .mcq-choice`).forEach(c => {
+    c.onclick = null;
+    const l = c.querySelector('.choice-letter').textContent;
+    if (l === correct) c.classList.add('correct');
+    else if (l === letter) c.classList.add('wrong');
+  });
+  const exp = AP_QUESTIONS.find(q => {
+    return q.choices && q.choices.some(c => c[0] === letter || c[0] === correct);
+  });
+}
+
+function practiceCheckFRQ(idx, answer, explanation) {
+  const expDiv = document.getElementById(`pexp-${idx}`);
+  const decodedAnswer = answer.replace(/&#39;/g, "'").replace(/\\n/g, '\n');
+  const decodedExp = explanation.replace(/&#39;/g, "'").replace(/\\n/g, '\n');
+  expDiv.innerHTML = `<div class="answer-box" style="margin-top:12px"><h4>✅ Model Answer</h4><pre>${decodedAnswer}</pre></div>
+    <div class="explanation-box" style="margin-top:8px"><h4>📝 Notes</h4><p>${decodedExp}</p></div>`;
+  document.getElementById(`pfrq-${idx}`).disabled = true;
+}
+
+// ─── TABS ─────────────────────────────────────────────────────────────────
+function showTab(tabName) {
+  document.getElementById('testArea').style.display = 'none';
+  document.getElementById('resultsArea').style.display = 'none';
+  document.querySelectorAll('.tab-panel').forEach(p => { p.style.display = 'none'; p.classList.remove('active'); });
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.sidebar-item').forEach(i => i.classList.remove('active'));
+  
+  const panel = document.getElementById(`panel-${tabName}`);
+  if (panel) { panel.style.display = 'block'; panel.classList.add('active'); }
+  const tab = document.getElementById(`tab-${tabName}`);
+  if (tab) tab.classList.add('active');
+  const nav = document.getElementById(`nav-${tabName}`);
+  if (nav) nav.classList.add('active');
+}
+
+// ─── ACCESS MODAL ─────────────────────────────────────────────────────────
+function showAccessModal() {
+  const modal = document.getElementById('accessModal');
+  modal.style.display = 'flex';
+}
+function closeModal() {
+  document.getElementById('accessModal').style.display = 'none';
+}
+
+// Valid access codes (in production, this should be server-side)
+const VALID_CODES = ['MINDSPIRE2026', 'APCHEM2026', 'FARIDAH2026', 'PAID2026'];
+
+function validateCode() {
+  const code = document.getElementById('accessCodeInput').value.trim().toUpperCase();
+  const msg = document.getElementById('codeMsg');
+  if (VALID_CODES.includes(code)) {
+    isPaidUser = true;
+    localStorage.setItem('msl_access', 'paid_2026');
+    msg.style.color = '#16a34a';
+    msg.textContent = '✅ Access unlocked! All units are now available.';
+    updateAccessUI();
+    setTimeout(() => {
+      closeModal();
+      renderUnitChips();
+      renderUnitSidebar();
+      updateAvailable();
+      showToast('🎉 Full access unlocked!');
+    }, 1000);
+  } else {
+    msg.style.color = '#ef4444';
+    msg.textContent = '❌ Invalid code. Contact Faridah for your code.';
+  }
+}
+
+// ─── TOAST ────────────────────────────────────────────────────────────────
+function showToast(msg, duration=3000) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), duration);
+}
+
+// Close modal on backdrop click
+document.getElementById('accessModal').addEventListener('click', function(e) {
+  if (e.target === this) closeModal();
+});
+</script>
+</body>
+</html>
