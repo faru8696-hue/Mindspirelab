@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>AP Chemistry Lessons | MindSpire Lab</title>
+<link rel="icon" href="/favicon.ico"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet"/>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root{--p:#6c63ff;--pd:#4f46e5;--grn:#10b981;--org:#f59e0b;--red:#ef4444;
+  --dark:#0f172a;--text:#374151;--muted:#6b7280;--border:#e5e7eb;--bg:#f8fafc;--card:#fff}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+a{text-decoration:none;color:inherit}
+button{font-family:inherit;cursor:pointer}
+
+/* NAV */
+.top-nav{position:fixed;top:0;left:0;right:0;z-index:300;background:#fff;
+  border-bottom:1px solid var(--border);padding:0 20px;height:56px;display:flex;
+  align-items:center;justify-content:space-between;box-shadow:0 1px 8px rgba(0,0,0,.06)}
+.nav-brand{display:flex;align-items:center;gap:8px;font-weight:900;font-size:16px;color:var(--dark)}
+.nav-brand svg{width:30px;height:30px}
+.nav-right{display:flex;align-items:center;gap:8px}
+.btn-back{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--muted);
+  padding:6px 12px;border-radius:8px;border:1px solid var(--border);transition:.15s;background:#fff}
+.btn-back:hover{background:var(--bg);color:var(--dark)}
+.btn-logout{font-size:12px;color:#9ca3af;padding:5px 12px;border-radius:8px;
+  border:1px solid var(--border);background:none;transition:.2s}
+.btn-logout:hover{background:#f1f5f9}
+
+/* PAGE LAYOUT */
+.page{padding-top:76px;padding-bottom:60px;max-width:900px;margin:0 auto;padding-left:20px;padding-right:20px}
+
+/* HEADER BANNER */
+.hero-banner{background:linear-gradient(135deg,#0f0c29,#1e1b4b,#2d2566);border-radius:20px;
+  padding:36px;margin-bottom:28px;position:relative;overflow:hidden}
+.hero-banner::before{content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse at 20% 60%,rgba(108,99,255,.4),transparent 60%),
+             radial-gradient(ellipse at 85% 20%,rgba(245,158,11,.15),transparent 45%)}
+.hb-inner{position:relative;z-index:1}
+.hb-title{font-size:clamp(22px,3vw,28px);font-weight:900;color:#fff;margin-bottom:8px}
+.hb-sub{font-size:13px;color:rgba(255,255,255,.6);margin-bottom:20px;max-width:560px;line-height:1.6}
+.hb-stats{display:flex;gap:14px;flex-wrap:wrap}
+.hs{background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.12);padding:10px 16px;
+  border-radius:10px;text-align:center}
+.hs-num{font-size:18px;font-weight:900;color:#fff}
+.hs-lbl{font-size:10px;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.5px}
+
+/* UNIT CARDS */
+.unit-card{background:var(--card);border:1px solid var(--border);border-radius:16px;
+  margin-bottom:16px;overflow:hidden;transition:.2s}
+.unit-card:hover{border-color:rgba(108,99,255,.3);box-shadow:0 4px 20px rgba(0,0,0,.06)}
+
+.unit-header{display:flex;align-items:center;gap:14px;padding:18px 22px;cursor:pointer;
+  user-select:none;transition:.15s}
+.unit-header:hover{background:#fafafa}
+.unit-icon-box{width:46px;height:46px;border-radius:12px;display:flex;align-items:center;
+  justify-content:center;font-size:22px;flex-shrink:0}
+.unit-meta{flex:1}
+.unit-num{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;
+  color:var(--muted);margin-bottom:2px}
+.unit-name{font-size:15px;font-weight:800;color:var(--dark)}
+.unit-right{display:flex;align-items:center;gap:10px}
+.progress-mini{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:600}
+.progress-track{width:60px;height:5px;background:#e5e7eb;border-radius:3px;overflow:hidden}
+.progress-fill{height:100%;border-radius:3px}
+.expand-icon{color:var(--muted);transition:.25s;font-size:13px}
+.unit-card.open .expand-icon{transform:rotate(180deg)}
+.free-tag{font-size:10px;font-weight:700;background:#dcfce7;color:#16a34a;
+  padding:2px 8px;border-radius:20px}
+.paid-tag{font-size:10px;font-weight:700;background:#fef3c7;color:#d97706;
+  padding:2px 8px;border-radius:20px}
+
+/* UNIT BODY */
+.unit-body{display:none;border-top:1px solid var(--border);padding:24px 22px}
+.unit-card.open .unit-body{display:block}
+
+/* TOPICS */
+.topic{margin-bottom:24px;padding-bottom:24px;border-bottom:1px solid var(--border)}
+.topic:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}
+.topic-title{font-size:14px;font-weight:800;color:var(--dark);margin-bottom:10px;
+  display:flex;align-items:center;gap:8px}
+.topic-title::before{content:'';width:3px;height:16px;border-radius:2px;background:var(--p);flex-shrink:0}
+
+.concept-list{margin-bottom:12px;padding-left:0;list-style:none}
+.concept-list li{font-size:13px;line-height:1.75;color:var(--text);padding:2px 0 2px 20px;position:relative}
+.concept-list li::before{content:'→';position:absolute;left:0;color:var(--p);font-size:11px;font-weight:700;top:4px}
+
+/* AP TIP BOX */
+.ap-tip{background:linear-gradient(135deg,#ede9fe,#ddd6fe);border:1px solid #c4b5fd;
+  border-radius:10px;padding:12px 14px;margin-bottom:10px}
+.ap-tip-label{font-size:11px;font-weight:800;color:#6d28d9;margin-bottom:4px;text-transform:uppercase;letter-spacing:.5px}
+.ap-tip-text{font-size:13px;color:#4c1d95;line-height:1.6}
+
+/* FORMULA BOX */
+.formula-box{background:#f0f9ff;border:1px solid #bae6fd;border-radius:10px;padding:12px 14px;margin-bottom:10px}
+.formula-label{font-size:11px;font-weight:800;color:#0284c7;margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px}
+.formula-list{display:flex;flex-wrap:wrap;gap:8px}
+.formula-item{background:#fff;border:1px solid #bae6fd;border-radius:8px;padding:6px 12px;
+  font-size:12px;font-family:'Courier New',monospace;color:#0f172a;font-weight:600}
+
+/* PRACTICE BUTTON */
+.btn-practice{display:inline-flex;align-items:center;gap:7px;background:linear-gradient(135deg,var(--p),var(--pd));
+  color:#fff;padding:10px 20px;border-radius:10px;font-size:13px;font-weight:700;
+  border:none;cursor:pointer;transition:.2s;text-decoration:none;margin-top:12px}
+.btn-practice:hover{transform:translateY(-1px);box-shadow:0 4px 14px rgba(108,99,255,.35)}
+
+/* SEARCH BAR */
+.search-wrap{margin-bottom:20px}
+.search-input{width:100%;padding:11px 16px;border:1.5px solid var(--border);border-radius:12px;
+  font-size:14px;font-family:'Inter',sans-serif;outline:none;transition:.2s;background:#fff}
+.search-input:focus{border-color:var(--p);box-shadow:0 0 0 3px rgba(108,99,255,.1)}
+
+/* TOAST */
+.toast{position:fixed;bottom:22px;right:22px;background:#1e293b;color:#fff;
+  padding:11px 18px;border-radius:12px;font-size:13px;font-weight:600;z-index:9999;
+  transform:translateY(70px);opacity:0;transition:.3s;pointer-events:none}
+.toast.show{transform:translateY(0);opacity:1}
+
+/* LOCK OVERLAY */
+.lock-overlay{text-align:center;padding:28px;background:#f8fafc;border-radius:12px;
+  border:1.5px dashed var(--border);margin-top:8px}
+.lock-overlay .lo-icon{font-size:32px;margin-bottom:8px}
+.lock-overlay p{font-size:13px;color:var(--muted)}
+
+@media(max-width:600px){
+  .hb-stats{gap:8px}
+  .hs{padding:8px 12px}
+  .unit-header{padding:14px 16px;gap:10px}
+  .unit-body{padding:18px 16px}
+/* LOADING */
+#authLoading{position:fixed;inset:0;background:#f8fafc;z-index:9999;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px}
+#authLoading .ld-spin{width:28px;height:28px;border:3px solid #e5e7eb;border-top-color:#6c63ff;
+  border-radius:50%;animation:ldSpin .8s linear infinite}
+#authLoading .ld-text{font-size:14px;font-weight:600;color:#6b7280}
+@keyframes ldSpin{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+<div id="authLoading"><div class="ld-spin"></div><div class="ld-text">Loading…</div></div>
+<!-- NAV -->
+<nav class="top-nav">
+  <div class="nav-brand">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 36" fill="none">
+      <defs><linearGradient id="nlg" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#a78bfa"/><stop offset="100%" stop-color="#4f46e5"/></linearGradient></defs>
+      <rect width="36" height="36" rx="10" fill="url(#nlg)"/>
+      <circle cx="18" cy="18" r="3" fill="white" opacity=".95"/>
+      <ellipse cx="18" cy="18" rx="10.5" ry="4" stroke="white" stroke-width="1.6" fill="none" opacity=".9"/>
+      <ellipse cx="18" cy="18" rx="10.5" ry="4" stroke="white" stroke-width="1.6" fill="none" opacity=".9" transform="rotate(60 18 18)"/>
+      <ellipse cx="18" cy="18" rx="10.5" ry="4" stroke="white" stroke-width="1.6" fill="none" opacity=".9" transform="rotate(120 18 18)"/>
+      <circle cx="28.5" cy="18" r="1.8" fill="#f59e0b"/>
+    </svg>
+    MindSpire Lab
+  </div>
+  <div class="nav-right">
+    <a href="/" class="btn-back"><i class="fas fa-arrow-left"></i> Dashboard</a>
+    <button class="btn-logout" onclick="doLogout()"><i class="fas fa-sign-out-alt"></i> Logout</button>
+  </div>
+</nav>
+
+<div class="page">
+
+  <!-- HERO -->
+  <div class="hero-banner">
+    <div class="hb-inner">
+      <div class="hb-title">📚 AP Chemistry Lesson Library</div>
+      <div class="hb-sub">Master all 9 AP Chemistry units with clear key concepts, formulas, and AP exam tips. Unit 1 is free for everyone!</div>
+      <div class="hb-stats">
+        <div class="hs"><div class="hs-num">9</div><div class="hs-lbl">AP Units</div></div>
+        <div class="hs"><div class="hs-num">54+</div><div class="hs-lbl">Topics</div></div>
+        <div class="hs"><div class="hs-num">AP Tips</div><div class="hs-lbl">Every Topic</div></div>
+        <div class="hs"><div class="hs-num">Formulas</div><div class="hs-lbl">Included</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SEARCH -->
+  <div class="search-wrap">
+    <input type="text" class="search-input" id="searchInput" placeholder="🔍 Search topics, concepts, keywords…" oninput="filterUnits(this.value)"/>
+  </div>
+
+  <!-- UNITS -->
+  <div id="unitsContainer"></div>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const SUPABASE_URL = 'https://qmrpbxiiwbqnmczdxoqr.supabase.co';
+const SUPABASE_ANON = 'sb_publishable_t8Q_10VZIilu1bZlJXyzsA_w-LUu_E2';
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
+let currentUser = null;
+let isPaid = false;
+
+// ── LESSON DATA ────────────────────────────────────────────────────────────────────
+const LESSONS = [
+{
+  id:1, name:"Atomic Structure & Properties", icon:"⚛️", color:"#6c63ff", free:true,
+  topics:[
+    {
+      name:"Moles, Molar Mass & Percent Composition",
+      concepts:[
+        "Mole = 6.022×10²³ particles (Avogadro's number)",
+        "Molar mass = sum of atomic masses in g/mol",
+        "Moles = mass (g) ÷ molar mass (g/mol)",
+        "Percent composition = (mass of element / molar mass of compound) × 100%",
+        "Empirical formula: simplest whole-number ratio of atoms",
+        "Molecular formula: actual number of atoms; multiple of empirical formula",
+      ],
+      tip:"The FRQ almost always includes a moles calculation. Show every step: n = m/M. Use grams — never forget to convert!",
+      formulas:["n = m/M","% comp = (mass element / molar mass) × 100","M.F. = k × E.F."]
+    },
+    {
+      name:"Atomic Theory & Mass Spectrometry",
+      concepts:[
+        "Protons (+) and neutrons are in the nucleus; electrons (−) orbit outside",
+        "Atomic number (Z) = number of protons; defines the element",
+        "Mass number (A) = protons + neutrons",
+        "Isotopes: same Z, different mass number (different # of neutrons)",
+        "Average atomic mass = weighted average of isotope masses × abundances",
+        "Mass spectrometry separates ions by mass-to-charge ratio (m/z)",
+        "Peaks in mass spectrum represent different isotopes or fragmentation patterns",
+      ],
+      tip:"AP loves mass spectrometry questions. Remember: m/z is the x-axis. Taller peak = more abundant isotope. Average atomic mass is the weighted average.",
+      formulas:["Avg mass = Σ (fractional abundance × isotope mass)","m/z = mass / charge"]
+    },
+    {
+      name:"Electron Configuration & Periodic Trends",
+      concepts:[
+        "Aufbau principle: fill lowest energy orbitals first (1s→2s→2p→3s…)",
+        "Pauli exclusion principle: max 2 electrons per orbital, opposite spins",
+        "Hund's rule: fill degenerate orbitals singly before pairing",
+        "Orbital shapes: s (sphere), p (dumbbell), d (clover), f (complex)",
+        "Core electrons vs. valence electrons; valence electrons determine reactivity",
+        "Electronegativity: F > O > N > Cl > Br — increases → and ↑ on periodic table",
+        "Atomic radius: increases ↓ and ← on periodic table",
+        "Ionization energy: increases → and ↑ on periodic table",
+        "Exceptions: Cr = [Ar]3d⁵4s¹, Cu = [Ar]3d¹⁰4s¹ (half-filled/full d is extra stable)",
+      ],
+      tip:"Know the periodic trend direction arrows cold. A question on every AP exam asks which element has the highest IE or EN. Also memorize Cr and Cu exceptions!",
+      formulas:["IE₁ < IE₂ < IE₃ (always increasing)","EN: F(4.0) > O(3.5) > N(3.0) > Cl(3.2)"]
+    },
+    {
+      name:"Photoelectron Spectroscopy (PES)",
+      concepts:[
+        "PES measures the binding energies of electrons in different orbitals",
+        "Higher binding energy → electrons closer to nucleus (core electrons)",
+        "Peak height in PES is proportional to the number of electrons in that subshell",
+        "1s electrons have the highest binding energy, valence electrons lowest",
+        "PES data can identify the element and its electron configuration",
+      ],
+      tip:"AP exam shows PES spectrum and asks you to identify element or write electron configuration. Count peaks carefully — height tells you electron count in that orbital.",
+      formulas:["KE = hν − BE (Einstein photoelectric equation)"]
+    }
+  ]
+},
+{
+  id:2, name:"Molecular & Ionic Compound Structure", icon:"🔬", color:"#10b981", free:false,
+  topics:[
+    {
+      name:"Lewis Structures & Formal Charge",
+      concepts:[
+        "Lewis structure shows all valence electrons as dots or bonding pairs",
+        "Formal charge = (valence e⁻) − (lone pair e⁻) − ½(bonding e⁻)",
+        "Best Lewis structure has formal charges closest to zero",
+        "Octet rule: most atoms want 8 electrons around them",
+        "Exceptions: H (2), Be (4), B (6), expanded octets for period 3+ elements (P, S, Cl)",
+        "Resonance structures: multiple valid Lewis structures; actual structure is hybrid",
+      ],
+      tip:"Formal charge formula is given on exam. Always check that the sum of formal charges = total charge of the ion/molecule. Draw ALL resonance structures — AP will ask for them.",
+      formulas:["FC = V − L − B/2","Σ FC = overall charge"]
+    },
+    {
+      name:"VSEPR Theory & Molecular Geometry",
+      concepts:[
+        "VSEPR: electron pairs repel — minimise repulsion to determine shape",
+        "Electron geometry vs. molecular geometry (lone pairs are invisible in shape)",
+        "2 regions: linear (180°); 3 regions: trigonal planar (120°); 4 regions: tetrahedral (109.5°)",
+        "5 regions: trigonal bipyramidal; 6 regions: octahedral",
+        "Lone pairs compress bond angles: NH₃ (107°), H₂O (104.5°)",
+        "Polarity: a molecule is polar if it has polar bonds AND asymmetric geometry",
+      ],
+      tip:"Draw the Lewis structure FIRST, then count electron pairs, then apply VSEPR. Never confuse electron geometry with molecular geometry — AP questions exploit this!",
+      formulas:["Bond angle: linear(180°), trig planar(120°), tetrahedral(109.5°)"]
+    },
+    {
+      name:"Ionic Bonding & Properties",
+      concepts:[
+        "Ionic bonds: metal gives electrons to nonmetal → electrostatic attraction",
+        "Lattice energy: energy required to separate ionic solid into gaseous ions",
+        "Higher charge and smaller radius → stronger ionic bond → higher lattice energy",
+        "Ionic compounds: high melting points, brittle, conduct electricity when dissolved/melted",
+      ],
+      tip:"Lattice energy trends: MgO has much higher lattice energy than NaCl because Mg²⁺ and O²⁻ have charges of 2 vs 1. Charge matters more than size.",
+      formulas:["Lattice energy ∝ (q₁×q₂)/r"]
+    }
+  ]
+},
+{
+  id:3, name:"Intermolecular Forces & Properties", icon:"💧", color:"#3b82f6", free:false,
+  topics:[
+    {
+      name:"Types of Intermolecular Forces",
+      concepts:[
+        "London Dispersion Forces (LDF): exist in ALL molecules; caused by temporary dipoles; stronger with more electrons (higher molar mass)",
+        "Dipole-Dipole: between polar molecules; stronger than LDF of similar size",
+        "Hydrogen Bonding: N-H, O-H, or F-H bonded to electronegative N, O, or F; strongest IMF; explains high BP of water",
+        "Ion-Dipole: between ion and polar molecule (important in solutions)",
+        "IMF strength order: LDF < dipole-dipole < H-bond < ion-dipole",
+      ],
+      tip:"AP always tests H-bonding — only N, O, F form H-bonds. Water's anomalous properties (high BP, surface tension, ice floating) are all from H-bonds. Memorize this!",
+      formulas:[]
+    },
+    {
+      name:"Properties of Solids, Liquids & Gases",
+      concepts:[
+        "Solids: definite shape and volume; particles vibrate in fixed positions",
+        "Liquids: definite volume, no definite shape; particles slide past each other",
+        "Gases: no definite shape or volume; particles move freely",
+        "Viscosity: resistance to flow; higher IMF → higher viscosity",
+        "Surface tension: tendency to minimise surface area; higher IMF → higher surface tension",
+        "Vapor pressure: partial pressure of vapor above liquid; lower IMF → higher VP",
+        "Boiling point: temperature where VP = atmospheric pressure; higher IMF → higher BP",
+      ],
+      tip:"BP and IMF strength are directly proportional — the AP exam almost always asks: which compound has the higher boiling point? Justify with IMF type AND magnitude.",
+      formulas:["Clausius-Clapeyron: ln(P₂/P₁) = −ΔHvap/R × (1/T₂ − 1/T₁)"]
+    },
+    {
+      name:"Phase Diagrams",
+      concepts:[
+        "Phase diagram: pressure vs temperature showing regions of solid, liquid, gas",
+        "Triple point: all three phases coexist in equilibrium",
+        "Critical point: above this T and P, substance is supercritical fluid",
+        "Normal BP: temperature where vapor pressure = 1 atm (101.3 kPa)",
+        "Water phase diagram is unusual: solid-liquid boundary slopes left (ice less dense than water)",
+      ],
+      tip:"Be able to read a phase diagram and describe what happens as you change T or P. Know that crossing a phase boundary = phase transition.",
+      formulas:[]
+    }
+  ]
+},
+{
+  id:4, name:"Chemical Reactions", icon:"⚗️", color:"#f59e0b", free:false,
+  topics:[
+    {
+      name:"Types of Chemical Reactions",
+      concepts:[
+        "Synthesis (combination): A + B → AB",
+        "Decomposition: AB → A + B",
+        "Single replacement: A + BC → AC + B (activity series determines feasibility)",
+        "Double replacement (precipitation, neutralisation, gas-forming)",
+        "Combustion: fuel + O₂ → CO₂ + H₂O",
+        "Acid-Base (Brønsted-Lowry): proton transfer; net ionic equations needed",
+        "Oxidation-Reduction (Redox): electron transfer; assign oxidation numbers",
+      ],
+      tip:"Writing net ionic equations is a must for AP FRQs. Cancel spectator ions. Know the solubility rules for common ionic compounds!",
+      formulas:[]
+    },
+    {
+      name:"Stoichiometry & Limiting Reagents",
+      concepts:[
+        "Balanced equation coefficients = molar ratios",
+        "Convert: grams → moles → moles of product → grams",
+        "Limiting reagent: reagent that runs out first; determines max product",
+        "Percent yield = (actual yield / theoretical yield) × 100%",
+        "Excess reagent: how much is left over after reaction stops",
+      ],
+      tip:"Always find limiting reagent by calculating moles of EACH reactant and see which gives fewer moles of product. Never guess.",
+      formulas:["% yield = (actual/theoretical) × 100","n = m/M → molar ratios → m of product"]
+    },
+    {
+      name:"Solution Chemistry & Concentration",
+      concepts:[
+        "Molarity (M) = moles of solute / litres of solution",
+        "Dilution: M₁V₁ = M₂V₂",
+        "Titration: use stoichiometry to find unknown concentration",
+        "At equivalence point: moles of acid = moles of base (for strong/strong)",
+        "Spectrophotometry: Beer-Lambert law: A = εlc",
+      ],
+      tip:"Titration calculations on AP FRQ: write the net ionic equation, find moles of known, use stoichiometry to get moles of unknown, then M = n/V.",
+      formulas:["M = n/V","M₁V₁ = M₂V₂","A = εbc (Beer-Lambert)"]
+    }
+  ]
+},
+{
+  id:5, name:"Kinetics", icon:"⏱️", color:"#ef4444", free:false,
+  topics:[
+    {
+      name:"Rate Laws & Reaction Orders",
+      concepts:[
+        "Rate = k[A]ᵐ[B]ⁿ — rate law is determined experimentally, NOT from balanced equation",
+        "Zero order: rate doesn't depend on concentration; graph: [A] vs t is linear",
+        "First order: rate ∝ [A]; graph: ln[A] vs t is linear; t½ = ln2/k (constant)",
+        "Second order: rate ∝ [A]²; graph: 1/[A] vs t is linear; t½ = 1/k[A]₀",
+        "Overall order = sum of all exponents in rate law",
+        "Units of k: depend on order — M/s (zero), s⁻¹ (first), M⁻¹s⁻¹ (second)",
+      ],
+      tip:"You MUST determine rate law from data tables on AP exam. Doubling [A] and rate doubles → first order in A. Rate quadruples → second order. Use the ratio method!",
+      formulas:["Rate = k[A]ᵐ[B]ⁿ","1st order: ln[A]t = ln[A]₀ − kt","t½(1st) = 0.693/k","t½(2nd) = 1/(k[A]₀)"]
+    },
+    {
+      name:"Activation Energy & Arrhenius Equation",
+      concepts:[
+        "Activation energy (Ea): minimum energy needed for successful collision",
+        "Arrhenius equation: k = Ae^(−Ea/RT) — relates rate constant to temperature",
+        "Increasing temperature → more molecules with energy ≥ Ea → faster rate",
+        "Catalyst: lowers Ea without being consumed; increases rate at any temperature",
+        "Maxwell-Boltzmann distribution shows fraction of molecules with enough energy",
+      ],
+      tip:"AP exam shows energy diagrams — know that catalyst lowers BOTH forward and reverse Ea equally. Ea doesn't change ΔH! Use ln(k₂/k₁) = Ea/R × (1/T₁ − 1/T₂).",
+      formulas:["k = Ae^(−Ea/RT)","ln(k₂/k₁) = Ea/R × (1/T₁ − 1/T₂)","R = 8.314 J/mol·K"]
+    },
+    {
+      name:"Reaction Mechanisms",
+      concepts:[
+        "Elementary step: single molecular collision; rate from stoichiometry of THAT step",
+        "Rate-determining step (RDS): slowest step; determines overall rate law",
+        "Intermediate: produced in one step, consumed in another (not in overall equation)",
+        "Catalyst: appears in mechanism but is regenerated (not in overall equation)",
+        "Molecularity: unimolecular (1 molecule), bimolecular (2 molecules), termolecular (rare)",
+      ],
+      tip:"If asked to propose a mechanism consistent with the rate law, the RDS must have those exact reactants. Intermediates cancel out between steps.",
+      formulas:[]
+    }
+  ]
+},
+{
+  id:6, name:"Thermodynamics", icon:"🌡️", color:"#8b5cf6", free:false,
+  topics:[
+    {
+      name:"Enthalpy & Hess's Law",
+      concepts:[
+        "Enthalpy (H): heat flow at constant pressure; ΔH = q_p",
+        "Exothermic: ΔH < 0 (heat released to surroundings)",
+        "Endothermic: ΔH > 0 (heat absorbed from surroundings)",
+        "Hess's Law: ΔH_rxn = ΣΔH_products − ΣΔH_reactants (can add reactions)",
+        "Standard enthalpy of formation (ΔHf°): enthalpy to form 1 mol from elements in standard state",
+        "ΔH°rxn = ΣΔHf°(products) − ΣΔHf°(reactants)",
+        "Bond enthalpies: ΔH = bonds broken − bonds formed",
+      ],
+      tip:"Know that ΔHf° for elements in standard state = 0. Hess's Law problems: reverse reactions change sign, multiply by coefficient multiplies ΔH.",
+      formulas:["ΔH°rxn = ΣΔHf°(products) − ΣΔHf°(reactants)","ΔH = bonds broken − bonds formed","q = mcΔT"]
+    },
+    {
+      name:"Entropy & Gibbs Free Energy",
+      concepts:[
+        "Entropy (S): measure of disorder/dispersal of energy; ΔS > 0 for increased disorder",
+        "Increasing disorder: solid → liquid → gas; dissolving; more moles of gas",
+        "Gibbs free energy: ΔG = ΔH − TΔS",
+        "ΔG < 0: spontaneous; ΔG > 0: nonspontaneous; ΔG = 0: at equilibrium",
+        "Spontaneity depends on temperature when signs of ΔH and ΔS conflict",
+        "ΔG° = −RT ln K (standard conditions)",
+        "ΔG = ΔG° + RT ln Q",
+      ],
+      tip:"Memorise the four sign combinations for ΔH and ΔS. AP FRQ always asks: is this reaction spontaneous at high T or low T? Think about which term dominates ΔG = ΔH − TΔS.",
+      formulas:["ΔG = ΔH − TΔS","ΔG° = −RT ln K","ΔG = ΔG° + RT ln Q","ΔG < 0 = spontaneous"]
+    }
+  ]
+},
+{
+  id:7, name:"Equilibrium", icon:"⚖️", color:"#06b6d4", free:false,
+  topics:[
+    {
+      name:"Equilibrium Constants (K)",
+      concepts:[
+        "Dynamic equilibrium: forward and reverse rates equal; concentrations constant",
+        "K = [products]^coefficients / [reactants]^coefficients",
+        "Solids and pure liquids NOT included in K expression",
+        "K > 1: products favoured; K < 1: reactants favoured; K = 1: roughly equal",
+        "Kc uses concentrations (M); Kp uses partial pressures (atm)",
+        "Kp = Kc(RT)^Δn where Δn = moles gas products − moles gas reactants",
+      ],
+      tip:"K expression is the #1 most tested equilibrium concept. Write it correctly: products over reactants, raise to stoichiometric powers, exclude pure solids/liquids.",
+      formulas:["K = [P]^p/[R]^r","Kp = Kc(RT)^Δn","ΔG° = −RT ln K"]
+    },
+    {
+      name:"Le Châtelier's Principle & ICE Tables",
+      concepts:[
+        "Le Châtelier's: system at equilibrium shifts to oppose applied stress",
+        "Adding reactant → shifts right (towards products)",
+        "Increasing pressure → shifts towards fewer moles of gas",
+        "Increasing temperature → shifts towards endothermic direction",
+        "Adding catalyst → no shift (equilibrium position unchanged, just reached faster)",
+        "ICE table: Initial, Change, Equilibrium — tool for solving K problems",
+        "Reaction quotient Q: compare to K to predict direction of shift",
+        "Q < K → shifts right; Q > K → shifts left",
+      ],
+      tip:"Le Châtelier and ICE tables are on every AP exam. For ICE: if x is small relative to initial, use approximation. Always check: 5% rule for approximation validity.",
+      formulas:["Q = K: equilibrium; Q<K: →right; Q>K: →left","Ka × Kb = Kw = 1×10⁻¹⁴"]
+    },
+    {
+      name:"Solubility & Ksp",
+      concepts:[
+        "Ksp: solubility product constant for dissolution of sparingly soluble salt",
+        "AgCl(s) ⇌ Ag⁺(aq) + Cl⁻(aq); Ksp = [Ag⁺][Cl⁻]",
+        "Common ion effect: adding a common ion decreases solubility (Le Châtelier)",
+        "Precipitation: Q > Ksp → precipitate forms",
+        "Molar solubility (s): moles of solid that dissolve per litre",
+      ],
+      tip:"Ksp problems require ICE tables. Common ion effect is key — adding NaCl to AgCl solution decreases solubility because [Cl⁻] increases.",
+      formulas:["Ksp = [cation]^a × [anion]^b","Q vs Ksp predicts precipitation"]
+    }
+  ]
+},
+{
+  id:8, name:"Acids & Bases", icon:"🧪", color:"#ec4899", free:false,
+  topics:[
+    {
+      name:"Acid-Base Definitions & Strong/Weak",
+      concepts:[
+        "Arrhenius: acid → H⁺, base → OH⁻",
+        "Brønsted-Lowry: acid = proton donor, base = proton acceptor",
+        "Lewis: acid = electron-pair acceptor, base = electron-pair donor",
+        "Conjugate acid-base pairs: differ by one proton",
+        "Strong acids (memorise): HCl, HBr, HI, HNO₃, H₂SO₄, HClO₄",
+        "Strong bases (memorise): Group 1 and 2 hydroxides (NaOH, KOH, Ca(OH)₂…)",
+        "Weak acids/bases: partial dissociation; use Ka/Kb equilibrium expressions",
+      ],
+      tip:"Know the 6 strong acids and strong bases cold. Everything else is weak. Weak acid problems always use an ICE table with Ka.",
+      formulas:["pH = −log[H⁺]","pOH = −log[OH⁻]","pH + pOH = 14","Ka × Kb = Kw = 10⁻¹⁴"]
+    },
+    {
+      name:"Buffer Solutions",
+      concepts:[
+        "Buffer: weak acid + conjugate base (or weak base + conjugate acid) mixture",
+        "Resists pH change on addition of small amounts of strong acid or base",
+        "Henderson-Hasselbalch: pH = pKa + log([A⁻]/[HA])",
+        "Maximum buffer capacity: when [A⁻] = [HA], i.e., pH = pKa",
+        "Buffer range: ±1 pH unit around pKa",
+        "Adding strong acid to buffer: neutralises A⁻, shifts ratio",
+        "Adding strong base to buffer: neutralises HA, shifts ratio",
+      ],
+      tip:"Henderson-Hasselbalch is the key buffer equation. For AP FRQ: calculate pH before and after adding acid/base using moles approach first, then H-H.",
+      formulas:["pH = pKa + log([A⁻]/[HA])","Ka = [H⁺][A⁻]/[HA]"]
+    },
+    {
+      name:"Titration Curves",
+      concepts:[
+        "Strong acid + strong base: equivalence point at pH 7",
+        "Weak acid + strong base: equivalence point pH > 7 (conjugate base is basic)",
+        "Weak base + strong acid: equivalence point pH < 7",
+        "At half-equivalence point: [HA] = [A⁻], pH = pKa",
+        "Indicators: change colour at pH ≈ pKa of indicator (should bracket equiv. point)",
+        "Buffer region: flat part of titration curve before equivalence point",
+      ],
+      tip:"AP FRQ titration questions: be able to calculate pH at start, buffer region, half-equivalence, equivalence point, and after equivalence. Know which region you're in!",
+      formulas:["At half-eq. pt: pH = pKa","At eq. pt (weak acid): use Kb of conjugate base"]
+    }
+  ]
+},
+{
+  id:9, name:"Electrochemistry & Redox", icon:"⚡", color:"#f97316", free:false,
+  topics:[
+    {
+      name:"Oxidation Numbers & Balancing Redox",
+      concepts:[
+        "Oxidation number rules: O = −2, H = +1, pure element = 0, monatomic ion = charge",
+        "Oxidation: loss of electrons (OIL) → oxidation number increases",
+        "Reduction: gain of electrons (RIG) → oxidation number decreases",
+        "Oxidising agent: accepts electrons (gets reduced); Reducing agent: donates electrons (gets oxidised)",
+        "Half-reaction method: split into oxidation and reduction half-reactions, balance each, combine",
+        "In acidic solution: balance O with H₂O, H with H⁺, then charge with e⁻",
+        "In basic solution: after balancing in acid, add OH⁻ to neutralise H⁺",
+      ],
+      tip:"Balance redox reactions in 6 steps: assign ox numbers → split into half-reactions → balance atoms → balance charge with e⁻ → equalise electrons → add half-reactions.",
+      formulas:["OIL RIG: Oxidation Is Loss, Reduction Is Gain"]
+    },
+    {
+      name:"Galvanic & Electrolytic Cells",
+      concepts:[
+        "Galvanic (voltaic) cell: spontaneous redox reaction generates electrical energy",
+        "Electrolytic cell: electrical energy drives nonspontaneous redox reaction",
+        "Anode: oxidation occurs (−in galvanic, +in electrolytic)",
+        "Cathode: reduction occurs (+in galvanic, −in electrolytic)",
+        "Salt bridge: maintains electrical neutrality; contains inert ions",
+        "Standard cell potential: E°cell = E°cathode − E°anode",
+        "ΔG° = −nFE°cell (n = moles of electrons, F = 96485 C/mol)",
+      ],
+      tip:"The mnemonic: RED CAT and AN OX — Reduction at Cathode, Anode is Oxidation. E°cell = E°cathode − E°anode. Positive E° = spontaneous (ΔG < 0).",
+      formulas:["E°cell = E°cathode − E°anode","ΔG° = −nFE°","E°cell = (RT/nF)lnK","Nernst: E = E° − (RT/nF)lnQ"]
+    },
+    {
+      name:"Nernst Equation & Electrolysis",
+      concepts:[
+        "Nernst equation: E = E° − (RT/nF)ln Q — adjusts cell potential for non-standard conditions",
+        "At equilibrium: E = 0, Q = K",
+        "Faraday's law: q = nF (charge = moles of electrons × Faraday constant)",
+        "Electrolysis: use current and time to calculate moles of electrons: n = It/F",
+        "Electroplating: electrolytic cell deposits metal ions onto cathode",
+      ],
+      tip:"Nernst equation and Faraday's law problems appear on almost every AP exam. Know: moles electrons = (current × time) / F = (I × t) / 96485.",
+      formulas:["E = E° − (RT/nF)lnQ = E° − (0.0592/n)logQ at 25°C","q = It","n_e = q/F","F = 96485 C/mol"]
+    }
+  ]
+}
+];
+
+// ── INIT ────────────────────────────────────────────────────────────────────────
+(async () => {
+  const { data: { session } } = await sb.auth.getSession();
+  if (!session) { window.location.href = '/login'; return; }
+  currentUser = session.user;
+  const { data: profile } = await sb.from('profiles').select('role,is_paid').eq('id', currentUser.id).single();
+  if (profile?.role === 'teacher') isPaid = true; // teachers see all
+  else isPaid = profile?.is_paid || false;
+  try { if (localStorage.getItem('msl_paid')==='1') isPaid=true; } catch(e){}
+  const ld = document.getElementById('authLoading');
+  if (ld) ld.remove();
+  renderUnits(LESSONS);
+})();
+
+async function doLogout() {
+  await sb.auth.signOut();
+  window.location.href = '/login';
+}
+
+// ── RENDER ───────────────────────────────────────────────────────────────────────
+function renderUnits(units) {
+  const c = document.getElementById('unitsContainer');
+  c.innerHTML = units.map(unit => {
+    const accessible = unit.free || isPaid;
+    return `<div class="unit-card" id="uc-${unit.id}">
+      <div class="unit-header" onclick="toggleUnit(${unit.id})">
+        <div class="unit-icon-box" style="background:${unit.color}20">${unit.icon}</div>
+        <div class="unit-meta">
+          <div class="unit-num">Unit ${unit.id}</div>
+          <div class="unit-name">${unit.name}</div>
+        </div>
+        <div class="unit-right">
+          ${unit.free ? '<span class="free-tag">Free</span>' : (isPaid ? '<span class="free-tag">Unlocked</span>' : '<span class="paid-tag">🔒 Paid</span>')}
+          <span style="font-size:12px;color:var(--muted)">${unit.topics.length} topics</span>
+          <i class="fas fa-chevron-down expand-icon"></i>
+        </div>
+      </div>
+      <div class="unit-body">
+        ${accessible ? unit.topics.map(t => renderTopic(t, unit.color)).join('') : `
+          <div class="lock-overlay">
+            <div class="lo-icon">🔒</div>
+            <p>This unit requires a paid plan.</p>
+            <a href="https://mindspirelab.com/pricing" target="_blank" style="display:inline-flex;align-items:center;gap:6px;background:var(--p);color:#fff;padding:9px 18px;border-radius:9px;font-size:13px;font-weight:700;text-decoration:none;margin-top:12px"><i class="fas fa-unlock"></i> View Plans</a>
+          </div>`}
+        ${accessible ? `<a href="/" class="btn-practice"><i class="fas fa-flask"></i> Practice Unit ${unit.id} Questions</a>` : ''}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function renderTopic(t, color) {
+  return `<div class="topic">
+    <div class="topic-title">${t.name}</div>
+    <ul class="concept-list">
+      ${t.concepts.map(c => `<li>${c}</li>`).join('')}
+    </ul>
+    ${t.tip ? `<div class="ap-tip">
+      <div class="ap-tip-label">⭐ AP Exam Tip</div>
+      <div class="ap-tip-text">${t.tip}</div>
+    </div>` : ''}
+    ${t.formulas?.length ? `<div class="formula-box">
+      <div class="formula-label">📐 Key Formulas</div>
+      <div class="formula-list">${t.formulas.map(f => `<div class="formula-item">${f}</div>`).join('')}</div>
+    </div>` : ''}
+  </div>`;
+}
+
+function toggleUnit(id) {
+  const card = document.getElementById('uc-' + id);
+  card.classList.toggle('open');
+}
+
+function filterUnits(q) {
+  const query = q.toLowerCase().trim();
+  if (!query) { renderUnits(LESSONS); return; }
+  const filtered = LESSONS.filter(u =>
+    u.name.toLowerCase().includes(query) ||
+    u.topics.some(t =>
+      t.name.toLowerCase().includes(query) ||
+      t.concepts.some(c => c.toLowerCase().includes(query)) ||
+      (t.tip||'').toLowerCase().includes(query)
+    )
+  );
+  renderUnits(filtered.length ? filtered : LESSONS);
+  if (query && filtered.length) {
+    // Auto-open matched units
+    filtered.forEach(u => {
+      const card = document.getElementById('uc-' + u.id);
+      if (card && !card.classList.contains('open')) card.classList.add('open');
+    });
+  }
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Leaderboard | MindSpire Lab AP Chemistry</title>
+<link rel="icon" href="/favicon.ico"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet"/>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root{--p:#6c63ff;--pd:#4f46e5;--grn:#10b981;--org:#f59e0b;--red:#ef4444;
+  --dark:#0f172a;--text:#374151;--muted:#6b7280;--border:#e5e7eb;--bg:#f8fafc;--card:#fff}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+a{text-decoration:none;color:inherit}
+button{font-family:inherit;cursor:pointer}
+
+/* NAV */
+.top-nav{position:fixed;top:0;left:0;right:0;z-index:300;background:#fff;
+  border-bottom:1px solid var(--border);padding:0 20px;height:56px;display:flex;
+  align-items:center;justify-content:space-between;box-shadow:0 1px 8px rgba(0,0,0,.06)}
+.nav-brand{display:flex;align-items:center;gap:8px;font-weight:900;font-size:16px;color:var(--dark)}
+.nav-brand svg{width:30px;height:30px}
+.nav-right{display:flex;align-items:center;gap:8px}
+.btn-back{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--muted);
+  padding:6px 12px;border-radius:8px;border:1px solid var(--border);transition:.15s;background:#fff}
+.btn-back:hover{background:var(--bg);color:var(--dark)}
+.btn-logout{font-size:12px;color:#9ca3af;padding:5px 12px;border-radius:8px;
+  border:1px solid var(--border);background:none}
+
+/* PAGE */
+.page{padding-top:76px;padding-bottom:60px;max-width:860px;margin:0 auto;padding-left:20px;padding-right:20px}
+
+/* HERO */
+.hero{background:linear-gradient(135deg,#0f0c29,#1e1b4b,#2d2566);border-radius:20px;
+  padding:36px;margin-bottom:28px;position:relative;overflow:hidden;text-align:center}
+.hero::before{content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse at 50% 50%,rgba(108,99,255,.4),transparent 65%)}
+.hero-inner{position:relative;z-index:1}
+.hero-title{font-size:clamp(22px,3vw,28px);font-weight:900;color:#fff;margin-bottom:8px}
+.hero-sub{font-size:13px;color:rgba(255,255,255,.6);margin-bottom:20px}
+.your-rank-box{display:inline-flex;align-items:center;gap:10px;background:rgba(255,255,255,.12);
+  border:1px solid rgba(255,255,255,.18);padding:12px 22px;border-radius:14px}
+.yrb-rank{font-size:22px;font-weight:900;color:#fbbf24}
+.yrb-label{font-size:12px;color:rgba(255,255,255,.6);margin-bottom:2px}
+.yrb-name{font-size:14px;font-weight:700;color:#fff}
+.yrb-xp{font-size:12px;color:rgba(255,255,255,.6)}
+
+/* TABS */
+.tabs{display:flex;background:var(--card);border:1px solid var(--border);border-radius:12px;
+  padding:4px;gap:4px;margin-bottom:20px}
+.tab{flex:1;padding:9px;text-align:center;font-size:13px;font-weight:600;color:var(--muted);
+  border-radius:9px;cursor:pointer;transition:.2s}
+.tab:hover{color:var(--dark)}
+.tab.active{background:linear-gradient(135deg,var(--p),var(--pd));color:#fff}
+
+/* TOP 3 PODIUM */
+.podium{display:flex;align-items:flex-end;justify-content:center;gap:14px;margin-bottom:28px;flex-wrap:wrap}
+.podium-item{display:flex;flex-direction:column;align-items:center;gap:6px;min-width:90px}
+.podium-avatar{width:54px;height:54px;border-radius:50%;display:flex;align-items:center;
+  justify-content:center;font-size:22px;font-weight:900;color:#fff;border:3px solid rgba(255,255,255,.3)}
+.podium-stand{border-radius:10px 10px 0 0;display:flex;align-items:flex-end;justify-content:center;
+  padding-bottom:8px;font-size:20px}
+.p1 .podium-stand{height:90px;background:linear-gradient(to top,#fbbf24,#f59e0b);width:90px}
+.p2 .podium-stand{height:68px;background:linear-gradient(to top,#9ca3af,#6b7280);width:80px}
+.p3 .podium-stand{height:50px;background:linear-gradient(to top,#cd7c2e,#a05e22);width:80px}
+.podium-name{font-size:12px;font-weight:700;color:var(--dark);text-align:center;max-width:90px;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.podium-xp{font-size:11px;color:var(--muted)}
+.p1 .podium-avatar{border-color:#fbbf24;background:linear-gradient(135deg,#fbbf24,#f59e0b)}
+.p2 .podium-avatar{border-color:#9ca3af;background:linear-gradient(135deg,#9ca3af,#6b7280)}
+.p3 .podium-avatar{border-color:#cd7c2e;background:linear-gradient(135deg,#cd7c2e,#a05e22)}
+
+/* LEADERBOARD LIST */
+.lb-card{background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden}
+.lb-row{display:flex;align-items:center;gap:14px;padding:14px 18px;border-bottom:1px solid #f1f5f9;
+  transition:.15s}
+.lb-row:last-child{border-bottom:none}
+.lb-row:hover{background:#fafafa}
+.lb-row.me{background:linear-gradient(135deg,rgba(108,99,255,.06),rgba(79,70,229,.04));
+  border-left:3px solid var(--p)}
+.lb-rank{font-size:16px;font-weight:900;color:var(--muted);width:32px;text-align:center;flex-shrink:0}
+.lb-rank.gold{color:#f59e0b}
+.lb-rank.silver{color:#9ca3af}
+.lb-rank.bronze{color:#cd7c2e}
+.lb-avatar{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--p),var(--pd));
+  display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;
+  color:#fff;flex-shrink:0}
+.lb-info{flex:1;min-width:0}
+.lb-name{font-size:14px;font-weight:700;color:var(--dark);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lb-sub{font-size:11px;color:var(--muted)}
+.lb-score{text-align:right;flex-shrink:0}
+.lb-score-num{font-size:15px;font-weight:900;color:var(--p)}
+.lb-score-lbl{font-size:10px;color:var(--muted)}
+
+/* EMPTY / LOADING */
+.empty{text-align:center;padding:48px;color:var(--muted)}
+.empty .ei{font-size:40px;margin-bottom:12px}
+.empty p{font-size:14px;font-weight:500}
+.spinner{width:36px;height:36px;border:3px solid var(--border);border-top-color:var(--p);
+  border-radius:50%;animation:spin .7s linear infinite;margin:40px auto}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+.toast{position:fixed;bottom:22px;right:22px;background:#1e293b;color:#fff;
+  padding:11px 18px;border-radius:12px;font-size:13px;font-weight:600;z-index:9999;
+  transform:translateY(70px);opacity:0;transition:.3s;pointer-events:none}
+.toast.show{transform:translateY(0);opacity:1}
+
+@media(max-width:600px){
+  .podium{gap:8px}
+  .podium-item{min-width:70px}
+  .p1 .podium-stand{width:70px}
+  .p2 .podium-stand,.p3 .podium-stand{width:60px}
+  .lb-sub{display:none}
+/* LOADING */
+#authLoading{position:fixed;inset:0;background:#f8fafc;z-index:9999;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px}
+#authLoading .ld-spin{width:28px;height:28px;border:3px solid #e5e7eb;border-top-color:#6c63ff;
+  border-radius:50%;animation:ldSpin .8s linear infinite}
+#authLoading .ld-text{font-size:14px;font-weight:600;color:#6b7280}
+@keyframes ldSpin{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+<div id="authLoading"><div class="ld-spin"></div><div class="ld-text">Loading…</div></div>
+<nav class="top-nav">
+  <div class="nav-brand">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 36" fill="none">
+      <defs><linearGradient id="nlg" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#a78bfa"/><stop offset="100%" stop-color="#4f46e5"/></linearGradient></defs>
+      <rect width="36" height="36" rx="10" fill="url(#nlg)"/>
+      <circle cx="18" cy="18" r="3" fill="white" opacity=".95"/>
+      <ellipse cx="18" cy="18" rx="10.5" ry="4" stroke="white" stroke-width="1.6" fill="none" opacity=".9"/>
+      <ellipse cx="18" cy="18" rx="10.5" ry="4" stroke="white" stroke-width="1.6" fill="none" opacity=".9" transform="rotate(60 18 18)"/>
+      <ellipse cx="18" cy="18" rx="10.5" ry="4" stroke="white" stroke-width="1.6" fill="none" opacity=".9" transform="rotate(120 18 18)"/>
+      <circle cx="28.5" cy="18" r="1.8" fill="#f59e0b"/>
+    </svg>
+    MindSpire Lab
+  </div>
+  <div class="nav-right">
+    <a href="/" class="btn-back"><i class="fas fa-arrow-left"></i> Dashboard</a>
+    <button class="btn-logout" onclick="doLogout()"><i class="fas fa-sign-out-alt"></i> Logout</button>
+  </div>
+</nav>
+
+<div class="page">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-inner">
+      <div class="hero-title">🏆 AP Chemistry Leaderboard</div>
+      <div class="hero-sub">See where you rank among all students on MindSpire Lab</div>
+      <div id="yourRankBox" style="display:none">
+        <div class="your-rank-box">
+          <div>
+            <div class="yrb-label">Your Rank</div>
+            <div class="yrb-rank" id="yourRankNum">#—</div>
+          </div>
+          <div style="width:1px;height:36px;background:rgba(255,255,255,.15)"></div>
+          <div>
+            <div class="yrb-name" id="yourRankName">You</div>
+            <div class="yrb-xp" id="yourRankXP">0 XP</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TABS -->
+  <div class="tabs">
+    <div class="tab active" id="tab-xp" onclick="switchTab('xp')">⭐ XP Leaderboard</div>
+    <div class="tab" id="tab-acc" onclick="switchTab('acc')">🎯 Accuracy</div>
+    <div class="tab" id="tab-q" onclick="switchTab('q')">📝 Most Questions</div>
+  </div>
+
+  <!-- PODIUM (top 3) -->
+  <div class="podium" id="podium"></div>
+
+  <!-- LIST (4–20) -->
+  <div class="lb-card">
+    <div id="lbList"><div class="spinner"></div></div>
+  </div>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const SUPABASE_URL = 'https://qmrpbxiiwbqnmczdxoqr.supabase.co';
+const SUPABASE_ANON = 'sb_publishable_t8Q_10VZIilu1bZlJXyzsA_w-LUu_E2';
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
+
+let currentUser = null;
+let allData = [];
+let currentTab = 'xp';
+
+(async () => {
+  const { data: { session } } = await sb.auth.getSession();
+  if (!session) { window.location.href = '/login'; return; }
+  currentUser = session.user;
+  const ld = document.getElementById('authLoading');
+  if (ld) ld.remove();
+  await loadLeaderboard();
+})();
+
+async function doLogout() {
+  await sb.auth.signOut();
+  window.location.href = '/login';
+}
+
+async function loadLeaderboard() {
+  // Get all students
+  const { data: students } = await sb.from('profiles')
+    .select('id,full_name,email').eq('role','student');
+  if (!students?.length) {
+    document.getElementById('lbList').innerHTML = '<div class="empty"><div class="ei">🎓</div><p>No students yet!</p></div>';
+    return;
+  }
+
+  // Get all attempts
+  const { data: attempts } = await sb.from('attempts')
+    .select('student_id,correct,unit');
+
+  // Calculate stats per student
+  allData = students.map(s => {
+    const sa = (attempts||[]).filter(a => a.student_id === s.id);
+    const mcq = sa.filter(a => a.correct !== null);
+    const correct = mcq.filter(a => a.correct).length;
+    const accuracy = mcq.length >= 5 ? Math.round((correct / mcq.length) * 100) : null;
+    const xp = correct * 10 + sa.length * 2;
+    return {
+      id: s.id,
+      name: s.full_name || s.email.split('@')[0],
+      email: s.email,
+      total: sa.length,
+      correct,
+      accuracy,
+      xp,
+      units: new Set(sa.map(a => a.unit)).size
+    };
+  });
+
+  renderTab('xp');
+}
+
+function switchTab(tab) {
+  currentTab = tab;
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('tab-' + tab).classList.add('active');
+  renderTab(tab);
+}
+
+function renderTab(tab) {
+  let sorted;
+  if (tab === 'xp') {
+    sorted = [...allData].sort((a,b) => b.xp - a.xp);
+  } else if (tab === 'acc') {
+    sorted = [...allData].filter(s => s.accuracy !== null).sort((a,b) => b.accuracy - a.accuracy);
+  } else {
+    sorted = [...allData].sort((a,b) => b.total - a.total);
+  }
+
+  // Find user rank
+  const myIdx = sorted.findIndex(s => s.id === currentUser.id);
+  if (myIdx >= 0) {
+    const me = sorted[myIdx];
+    document.getElementById('yourRankNum').textContent = '#' + (myIdx + 1);
+    document.getElementById('yourRankName').textContent = me.name;
+    document.getElementById('yourRankXP').textContent = tab === 'xp' ? me.xp + ' XP'
+      : tab === 'acc' ? (me.accuracy !== null ? me.accuracy + '% accuracy' : 'Not enough data')
+      : me.total + ' questions';
+    document.getElementById('yourRankBox').style.display = 'block';
+  }
+
+  // Podium (top 3)
+  const top3 = sorted.slice(0, 3);
+  const podiumOrder = [1, 0, 2]; // display: 2nd, 1st, 3rd
+  const medals = ['🥇', '🥈', '🥉'];
+  const podiumClasses = ['p2', 'p1', 'p3'];
+  const standPositions = [1, 0, 2];
+
+  document.getElementById('podium').innerHTML = podiumOrder.map(i => {
+    const s = top3[i];
+    if (!s) return '';
+    const val = tab === 'xp' ? s.xp + ' XP'
+      : tab === 'acc' ? (s.accuracy !== null ? s.accuracy + '%' : '—')
+      : s.total + ' Q';
+    return `<div class="podium-item ${podiumClasses[standPositions.indexOf(i)]}">
+      <div class="podium-avatar">${s.name.charAt(0).toUpperCase()}</div>
+      <div class="podium-name">${s.name}</div>
+      <div class="podium-xp">${val}</div>
+      <div class="podium-stand">${medals[i]}</div>
+    </div>`;
+  }).join('');
+
+  // List (4 onwards, plus user if not in top)
+  const rest = sorted.slice(3, 20);
+  if (!rest.length && sorted.length <= 3) {
+    document.getElementById('lbList').innerHTML = '';
+    return;
+  }
+
+  const isInTop3 = myIdx >= 0 && myIdx < 3;
+  let html = rest.map((s, idx) => {
+    const rank = idx + 4;
+    const isMe = s.id === currentUser.id;
+    const val = tab === 'xp' ? `<div class="lb-score-num">${s.xp}</div><div class="lb-score-lbl">XP</div>`
+      : tab === 'acc' ? `<div class="lb-score-num">${s.accuracy !== null ? s.accuracy + '%' : '—'}</div><div class="lb-score-lbl">accuracy</div>`
+      : `<div class="lb-score-num">${s.total}</div><div class="lb-score-lbl">questions</div>`;
+    return `<div class="lb-row ${isMe ? 'me' : ''}">
+      <div class="lb-rank">${rank}</div>
+      <div class="lb-avatar" style="${isMe ? 'border:2px solid var(--p)' : ''}">${s.name.charAt(0).toUpperCase()}</div>
+      <div class="lb-info">
+        <div class="lb-name">${s.name}${isMe ? ' <span style="font-size:11px;color:var(--p);font-weight:700">(You)</span>' : ''}</div>
+        <div class="lb-sub">${s.units} units practiced · ${s.total} questions</div>
+      </div>
+      <div class="lb-score">${val}</div>
+    </div>`;
+  }).join('');
+
+  // If user is outside top 20, show them at bottom
+  if (myIdx >= 20) {
+    const me = sorted[myIdx];
+    const val = tab === 'xp' ? `<div class="lb-score-num">${me.xp}</div><div class="lb-score-lbl">XP</div>`
+      : tab === 'acc' ? `<div class="lb-score-num">${me.accuracy !== null ? me.accuracy + '%' : '—'}</div><div class="lb-score-lbl">accuracy</div>`
+      : `<div class="lb-score-num">${me.total}</div><div class="lb-score-lbl">questions</div>`;
+    html += `<div style="border-top:2px dashed var(--border)"></div>
+    <div class="lb-row me">
+      <div class="lb-rank">${myIdx + 1}</div>
+      <div class="lb-avatar" style="border:2px solid var(--p)">${me.name.charAt(0).toUpperCase()}</div>
+      <div class="lb-info">
+        <div class="lb-name">${me.name} <span style="font-size:11px;color:var(--p);font-weight:700">(You)</span></div>
+        <div class="lb-sub">${me.units} units practiced · ${me.total} questions</div>
+      </div>
+      <div class="lb-score">${val}</div>
+    </div>`;
+  }
+
+  document.getElementById('lbList').innerHTML = html || '<div class="empty"><div class="ei">📊</div><p>Not enough data to rank yet — keep practicing!</p></div>';
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,1223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Teacher Dashboard — MindSpire Lab</title>
+<link rel="icon" href="/favicon.ico"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet"/>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="/questions.js"></script>
+<style>
+:root{--p:#6c63ff;--pd:#4f46e5;--grn:#10b981;--org:#f59e0b;--red:#ef4444;
+  --dark:#0f172a;--dark2:#1e293b;--text:#374151;--muted:#6b7280;
+  --border:#e5e7eb;--bg:#f1f5f9;--card:#fff}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text)}
+a{text-decoration:none;color:inherit}
+button{font-family:inherit;cursor:pointer}
+
+/* NAV */
+.nav{position:fixed;top:0;left:0;right:0;z-index:200;height:56px;background:var(--dark);
+  display:flex;align-items:center;padding:0 20px;gap:14px;box-shadow:0 2px 12px rgba(0,0,0,.3)}
+.nav-logo{display:flex;align-items:center;gap:8px;font-weight:900;font-size:15px;color:#fff}
+.nav-logo svg{width:30px;height:30px}
+.nav-badge{background:#6c63ff;color:#fff;font-size:10px;font-weight:800;padding:3px 8px;border-radius:20px;letter-spacing:.5px}
+.nav-right{margin-left:auto;display:flex;align-items:center;gap:10px}
+.nav-user{font-size:13px;color:#c4b5fd;font-weight:500}
+.btn-logout{font-size:12px;color:#9ca3af;padding:5px 12px;border-radius:8px;border:1px solid #374151;background:none;transition:.2s}
+.btn-logout:hover{background:#1e293b;color:#fff}
+
+/* LAYOUT */
+.layout{display:flex;min-height:100vh;padding-top:56px}
+.sidebar{width:220px;min-width:220px;background:var(--dark2);position:sticky;top:56px;
+  height:calc(100vh - 56px);overflow-y:auto;padding:16px 0}
+.sb-item{display:flex;align-items:center;gap:10px;padding:10px 18px;font-size:13px;
+  font-weight:500;color:#9ca3af;cursor:pointer;transition:.15s;border-left:3px solid transparent}
+.sb-item:hover{background:rgba(255,255,255,.05);color:#e2e8f0}
+.sb-item.active{color:#a78bfa;border-left-color:#a78bfa;background:rgba(167,139,250,.08)}
+.sb-item i{width:16px;text-align:center;font-size:13px}
+.sb-divider{border-top:1px solid #334155;margin:10px 0}
+.sb-label{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:1px;
+  color:#475569;padding:4px 18px;margin-bottom:2px}
+
+/* MAIN */
+.main{flex:1;padding:24px;max-width:calc(100vw - 220px)}
+.page-title{font-size:22px;font-weight:900;color:var(--dark);margin-bottom:4px}
+.page-sub{font-size:13px;color:var(--muted);margin-bottom:24px}
+
+/* PANEL */
+.panel{display:none}
+.panel.active{display:block}
+
+/* STAT CARDS */
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:28px}
+.stat-card{background:var(--card);border-radius:14px;padding:20px;border:1px solid var(--border)}
+.sc-num{font-size:28px;font-weight:900;color:var(--dark);margin-bottom:2px}
+.sc-lbl{font-size:12px;color:var(--muted);font-weight:500}
+.sc-icon{font-size:22px;margin-bottom:8px}
+
+/* TABLE */
+.table-card{background:var(--card);border-radius:14px;border:1px solid var(--border);overflow:hidden;margin-bottom:24px}
+.tc-head{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid var(--border)}
+.tc-title{font-size:15px;font-weight:800;color:var(--dark)}
+table{width:100%;border-collapse:collapse}
+th{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);
+  padding:10px 16px;text-align:left;background:#f8fafc;border-bottom:1px solid var(--border)}
+td{font-size:13px;padding:12px 16px;border-bottom:1px solid #f1f5f9;color:var(--text)}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:#fafafa}
+.badge{display:inline-block;padding:3px 9px;border-radius:20px;font-size:11px;font-weight:700}
+.badge-green{background:#dcfce7;color:#16a34a}
+.badge-blue{background:#dbeafe;color:#1d4ed8}
+.badge-yellow{background:#fef9c3;color:#854d0e}
+.badge-red{background:#fee2e2;color:#dc2626}
+.badge-gray{background:#f1f5f9;color:#475569}
+.badge-purple{background:#ede9fe;color:#6d28d9}
+
+/* BUTTONS */
+.btn{padding:8px 16px;border-radius:9px;font-size:13px;font-weight:600;border:none;transition:.2s;display:inline-flex;align-items:center;gap:6px}
+.btn-primary{background:var(--p);color:#fff}
+.btn-primary:hover{background:var(--pd);transform:translateY(-1px)}
+.btn-outline{background:#fff;color:var(--p);border:1.5px solid var(--p)}
+.btn-outline:hover{background:#f5f3ff}
+.btn-sm{padding:5px 11px;font-size:12px;border-radius:7px}
+.btn-danger{background:var(--red);color:#fff}
+.btn-danger:hover{background:#dc2626}
+.btn-green{background:var(--grn);color:#fff}
+.btn-green:hover{background:#059669}
+
+/* MODAL */
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:500;align-items:center;justify-content:center;padding:20px}
+.modal-bg.open{display:flex}
+.modal{background:#fff;border-radius:18px;padding:28px;width:100%;max-width:540px;max-height:90vh;overflow-y:auto}
+.modal-title{font-size:18px;font-weight:800;color:var(--dark);margin-bottom:4px}
+.modal-sub{font-size:13px;color:var(--muted);margin-bottom:22px}
+.form-field{margin-bottom:16px}
+.form-field label{display:block;font-size:12px;font-weight:700;color:var(--text);margin-bottom:6px;text-transform:uppercase;letter-spacing:.4px}
+.form-field input,.form-field textarea,.form-field select{width:100%;padding:10px 13px;border:1.5px solid var(--border);border-radius:9px;font-size:13px;font-family:'Inter',sans-serif;color:var(--dark);transition:.2s}
+.form-field input:focus,.form-field textarea:focus,.form-field select:focus{outline:none;border-color:var(--p);box-shadow:0 0 0 3px rgba(108,99,255,.1)}
+.form-field textarea{resize:vertical;min-height:80px}
+.modal-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:20px}
+.chip-grid{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+.chip{padding:6px 12px;border-radius:20px;font-size:12px;font-weight:600;cursor:pointer;border:1.5px solid var(--border);color:var(--muted);transition:.15s;user-select:none}
+.chip:hover{border-color:var(--p);color:var(--p)}
+.chip.sel{background:var(--p);color:#fff;border-color:var(--p)}
+.student-check-list{max-height:200px;overflow-y:auto;border:1.5px solid var(--border);border-radius:9px;padding:8px}
+.student-check-item{display:flex;align-items:center;gap:10px;padding:7px 8px;border-radius:7px;cursor:pointer;font-size:13px;font-weight:500;transition:.15s}
+.student-check-item:hover{background:#f8fafc}
+.student-check-item input[type=checkbox]{width:15px;height:15px;accent-color:var(--p);cursor:pointer}
+
+/* PROGRESS BAR */
+.prog-bar-wrap{background:#e5e7eb;border-radius:99px;height:7px;overflow:hidden}
+.prog-bar-fill{height:100%;border-radius:99px;background:var(--grn);transition:.5s}
+.prog-bar-fill.warn{background:var(--org)}
+.prog-bar-fill.danger{background:var(--red)}
+
+/* STUDENT DETAIL */
+.unit-progress-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px}
+.unit-prog-card{background:#f8fafc;border:1px solid var(--border);border-radius:12px;padding:14px}
+.upc-name{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;margin-bottom:6px}
+.upc-stats{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.upc-pct{font-size:18px;font-weight:900;color:var(--dark)}
+.upc-count{font-size:11px;color:var(--muted)}
+
+/* EMPTY STATE */
+.empty{text-align:center;padding:48px 20px;color:var(--muted)}
+.empty i{font-size:40px;margin-bottom:12px;display:block;opacity:.4}
+.empty p{font-size:14px;font-weight:500}
+
+/* TOAST */
+.toast{position:fixed;bottom:20px;right:20px;background:#1e293b;color:#fff;padding:12px 20px;
+  border-radius:12px;font-size:13px;font-weight:600;transform:translateY(80px);opacity:0;
+  transition:.3s;z-index:1000;box-shadow:0 6px 20px rgba(0,0,0,.25)}
+.toast.show{transform:none;opacity:1}
+
+/* SEARCH */
+.search-bar{display:flex;align-items:center;gap:10px}
+.search-bar input{padding:8px 12px;border:1.5px solid var(--border);border-radius:9px;font-size:13px;font-family:'Inter',sans-serif;width:240px}
+.search-bar input:focus{outline:none;border-color:var(--p)}
+
+/* LOADING */
+#authLoading{position:fixed;inset:0;background:#0f172a;z-index:9999;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px}
+#authLoading .ld-spin{width:30px;height:30px;border:3px solid rgba(255,255,255,.2);border-top-color:#a78bfa;
+  border-radius:50%;animation:ldSpin .8s linear infinite}
+#authLoading .ld-text{font-size:14px;font-weight:600;color:#94a3b8}
+@keyframes ldSpin{to{transform:rotate(360deg)}}
+.layout,.nav{opacity:0;transition:opacity .3s}
+.layout.ready,.nav.ready{opacity:1}
+
+@media(max-width:900px){
+  .stats-grid{grid-template-columns:1fr 1fr}
+  .sidebar{display:none}
+  .main{max-width:100%}
+  .unit-progress-grid{grid-template-columns:1fr 1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- AUTH LOADING -->
+<div id="authLoading">
+  <svg width="48" height="48" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <defs><linearGradient id="tldlg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#a78bfa"/><stop offset="100%" stop-color="#4f46e5"/></linearGradient></defs>
+    <rect width="36" height="36" rx="10" fill="url(#tldlg)"/>
+    <circle cx="18" cy="18" r="3" fill="white" opacity=".95"/>
+    <ellipse cx="18" cy="18" rx="10.5" ry="4" stroke="white" stroke-width="1.6" fill="none" opacity=".9"/>
+    <ellipse cx="18" cy="18" rx="10.5" ry="4" stroke="white" stroke-width="1.6" fill="none" opacity=".9" transform="rotate(60 18 18)"/>
+    <ellipse cx="18" cy="18" rx="10.5" ry="4" stroke="white" stroke-width="1.6" fill="none" opacity=".9" transform="rotate(120 18 18)"/>
+  </svg>
+  <div class="ld-spin"></div>
+  <div class="ld-text">Verifying teacher session…</div>
+</div>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-logo">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 36" fill="none">
+      <defs><linearGradient id="nlg" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#a78bfa"/><stop offset="100%" stop-color="#4f46e5"/></linearGradient></defs>
+      <rect width="36" height="36" rx="10" fill="url(#nlg)"/>
+      <circle cx="18" cy="18" r="3" fill="white" opacity=".95"/>
+      <ellipse cx="18" cy="18" rx="10.5" ry="4" stroke="white" stroke-width="1.6" fill="none" opacity=".9"/>
+      <ellipse cx="18" cy="18" rx="10.5" ry="4" stroke="white" stroke-width="1.6" fill="none" opacity=".9" transform="rotate(60 18 18)"/>
+      <ellipse cx="18" cy="18" rx="10.5" ry="4" stroke="white" stroke-width="1.6" fill="none" opacity=".9" transform="rotate(120 18 18)"/>
+      <circle cx="28.5" cy="18" r="1.8" fill="#f59e0b"/>
+    </svg>
+    MindSpire Lab
+    <span class="nav-badge">TEACHER</span>
+  </div>
+  <div class="nav-right">
+    <span class="nav-user" id="navUser"></span>
+    <button class="btn-logout" onclick="doLogout()"><i class="fas fa-sign-out-alt"></i> Logout</button>
+  </div>
+</nav>
+
+<!-- LAYOUT -->
+<div class="layout">
+  <aside class="sidebar">
+    <div class="sb-label">Overview</div>
+    <div class="sb-item active" id="snav-overview" onclick="showPage('overview')"><i class="fas fa-chart-line"></i> Dashboard</div>
+    <div class="sb-item" id="snav-students" onclick="showPage('students')"><i class="fas fa-users"></i> Students</div>
+    <div class="sb-divider"></div>
+    <div class="sb-label">Assign Work</div>
+    <div class="sb-item" id="snav-assignments" onclick="showPage('assignments')"><i class="fas fa-tasks"></i> Assignments</div>
+    <div class="sb-item" id="snav-tests" onclick="showPage('tests')"><i class="fas fa-file-alt"></i> Tests</div>
+    <div class="sb-divider"></div>
+    <div class="sb-label">Platform</div>
+    <div class="sb-item" onclick="window.open('/','_blank')"><i class="fas fa-flask"></i> Open Practice</div>
+    <div class="sb-divider"></div>
+    <div class="sb-label">Account</div>
+    <div class="sb-item" id="snav-profile" onclick="showPage('profile')"><i class="fas fa-user-circle"></i> My Profile</div>
+    <div class="sb-item" id="snav-announce" onclick="showPage('announce')"><i class="fas fa-bullhorn"></i> Announcements</div>
+  </aside>
+
+  <div class="main">
+
+    <!-- ── OVERVIEW ── -->
+    <div class="panel active" id="page-overview">
+      <div class="page-title">📊 Teacher Dashboard</div>
+      <div class="page-sub" id="overviewSub">Loading your class data…</div>
+      <div class="stats-grid" id="statsGrid">
+        <div class="stat-card"><div class="sc-icon">👩‍🎓</div><div class="sc-num" id="st-students">—</div><div class="sc-lbl">Total Students</div></div>
+        <div class="stat-card"><div class="sc-icon">📝</div><div class="sc-num" id="st-attempts">—</div><div class="sc-lbl">Questions Answered</div></div>
+        <div class="stat-card"><div class="sc-icon">✅</div><div class="sc-num" id="st-avgScore">—</div><div class="sc-lbl">Class Avg Score</div></div>
+        <div class="stat-card"><div class="sc-icon">📋</div><div class="sc-num" id="st-assignments">—</div><div class="sc-lbl">Active Assignments</div></div>
+      </div>
+
+      <div class="table-card">
+        <div class="tc-head">
+          <div class="tc-title">🔥 Recent Activity</div>
+        </div>
+        <div id="recentActivity"><div class="empty"><i class="fas fa-clock"></i><p>No activity yet</p></div></div>
+      </div>
+
+      <div class="table-card">
+        <div class="tc-head">
+          <div class="tc-title">📉 Students Needing Attention (score &lt; 60%)</div>
+        </div>
+        <div id="atRiskStudents"><div class="empty"><i class="fas fa-check-circle"></i><p>All students performing well</p></div></div>
+      </div>
+    </div>
+
+    <!-- ── STUDENTS ── -->
+    <div class="panel" id="page-students">
+      <div class="page-title">👩‍🎓 Students</div>
+      <div class="page-sub">View individual student progress across all AP Chemistry units</div>
+      <div class="table-card">
+        <div class="tc-head">
+          <div class="tc-title">All Students</div>
+          <div class="search-bar">
+            <input type="text" id="studentSearch" placeholder="🔍 Search name or email…" oninput="filterStudents()"/>
+            <button class="btn btn-primary btn-sm" onclick="loadStudents()"><i class="fas fa-sync-alt"></i></button>
+          </div>
+        </div>
+        <table>
+          <thead><tr>
+            <th>Student</th><th>Access</th><th>Questions</th><th>MCQ Score</th><th>Best Unit</th><th>Last Active</th><th>Actions</th>
+          </tr></thead>
+          <tbody id="studentsTableBody"><tr><td colspan="7"><div class="empty"><i class="fas fa-spinner fa-spin"></i><p>Loading…</p></div></td></tr></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ── ASSIGNMENTS ── -->
+    <div class="panel" id="page-assignments">
+      <div class="page-title">📋 Assignments</div>
+      <div class="page-sub">Create and manage practice assignments for your students</div>
+      <div style="margin-bottom:16px">
+        <button class="btn btn-primary" onclick="openAssignModal()"><i class="fas fa-plus"></i> New Assignment</button>
+      </div>
+      <div class="table-card">
+        <div class="tc-head"><div class="tc-title">All Assignments</div></div>
+        <table>
+          <thead><tr><th>Title</th><th>Units</th><th>Questions</th><th>Assigned To</th><th>Due Date</th><th>Completion</th><th>Action</th></tr></thead>
+          <tbody id="assignmentsTableBody"><tr><td colspan="7"><div class="empty"><i class="fas fa-spinner fa-spin"></i><p>Loading…</p></div></td></tr></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ── TESTS ── -->
+    <div class="panel" id="page-tests">
+      <div class="page-title">📝 Tests</div>
+      <div class="page-sub">Create timed tests with specific questions for your students</div>
+      <div style="margin-bottom:16px">
+        <button class="btn btn-primary" onclick="openTestModal()"><i class="fas fa-plus"></i> New Test</button>
+      </div>
+      <div class="table-card">
+        <div class="tc-head"><div class="tc-title">All Tests</div></div>
+        <table>
+          <thead><tr><th>Title</th><th>Units</th><th>Questions</th><th>Time Limit</th><th>Assigned To</th><th>Avg Score</th><th>Action</th></tr></thead>
+          <tbody id="testsTableBody"><tr><td colspan="7"><div class="empty"><i class="fas fa-spinner fa-spin"></i><p>Loading…</p></div></td></tr></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ── TEACHER PROFILE ── -->
+    <div class="panel" id="page-profile">
+      <div class="page-title">👩‍🏫 My Profile</div>
+      <div class="page-sub">Your teacher profile and credentials</div>
+
+      <div style="background:linear-gradient(135deg,#0f0c29,#1e1b4b,#2d2566);border-radius:20px;padding:36px;margin-bottom:24px;position:relative;overflow:hidden">
+        <div style="position:relative;z-index:1;display:flex;gap:24px;align-items:flex-start">
+          <div style="width:80px;height:80px;border-radius:20px;background:linear-gradient(135deg,#f59e0b,#ef4444);display:flex;align-items:center;justify-content:center;font-size:32px;flex-shrink:0;border:3px solid rgba(255,255,255,.2)" id="tphAvatar">F</div>
+          <div style="flex:1">
+            <div style="font-size:24px;font-weight:900;color:#fff;margin-bottom:4px" id="tphName">Loading…</div>
+            <div style="font-size:13px;color:rgba(255,255,255,.6);margin-bottom:12px" id="tphEmail"></div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <div style="display:inline-flex;align-items:center;gap:5px;padding:5px 12px;border-radius:20px;font-size:12px;font-weight:700;border:1px solid rgba(255,255,255,.15);color:rgba(255,255,255,.9);background:rgba(255,255,255,.1)"><i class="fas fa-chalkboard-teacher"></i> AP Chemistry Teacher</div>
+              <div style="display:inline-flex;align-items:center;gap:5px;padding:5px 12px;border-radius:20px;font-size:12px;font-weight:700;border:1px solid rgba(255,255,255,.15);color:rgba(255,255,255,.9);background:rgba(255,255,255,.1)" id="tphStudentCount"><i class="fas fa-users"></i> 0 students</div>
+            </div>
+            <div id="tphBio" style="margin-top:12px;font-size:13px;color:rgba(255,255,255,.65);font-style:italic;max-width:480px"></div>
+          </div>
+        </div>
+        <button onclick="openTeacherEditModal()" style="position:absolute;top:20px;right:20px;background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.2);padding:7px 14px;border-radius:9px;font-size:13px;font-weight:600;cursor:pointer;z-index:2"><i class="fas fa-pen"></i> Edit Profile</button>
+      </div>
+
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:24px">
+        <div class="stat-card"><div class="sc-icon">👩‍🎓</div><div class="sc-num" id="tst-students">—</div><div class="sc-lbl">Total Students</div></div>
+        <div class="stat-card"><div class="sc-icon">📋</div><div class="sc-num" id="tst-assignments">—</div><div class="sc-lbl">Assignments Created</div></div>
+        <div class="stat-card"><div class="sc-icon">📝</div><div class="sc-num" id="tst-tests">—</div><div class="sc-lbl">Tests Created</div></div>
+      </div>
+
+      <!-- Contact & Credentials -->
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:14px;padding:22px;margin-bottom:20px">
+        <div style="font-size:15px;font-weight:800;color:var(--dark);margin-bottom:16px">📞 Contact & Credentials</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+          <div>
+            <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px">WhatsApp</div>
+            <a href="https://wa.me/19162927162" target="_blank" style="display:inline-flex;align-items:center;gap:8px;background:#25d366;color:#fff;padding:9px 16px;border-radius:9px;font-size:13px;font-weight:700;text-decoration:none"><i class="fab fa-whatsapp"></i> +1 (916) 292-7162</a>
+          </div>
+          <div>
+            <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px">Email</div>
+            <a href="mailto:faridah@mindspirelab.com" style="display:inline-flex;align-items:center;gap:8px;background:#dbeafe;color:#1d4ed8;padding:9px 16px;border-radius:9px;font-size:13px;font-weight:700;text-decoration:none"><i class="fas fa-envelope"></i> faridah@mindspirelab.com</a>
+          </div>
+          <div>
+            <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px">Subject</div>
+            <div style="font-size:13px;font-weight:600;color:var(--dark)">AP Chemistry (College Board)</div>
+          </div>
+          <div>
+            <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px">Credentials</div>
+            <div id="tphCredentials" style="font-size:13px;font-weight:600;color:var(--dark)">AP Chemistry Educator</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Schedule -->
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:14px;padding:22px">
+        <div style="font-size:15px;font-weight:800;color:var(--dark);margin-bottom:16px">🗓️ Schedule &amp; Office Hours</div>
+        <div id="tphSchedule" style="font-size:13px;color:var(--text);line-height:1.7">Monday–Friday: 4:00 PM – 7:00 PM (EST)<br/>Saturday: 9:00 AM – 12:00 PM (EST)<br/>Available via WhatsApp anytime for quick questions.</div>
+      </div>
+    </div>
+
+    <!-- ── ANNOUNCEMENTS ── -->
+    <div class="panel" id="page-announce">
+      <div class="page-title">📣 Announcements</div>
+      <div class="page-sub">Post messages that appear on all student dashboards and profiles</div>
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:14px;padding:22px;margin-bottom:20px">
+        <div style="font-size:15px;font-weight:800;color:var(--dark);margin-bottom:16px">Post New Announcement</div>
+        <div class="form-field">
+          <label>Message</label>
+          <textarea id="announceText" style="width:100%;min-height:100px;padding:10px 13px;border:1.5px solid var(--border);border-radius:9px;font-family:'Inter',sans-serif;font-size:13px;resize:vertical" placeholder="e.g. Unit 5 Kinetics test is on Friday. Review rate laws and Arrhenius equation!"></textarea>
+        </div>
+        <button class="btn btn-primary" onclick="postAnnouncement()"><i class="fas fa-paper-plane"></i> Post Announcement</button>
+      </div>
+      <div class="table-card">
+        <div class="tc-head"><div class="tc-title">Previous Announcements</div></div>
+        <div id="announceList"><div class="empty"><i class="fas fa-spinner fa-spin"></i><p>Loading…</p></div></div>
+      </div>
+    </div>
+
+  </div><!-- /.main -->
+</div><!-- /.layout -->
+
+<!-- TEACHER EDIT PROFILE MODAL -->
+<div class="modal-bg" id="teacherEditModal" onclick="if(event.target===this)closeModal('teacherEditModal')">
+  <div class="modal">
+    <div class="modal-title">Edit Teacher Profile</div>
+    <div class="modal-sub">Update your profile information</div>
+    <div class="form-field">
+      <label>Full Name</label>
+      <input type="text" id="te-name" placeholder="Your full name"/>
+    </div>
+    <div class="form-field">
+      <label>Bio / Teaching Philosophy</label>
+      <textarea id="te-bio" placeholder="Tell students about your teaching style and experience…"></textarea>
+    </div>
+    <div class="form-field">
+      <label>Credentials</label>
+      <input type="text" id="te-credentials" placeholder="e.g. M.Sc. Chemistry, Certified AP Educator"/>
+    </div>
+    <div class="form-field">
+      <label>Office Hours / Schedule</label>
+      <textarea id="te-schedule" placeholder="e.g. Mon–Fri 4–7pm EST, Sat 9am–12pm EST"></textarea>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="closeModal('teacherEditModal')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveTeacherProfile()"><i class="fas fa-save"></i> Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- STUDENT DETAIL MODAL -->
+<div class="modal-bg" id="studentDetailModal" onclick="if(event.target===this)closeModal('studentDetailModal')">
+  <div class="modal" style="max-width:700px">
+    <div class="modal-title" id="sdTitle">Student Progress</div>
+    <div class="modal-sub" id="sdSub"></div>
+    <div id="sdContent"></div>
+    <div class="modal-actions"><button class="btn btn-outline" onclick="closeModal('studentDetailModal')">Close</button></div>
+  </div>
+</div>
+
+<!-- CREATE ASSIGNMENT MODAL -->
+<div class="modal-bg" id="assignModal" onclick="if(event.target===this)closeModal('assignModal')">
+  <div class="modal">
+    <div class="modal-title">📋 Create Assignment</div>
+    <div class="modal-sub">Assign questions to specific students</div>
+    <div class="form-field">
+      <label>Assignment Title</label>
+      <input type="text" id="a-title" placeholder="e.g. Unit 3 Homework — IMF"/>
+    </div>
+    <div class="form-field">
+      <label>Instructions (optional)</label>
+      <textarea id="a-instructions" placeholder="Any special instructions for students…"></textarea>
+    </div>
+    <div class="form-field">
+      <label>Select Units</label>
+      <div class="chip-grid" id="a-unit-chips"></div>
+    </div>
+    <div class="form-field">
+      <label>Question Types</label>
+      <div class="chip-grid">
+        <div class="chip sel" id="a-type-MCQ" onclick="toggleChip(this,'a-types','MCQ')">MCQ</div>
+        <div class="chip" id="a-type-FRQ" onclick="toggleChip(this,'a-types','FRQ')">FRQ</div>
+      </div>
+    </div>
+    <div class="form-field">
+      <label>Number of Questions: <span id="a-count-display">10</span></label>
+      <input type="range" min="5" max="40" value="10" step="5" oninput="document.getElementById('a-count-display').textContent=this.value" id="a-count"/>
+    </div>
+    <div class="form-field">
+      <label>Due Date (optional)</label>
+      <input type="datetime-local" id="a-due"/>
+    </div>
+    <div class="form-field">
+      <label>Assign To Students</label>
+      <div class="student-check-list" id="a-student-list"><p style="color:var(--muted);font-size:13px;padding:6px">Loading students…</p></div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="closeModal('assignModal')">Cancel</button>
+      <button class="btn btn-primary" onclick="createAssignment()"><i class="fas fa-check"></i> Create Assignment</button>
+    </div>
+  </div>
+</div>
+
+<!-- CREATE TEST MODAL -->
+<div class="modal-bg" id="testModal" onclick="if(event.target===this)closeModal('testModal')">
+  <div class="modal">
+    <div class="modal-title">📝 Create Test</div>
+    <div class="modal-sub">Create a timed test for your students</div>
+    <div class="form-field">
+      <label>Test Title</label>
+      <input type="text" id="t-title" placeholder="e.g. Unit 5 Kinetics Quiz"/>
+    </div>
+    <div class="form-field">
+      <label>Instructions (optional)</label>
+      <textarea id="t-instructions" placeholder="e.g. No notes allowed. Show all work."></textarea>
+    </div>
+    <div class="form-field">
+      <label>Select Units</label>
+      <div class="chip-grid" id="t-unit-chips"></div>
+    </div>
+    <div class="form-field">
+      <label>Question Types</label>
+      <div class="chip-grid">
+        <div class="chip sel" id="t-type-MCQ" onclick="toggleChip(this,'t-types','MCQ')">MCQ</div>
+        <div class="chip" id="t-type-FRQ" onclick="toggleChip(this,'t-types','FRQ')">FRQ</div>
+      </div>
+    </div>
+    <div class="form-field">
+      <label>Number of Questions: <span id="t-count-display">20</span></label>
+      <input type="range" min="5" max="45" value="20" step="5" oninput="document.getElementById('t-count-display').textContent=this.value" id="t-count"/>
+    </div>
+    <div class="form-field">
+      <label>Time Limit (minutes, 0 = unlimited)</label>
+      <input type="number" id="t-time" value="30" min="0" max="180"/>
+    </div>
+    <div class="form-field">
+      <label>Due Date (optional)</label>
+      <input type="datetime-local" id="t-due"/>
+    </div>
+    <div class="form-field">
+      <label>Assign To Students</label>
+      <div class="student-check-list" id="t-student-list"><p style="color:var(--muted);font-size:13px;padding:6px">Loading students…</p></div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="closeModal('testModal')">Cancel</button>
+      <button class="btn btn-primary" onclick="createTest()"><i class="fas fa-check"></i> Create Test</button>
+    </div>
+  </div>
+</div>
+
+<!-- ASSIGNMENT DETAIL MODAL -->
+<div class="modal-bg" id="assignDetailModal" onclick="if(event.target===this)closeModal('assignDetailModal')">
+  <div class="modal" style="max-width:620px">
+    <div class="modal-title" id="adTitle">Assignment Results</div>
+    <div class="modal-sub" id="adSub"></div>
+    <div id="adContent"></div>
+    <div class="modal-actions"><button class="btn btn-outline" onclick="closeModal('assignDetailModal')">Close</button></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// Helper: show toast (alias for teacher page)
+function showToast(msg) { toast(msg); }
+
+// ── CONFIG ─────────────────────────────────────────────────────
+const SUPABASE_URL = 'https://qmrpbxiiwbqnmczdxoqr.supabase.co';
+const SUPABASE_ANON = 'sb_publishable_t8Q_10VZIilu1bZlJXyzsA_w-LUu_E2';
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
+
+let currentUser = null;
+let allStudents = [];
+let aTypes = ['MCQ'];
+let tTypes = ['MCQ'];
+let aUnits = [];
+let tUnits = [];
+
+// ── INIT ───────────────────────────────────────────────────────
+(async () => {
+  const { data: { session } } = await sb.auth.getSession();
+  if (!session) { window.location.href = '/login'; return; }
+  
+  const { data: profile } = await sb.from('profiles').select('*').eq('id', session.user.id).single();
+  if (!profile || profile.role !== 'teacher') {
+    window.location.href = '/';
+    return;
+  }
+  currentUser = { ...session.user, ...profile };
+  document.getElementById('navUser').textContent = profile.full_name || profile.email;
+  
+  buildUnitChips('a-unit-chips', aUnits, 'a');
+  buildUnitChips('t-unit-chips', tUnits, 't');
+  loadOverview();
+  loadStudents();
+  loadTeacherProfile();
+  loadAnnouncements();
+  // Remove loading overlay — show page
+  const ld = document.getElementById('authLoading');
+  if (ld) ld.remove();
+  document.querySelectorAll('.layout,.nav').forEach(el => el.classList.add('ready'));
+})();
+
+// ── LOGOUT ─────────────────────────────────────────────────────
+async function doLogout() {
+  await sb.auth.signOut();
+  window.location.href = '/login';
+}
+
+// ── NAVIGATION ─────────────────────────────────────────────────
+function showPage(name) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.sb-item').forEach(s => s.classList.remove('active'));
+  document.getElementById('page-' + name).classList.add('active');
+  const snav = document.getElementById('snav-' + name);
+  if (snav) snav.classList.add('active');
+  if (name === 'assignments') loadAssignments();
+  if (name === 'tests') loadTests();
+  if (name === 'students') loadStudents();
+  if (name === 'announce') loadAnnouncements();
+  // Back button support
+  history.pushState({page: name}, '', '#' + name);
+}
+window.addEventListener('popstate', e => {
+  const page = e.state?.page || 'overview';
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.sb-item').forEach(s => s.classList.remove('active'));
+  const el = document.getElementById('page-' + page);
+  if (el) el.classList.add('active');
+  const snav = document.getElementById('snav-' + page);
+  if (snav) snav.classList.add('active');
+});
+
+// ── TOAST ──────────────────────────────────────────────────────
+function toast(msg, dur=3000) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), dur);
+}
+
+// ── MODALS ─────────────────────────────────────────────────────
+function openModal(id) { document.getElementById(id).classList.add('open'); }
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+
+// ── UNIT CHIPS ─────────────────────────────────────────────────
+function buildUnitChips(containerId, selectedArr, prefix) {
+  const c = document.getElementById(containerId);
+  c.innerHTML = UNITS.map(u =>
+    `<div class="chip ${selectedArr.includes(u.id)?'sel':''}" id="${prefix}-u-${u.id}"
+      onclick="toggleUnitChip(${u.id},'${prefix}')">
+      ${u.icon} Unit ${u.id}
+    </div>`
+  ).join('');
+}
+
+function toggleUnitChip(id, prefix) {
+  const arr = prefix === 'a' ? aUnits : tUnits;
+  const el = document.getElementById(`${prefix}-u-${id}`);
+  if (arr.includes(id)) {
+    arr.splice(arr.indexOf(id), 1);
+    el.classList.remove('sel');
+  } else {
+    arr.push(id);
+    el.classList.add('sel');
+  }
+}
+
+function toggleChip(el, varName, val) {
+  const arr = varName === 'a-types' ? aTypes : tTypes;
+  if (arr.includes(val)) {
+    if (arr.length === 1) { toast('Select at least one type!'); return; }
+    arr.splice(arr.indexOf(val), 1);
+    el.classList.remove('sel');
+  } else {
+    arr.push(val);
+    el.classList.add('sel');
+  }
+}
+
+// ── LOAD OVERVIEW ──────────────────────────────────────────────
+async function loadOverview() {
+  // Get student count
+  const { data: students } = await sb.from('profiles').select('id,full_name,email').eq('role','student');
+  document.getElementById('st-students').textContent = students?.length || 0;
+
+  // Get all attempts
+  const { data: attempts } = await sb.from('attempts').select('correct,student_id,created_at,unit').order('created_at',{ascending:false});
+  document.getElementById('st-attempts').textContent = attempts?.length || 0;
+
+  if (attempts?.length) {
+    const mcqAttempts = attempts.filter(a => a.correct !== null);
+    const correct = mcqAttempts.filter(a => a.correct).length;
+    const pct = mcqAttempts.length ? Math.round((correct/mcqAttempts.length)*100) : 0;
+    document.getElementById('st-avgScore').textContent = pct + '%';
+  } else {
+    document.getElementById('st-avgScore').textContent = '—';
+  }
+
+  // Active assignments
+  const { count: aCount } = await sb.from('assignments').select('id', {count:'exact'});
+  document.getElementById('st-assignments').textContent = aCount || 0;
+
+  document.getElementById('overviewSub').textContent = `Welcome back! You have ${students?.length||0} students enrolled.`;
+
+  // Recent activity
+  if (attempts?.length) {
+    const studentMap = {};
+    (students||[]).forEach(s => studentMap[s.id] = s.full_name || s.email);
+    const recent = attempts.slice(0, 10);
+    document.getElementById('recentActivity').innerHTML = `
+      <table><thead><tr><th>Student</th><th>Unit</th><th>Result</th><th>Time</th></tr></thead>
+      <tbody>${recent.map(a => `<tr>
+        <td><strong>${studentMap[a.student_id]||'Student'}</strong></td>
+        <td><span class="badge badge-blue">Unit ${a.unit}</span></td>
+        <td>${a.correct===null?'<span class="badge badge-gray">FRQ</span>':a.correct?'<span class="badge badge-green">✓ Correct</span>':'<span class="badge badge-red">✗ Wrong</span>'}</td>
+        <td style="color:var(--muted);font-size:12px">${timeAgo(a.created_at)}</td>
+      </tr>`).join('')}</tbody></table>`;
+  }
+
+  // At-risk students
+  if (attempts?.length && students?.length) {
+    const studentStats = {};
+    attempts.forEach(a => {
+      if (!studentStats[a.student_id]) studentStats[a.student_id] = {correct:0,total:0};
+      if (a.correct !== null) { studentStats[a.student_id].total++; if(a.correct) studentStats[a.student_id].correct++; }
+    });
+    const atRisk = students.filter(s => {
+      const st = studentStats[s.id];
+      if (!st || st.total < 5) return false;
+      return (st.correct/st.total)*100 < 60;
+    });
+    if (atRisk.length) {
+      document.getElementById('atRiskStudents').innerHTML = `
+        <table><thead><tr><th>Student</th><th>Score</th><th>Questions Done</th><th>Action</th></tr></thead>
+        <tbody>${atRisk.map(s => {
+          const st = studentStats[s.id];
+          const pct = Math.round((st.correct/st.total)*100);
+          return `<tr>
+            <td><strong>${s.full_name||s.email}</strong></td>
+            <td><span class="badge badge-red">${pct}%</span></td>
+            <td>${st.total} questions</td>
+            <td><button class="btn btn-outline btn-sm" onclick="viewStudent('${s.id}','${(s.full_name||s.email).replace(/'/g,"\\'")}')">View Progress</button></td>
+          </tr>`;
+        }).join('')}</tbody></table>`;
+    }
+  }
+}
+
+// ── LOAD STUDENTS ──────────────────────────────────────────────
+async function loadStudents() {
+  const tbody = document.getElementById('studentsTableBody');
+  tbody.innerHTML = '<tr><td colspan="7"><div class="empty"><i class="fas fa-spinner fa-spin"></i><p>Loading…</p></div></td></tr>';
+
+  const { data: students } = await sb.from('profiles').select('*').eq('role','student').order('full_name');
+  allStudents = students || [];
+
+  if (!allStudents.length) {
+    tbody.innerHTML = '<tr><td colspan="7"><div class="empty"><i class="fas fa-user-graduate"></i><p>No students yet. Share your class sign-up link!</p></div></td></tr>';
+    return;
+  }
+
+  const { data: attempts } = await sb.from('attempts').select('student_id,correct,unit,created_at');
+  renderStudentsTable(allStudents, attempts || []);
+}
+
+function renderStudentsTable(students, attempts) {
+  const tbody = document.getElementById('studentsTableBody');
+  if (!students.length) {
+    tbody.innerHTML = '<tr><td colspan="7"><div class="empty"><i class="fas fa-search"></i><p>No students match</p></div></td></tr>';
+    return;
+  }
+
+  tbody.innerHTML = students.map(s => {
+    const sa = attempts.filter(a => a.student_id === s.id);
+    const mcq = sa.filter(a => a.correct !== null);
+    const correct = mcq.filter(a => a.correct).length;
+    const pct = mcq.length ? Math.round((correct/mcq.length)*100) : null;
+
+    // Unit stats
+    const unitStats = {};
+    sa.forEach(a => {
+      if (!unitStats[a.unit]) unitStats[a.unit] = {correct:0,total:0};
+      if (a.correct !== null) { unitStats[a.unit].total++; if(a.correct) unitStats[a.unit].correct++; }
+    });
+    const unitPcts = Object.entries(unitStats).map(([u,v]) => ({u:parseInt(u),pct:v.total?Math.round((v.correct/v.total)*100):0,total:v.total})).filter(x=>x.total>0);
+    const bestUnit = unitPcts.length ? unitPcts.reduce((a,b)=>a.pct>b.pct?a:b) : null;
+    const worstUnit = unitPcts.length ? unitPcts.reduce((a,b)=>a.pct<b.pct?a:b) : null;
+    const lastActive = sa.length ? sa.sort((a,b)=>new Date(b.created_at)-new Date(a.created_at))[0].created_at : null;
+
+    const pctBadge = pct === null ? '<span class="badge badge-gray">No data</span>'
+      : pct >= 80 ? `<span class="badge badge-green">${pct}%</span>`
+      : pct >= 60 ? `<span class="badge badge-yellow">${pct}%</span>`
+      : `<span class="badge badge-red">${pct}%</span>`;
+
+    const accessBadge = s.is_paid
+      ? `<span class="badge badge-green"><i class="fas fa-unlock"></i> Full Access</span>`
+      : `<span class="badge badge-gray"><i class="fas fa-lock"></i> Free Only</span>`;
+
+    const accessBtn = s.is_paid
+      ? `<button class="btn btn-danger btn-sm" onclick="toggleAccess('${s.id}',false,this)"><i class="fas fa-lock"></i> Revoke</button>`
+      : `<button class="btn btn-green btn-sm" onclick="toggleAccess('${s.id}',true,this)"><i class="fas fa-unlock"></i> Grant Access</button>`;
+
+    return `<tr id="srow-${s.id}">
+      <td><strong>${s.full_name||'—'}</strong><br><span style="font-size:11px;color:var(--muted)">${s.email}</span></td>
+      <td id="abadge-${s.id}">${accessBadge}</td>
+      <td>${sa.length}</td>
+      <td>${pctBadge}</td>
+      <td>${bestUnit ? `<span class="badge badge-green">Unit ${bestUnit.u} (${bestUnit.pct}%)</span>` : '—'}</td>
+      <td style="font-size:12px;color:var(--muted)">${lastActive ? timeAgo(lastActive) : 'Never'}</td>
+      <td style="display:flex;gap:6px;flex-wrap:wrap">
+        <span id="abtn-${s.id}">${accessBtn}</span>
+        <button class="btn btn-outline btn-sm" onclick="viewStudent('${s.id}','${(s.full_name||s.email).replace(/'/g,"\\'")}')">
+          <i class="fas fa-chart-bar"></i> Details
+        </button>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+function filterStudents() {
+  const q = document.getElementById('studentSearch').value.toLowerCase();
+  const filtered = allStudents.filter(s =>
+    (s.full_name||'').toLowerCase().includes(q) ||
+    s.email.toLowerCase().includes(q)
+  );
+  // Need to re-fetch attempts — use cached for filtering
+  const tbody = document.getElementById('studentsTableBody');
+  if (!filtered.length) {
+    tbody.innerHTML = '<tr><td colspan="7"><div class="empty"><i class="fas fa-search"></i><p>No students match</p></div></td></tr>';
+    return;
+  }
+  loadStudents(); // Re-render with filter applied via DOM
+}
+
+// ── GRANT / REVOKE PAID ACCESS ────────────────────────────────────
+async function toggleAccess(studentId, grant, btn) {
+  btn.disabled = true;
+  btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+
+  const { error } = await sb.from('profiles').update({ is_paid: grant }).eq('id', studentId);
+
+  if (error) {
+    showToast('❌ Error: ' + error.message);
+    btn.disabled = false;
+    return;
+  }
+
+  const badgeEl = document.getElementById('abadge-' + studentId);
+  const btnEl   = document.getElementById('abtn-'   + studentId);
+
+  if (grant) {
+    badgeEl.innerHTML = '<span class="badge badge-green"><i class="fas fa-unlock"></i> Full Access</span>';
+    btnEl.innerHTML   = `<button class="btn btn-danger btn-sm" onclick="toggleAccess('${studentId}',false,this)"><i class="fas fa-lock"></i> Revoke</button>`;
+    showToast('✅ Full access granted!');
+  } else {
+    badgeEl.innerHTML = '<span class="badge badge-gray"><i class="fas fa-lock"></i> Free Only</span>';
+    btnEl.innerHTML   = `<button class="btn btn-green btn-sm" onclick="toggleAccess('${studentId}',true,this)"><i class="fas fa-unlock"></i> Grant Access</button>`;
+    showToast('🔒 Access revoked.');
+  }
+
+  const s = allStudents.find(x => x.id === studentId);
+  if (s) s.is_paid = grant;
+}
+
+// ── VIEW STUDENT DETAIL ────────────────────────────────────────
+async function viewStudent(studentId, name) {
+  document.getElementById('sdTitle').textContent = `📊 ${name}`;
+  document.getElementById('sdSub').textContent = 'Progress across all AP Chemistry units';
+  document.getElementById('sdContent').innerHTML = '<div class="empty"><i class="fas fa-spinner fa-spin"></i><p>Loading…</p></div>';
+  openModal('studentDetailModal');
+
+  const { data: attempts } = await sb.from('attempts')
+    .select('*').eq('student_id', studentId).order('created_at',{ascending:false});
+
+  if (!attempts?.length) {
+    document.getElementById('sdContent').innerHTML = '<div class="empty"><i class="fas fa-book-open"></i><p>This student hasn\'t answered any questions yet.</p></div>';
+    return;
+  }
+
+  // Unit breakdown
+  const unitStats = {};
+  UNITS.forEach(u => unitStats[u.id] = {correct:0,total:0,name:u.name,icon:u.icon,color:u.color});
+  attempts.forEach(a => {
+    if (a.correct !== null && unitStats[a.unit]) {
+      unitStats[a.unit].total++;
+      if (a.correct) unitStats[a.unit].correct++;
+    }
+  });
+
+  const mcqAttempts = attempts.filter(a => a.correct !== null);
+  const totalCorrect = mcqAttempts.filter(a => a.correct).length;
+  const overallPct = mcqAttempts.length ? Math.round((totalCorrect/mcqAttempts.length)*100) : 0;
+
+  let html = `
+    <div style="display:flex;gap:16px;margin-bottom:20px">
+      <div class="stat-card" style="flex:1"><div class="sc-num">${attempts.length}</div><div class="sc-lbl">Total Questions</div></div>
+      <div class="stat-card" style="flex:1"><div class="sc-num">${overallPct}%</div><div class="sc-lbl">Overall MCQ Score</div></div>
+      <div class="stat-card" style="flex:1"><div class="sc-num">${timeAgo(attempts[0].created_at)}</div><div class="sc-lbl">Last Active</div></div>
+    </div>
+    <div style="font-size:13px;font-weight:700;color:var(--dark);margin-bottom:12px">Unit Breakdown</div>
+    <div class="unit-progress-grid">`;
+
+  UNITS.forEach(u => {
+    const s = unitStats[u.id];
+    const pct = s.total > 0 ? Math.round((s.correct/s.total)*100) : null;
+    const barClass = pct === null ? '' : pct >= 80 ? '' : pct >= 60 ? 'warn' : 'danger';
+    html += `<div class="unit-prog-card">
+      <div class="upc-name">${u.icon} Unit ${u.id}</div>
+      <div class="upc-stats">
+        <div class="upc-pct">${pct !== null ? pct + '%' : '—'}</div>
+        <div class="upc-count">${s.total} Q</div>
+      </div>
+      <div class="prog-bar-wrap"><div class="prog-bar-fill ${barClass}" style="width:${pct||0}%"></div></div>
+    </div>`;
+  });
+
+  html += `</div>
+    <div style="font-size:13px;font-weight:700;color:var(--dark);margin-bottom:10px">Recent Answers</div>
+    <table><thead><tr><th>Question ID</th><th>Unit</th><th>Topic</th><th>Result</th><th>Date</th></tr></thead>
+    <tbody>${attempts.slice(0,15).map(a => `<tr>
+      <td>#${a.question_id}</td>
+      <td><span class="badge badge-blue">Unit ${a.unit}</span></td>
+      <td style="font-size:12px">${a.topic||'—'}</td>
+      <td>${a.correct===null?'<span class="badge badge-purple">FRQ</span>':a.correct?'<span class="badge badge-green">✓ Correct</span>':'<span class="badge badge-red">✗ Wrong</span>'}</td>
+      <td style="font-size:11px;color:var(--muted)">${timeAgo(a.created_at)}</td>
+    </tr>`).join('')}</tbody></table>`;
+
+  document.getElementById('sdContent').innerHTML = html;
+}
+
+// ── LOAD ASSIGNMENTS ───────────────────────────────────────────
+async function loadAssignments() {
+  const tbody = document.getElementById('assignmentsTableBody');
+  tbody.innerHTML = '<tr><td colspan="7"><div class="empty"><i class="fas fa-spinner fa-spin"></i><p>Loading…</p></div></td></tr>';
+  
+  const { data: assignments } = await sb.from('assignments').select('*').eq('teacher_id', currentUser.id).order('created_at',{ascending:false});
+  if (!assignments?.length) {
+    tbody.innerHTML = '<tr><td colspan="7"><div class="empty"><i class="fas fa-tasks"></i><p>No assignments yet. Create your first one!</p></div></td></tr>';
+    return;
+  }
+
+  // Get assignment_students for each
+  const { data: aStudents } = await sb.from('assignment_students').select('*').in('assignment_id', assignments.map(a=>a.id));
+
+  tbody.innerHTML = assignments.map(a => {
+    const as = (aStudents||[]).filter(s => s.assignment_id === a.id);
+    const completed = as.filter(s => s.status === 'completed').length;
+    const total = as.length;
+    const pct = total ? Math.round((completed/total)*100) : 0;
+    const due = a.due_date ? new Date(a.due_date).toLocaleDateString() : '—';
+    const isOverdue = a.due_date && new Date(a.due_date) < new Date() && pct < 100;
+    
+    return `<tr>
+      <td>
+        <strong>${a.title}</strong>
+        ${isOverdue ? '<span class="badge badge-red" style="margin-left:6px">Overdue</span>' : ''}
+      </td>
+      <td>${(a.units||[]).map(u=>`<span class="badge badge-blue">U${u}</span>`).join(' ')}</td>
+      <td>${a.q_count} Q</td>
+      <td>${total} student${total!==1?'s':''}</td>
+      <td style="font-size:12px">${due}</td>
+      <td>
+        <div style="display:flex;align-items:center;gap:8px">
+          <div class="prog-bar-wrap" style="width:80px"><div class="prog-bar-fill" style="width:${pct}%"></div></div>
+          <span style="font-size:12px">${completed}/${total}</span>
+        </div>
+      </td>
+      <td>
+        <button class="btn btn-outline btn-sm" onclick="viewAssignment(${a.id},'${a.title.replace(/'/g,"\\'")}')"><i class="fas fa-eye"></i> View</button>
+        <button class="btn btn-danger btn-sm" style="margin-left:4px" onclick="deleteAssignment(${a.id})"><i class="fas fa-trash"></i></button>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+async function viewAssignment(id, title) {
+  document.getElementById('adTitle').textContent = `📋 ${title}`;
+  document.getElementById('adSub').textContent = 'Student completion status';
+  document.getElementById('adContent').innerHTML = '<div class="empty"><i class="fas fa-spinner fa-spin"></i><p>Loading…</p></div>';
+  openModal('assignDetailModal');
+
+  const { data: as } = await sb.from('assignment_students').select('*,profiles(full_name,email)').eq('assignment_id', id);
+  if (!as?.length) {
+    document.getElementById('adContent').innerHTML = '<div class="empty"><p>No students assigned.</p></div>';
+    return;
+  }
+
+  document.getElementById('adContent').innerHTML = `
+    <table><thead><tr><th>Student</th><th>Status</th><th>Score</th><th>Submitted</th></tr></thead>
+    <tbody>${as.map(s => `<tr>
+      <td><strong>${s.profiles?.full_name||s.profiles?.email||'—'}</strong></td>
+      <td>${statusBadge(s.status)}</td>
+      <td>${s.pct !== null ? `<strong>${s.pct}%</strong> (${s.score}/${s.total})` : '—'}</td>
+      <td style="font-size:12px;color:var(--muted)">${s.submitted_at ? new Date(s.submitted_at).toLocaleString() : '—'}</td>
+    </tr>`).join('')}</tbody></table>`;
+}
+
+async function deleteAssignment(id) {
+  if (!confirm('Delete this assignment? This cannot be undone.')) return;
+  await sb.from('assignment_students').delete().eq('assignment_id', id);
+  await sb.from('assignments').delete().eq('id', id);
+  toast('Assignment deleted');
+  loadAssignments();
+}
+
+// ── LOAD TESTS ─────────────────────────────────────────────────
+async function loadTests() {
+  const tbody = document.getElementById('testsTableBody');
+  tbody.innerHTML = '<tr><td colspan="7"><div class="empty"><i class="fas fa-spinner fa-spin"></i><p>Loading…</p></div></td></tr>';
+
+  const { data: tests } = await sb.from('tests').select('*').eq('teacher_id', currentUser.id).order('created_at',{ascending:false});
+  if (!tests?.length) {
+    tbody.innerHTML = '<tr><td colspan="7"><div class="empty"><i class="fas fa-file-alt"></i><p>No tests yet. Create your first one!</p></div></td></tr>';
+    return;
+  }
+
+  const { data: tStudents } = await sb.from('test_students').select('*').in('test_id', tests.map(t=>t.id));
+
+  tbody.innerHTML = tests.map(t => {
+    const ts = (tStudents||[]).filter(s => s.test_id === t.id);
+    const completed = ts.filter(s => s.status === 'completed').length;
+    const scores = ts.filter(s => s.pct !== null).map(s => s.pct);
+    const avgScore = scores.length ? Math.round(scores.reduce((a,b)=>a+b,0)/scores.length) : null;
+    const timeLimit = t.time_limit ? `${t.time_limit} min` : 'Unlimited';
+
+    return `<tr>
+      <td><strong>${t.title}</strong></td>
+      <td>${(t.units||[]).map(u=>`<span class="badge badge-blue">U${u}</span>`).join(' ')}</td>
+      <td>${t.q_count} Q</td>
+      <td><span class="badge badge-purple">${timeLimit}</span></td>
+      <td>${ts.length} student${ts.length!==1?'s':''}</td>
+      <td>${avgScore !== null ? `<strong>${avgScore}%</strong>` : '—'}</td>
+      <td>
+        <button class="btn btn-outline btn-sm" onclick="viewTestResults(${t.id},'${t.title.replace(/'/g,"\\'")}')"><i class="fas fa-eye"></i> Results</button>
+        <button class="btn btn-danger btn-sm" style="margin-left:4px" onclick="deleteTest(${t.id})"><i class="fas fa-trash"></i></button>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+async function viewTestResults(id, title) {
+  document.getElementById('adTitle').textContent = `📝 ${title} — Results`;
+  document.getElementById('adSub').textContent = 'Student test scores';
+  document.getElementById('adContent').innerHTML = '<div class="empty"><i class="fas fa-spinner fa-spin"></i><p>Loading…</p></div>';
+  openModal('assignDetailModal');
+
+  const { data: ts } = await sb.from('test_students').select('*,profiles(full_name,email)').eq('test_id', id);
+  if (!ts?.length) {
+    document.getElementById('adContent').innerHTML = '<div class="empty"><p>No students assigned.</p></div>';
+    return;
+  }
+
+  document.getElementById('adContent').innerHTML = `
+    <table><thead><tr><th>Student</th><th>Status</th><th>Score</th><th>Started</th><th>Submitted</th></tr></thead>
+    <tbody>${ts.map(s => `<tr>
+      <td><strong>${s.profiles?.full_name||s.profiles?.email||'—'}</strong></td>
+      <td>${statusBadge(s.status)}</td>
+      <td>${s.pct !== null ? `<strong>${s.pct}%</strong> (${s.score}/${s.total})` : '—'}</td>
+      <td style="font-size:12px;color:var(--muted)">${s.started_at ? new Date(s.started_at).toLocaleString() : '—'}</td>
+      <td style="font-size:12px;color:var(--muted)">${s.submitted_at ? new Date(s.submitted_at).toLocaleString() : '—'}</td>
+    </tr>`).join('')}</tbody></table>`;
+}
+
+async function deleteTest(id) {
+  if (!confirm('Delete this test? This cannot be undone.')) return;
+  await sb.from('test_students').delete().eq('test_id', id);
+  await sb.from('tests').delete().eq('id', id);
+  toast('Test deleted');
+  loadTests();
+}
+
+// ── CREATE ASSIGNMENT ──────────────────────────────────────────
+async function openAssignModal() {
+  renderStudentCheckList('a-student-list');
+  openModal('assignModal');
+}
+
+async function renderStudentCheckList(containerId) {
+  const c = document.getElementById(containerId);
+  if (!allStudents.length) {
+    await loadStudents();
+  }
+  if (!allStudents.length) {
+    c.innerHTML = '<p style="color:var(--muted);font-size:13px;padding:6px">No students yet.</p>';
+    return;
+  }
+  c.innerHTML = allStudents.map(s =>
+    `<label class="student-check-item">
+      <input type="checkbox" class="student-cb" value="${s.id}"/>
+      <div>
+        <div style="font-weight:600">${s.full_name||'—'}</div>
+        <div style="font-size:11px;color:var(--muted)">${s.email}</div>
+      </div>
+    </label>`
+  ).join('');
+}
+
+async function createAssignment() {
+  const title = document.getElementById('a-title').value.trim();
+  if (!title) { toast('Please enter a title'); return; }
+  if (!aUnits.length) { toast('Select at least one unit'); return; }
+
+  const selectedStudents = [...document.querySelectorAll('#a-student-list .student-cb:checked')].map(cb => cb.value);
+  if (!selectedStudents.length) { toast('Select at least one student'); return; }
+
+  const { data: assignment, error } = await sb.from('assignments').insert({
+    teacher_id: currentUser.id,
+    title,
+    instructions: document.getElementById('a-instructions').value.trim() || null,
+    units: aUnits,
+    q_count: parseInt(document.getElementById('a-count').value),
+    types: aTypes,
+    due_date: document.getElementById('a-due').value || null,
+  }).select().single();
+
+  if (error) { toast('❌ Error: ' + error.message); return; }
+
+  // Assign to students
+  await sb.from('assignment_students').insert(
+    selectedStudents.map(sid => ({ assignment_id: assignment.id, student_id: sid, status: 'pending' }))
+  );
+
+  toast(`✅ Assignment "${title}" created for ${selectedStudents.length} student(s)!`);
+  closeModal('assignModal');
+  document.getElementById('a-title').value = '';
+  document.getElementById('a-instructions').value = '';
+  loadAssignments();
+}
+
+// ── CREATE TEST ────────────────────────────────────────────────
+async function openTestModal() {
+  renderStudentCheckList('t-student-list');
+  openModal('testModal');
+}
+
+async function createTest() {
+  const title = document.getElementById('t-title').value.trim();
+  if (!title) { toast('Please enter a title'); return; }
+  if (!tUnits.length) { toast('Select at least one unit'); return; }
+
+  const selectedStudents = [...document.querySelectorAll('#t-student-list .student-cb:checked')].map(cb => cb.value);
+  if (!selectedStudents.length) { toast('Select at least one student'); return; }
+
+  const { data: test, error } = await sb.from('tests').insert({
+    teacher_id: currentUser.id,
+    title,
+    instructions: document.getElementById('t-instructions').value.trim() || null,
+    units: tUnits,
+    q_count: parseInt(document.getElementById('t-count').value),
+    types: tTypes,
+    time_limit: parseInt(document.getElementById('t-time').value) || 0,
+    due_date: document.getElementById('t-due').value || null,
+  }).select().single();
+
+  if (error) { toast('❌ Error: ' + error.message); return; }
+
+  await sb.from('test_students').insert(
+    selectedStudents.map(sid => ({ test_id: test.id, student_id: sid, status: 'pending' }))
+  );
+
+  toast(`✅ Test "${title}" created for ${selectedStudents.length} student(s)!`);
+  closeModal('testModal');
+  document.getElementById('t-title').value = '';
+  document.getElementById('t-instructions').value = '';
+  loadTests();
+}
+
+// ── TEACHER PROFILE ───────────────────────────────────────────
+async function loadTeacherProfile() {
+  if (!currentUser) return;
+  const { data: students } = await sb.from('profiles').select('id').eq('role','student');
+  const { data: assignments } = await sb.from('assignments').select('id').eq('teacher_id', currentUser.id);
+  const { data: tests } = await sb.from('tests').select('id').eq('teacher_id', currentUser.id);
+  const name = currentUser.full_name || currentUser.email.split('@')[0];
+  document.getElementById('tphName').textContent = name;
+  document.getElementById('tphEmail').textContent = currentUser.email;
+  document.getElementById('tphAvatar').textContent = name.charAt(0).toUpperCase();
+  document.getElementById('tphStudentCount').innerHTML = `<i class="fas fa-users"></i> ${students?.length||0} students`;
+  document.getElementById('tst-students').textContent = students?.length||0;
+  document.getElementById('tst-assignments').textContent = assignments?.length||0;
+  document.getElementById('tst-tests').textContent = tests?.length||0;
+  if (currentUser.bio) document.getElementById('tphBio').textContent = '"' + currentUser.bio + '"';
+  if (currentUser.credentials) document.getElementById('tphCredentials').textContent = currentUser.credentials;
+  if (currentUser.schedule) document.getElementById('tphSchedule').innerHTML = currentUser.schedule.replace(/\n/g,'<br/>');
+}
+
+function openTeacherEditModal() {
+  document.getElementById('te-name').value = currentUser.full_name || '';
+  document.getElementById('te-bio').value = currentUser.bio || '';
+  document.getElementById('te-credentials').value = currentUser.credentials || '';
+  document.getElementById('te-schedule').value = currentUser.schedule || '';
+  openModal('teacherEditModal');
+}
+
+async function saveTeacherProfile() {
+  const name = document.getElementById('te-name').value.trim();
+  if (!name) { toast('Please enter your name'); return; }
+  const bio = document.getElementById('te-bio').value.trim();
+  const credentials = document.getElementById('te-credentials').value.trim();
+  const schedule = document.getElementById('te-schedule').value.trim();
+  const { error } = await sb.from('profiles').update({full_name:name,bio:bio||null,credentials:credentials||null,schedule:schedule||null}).eq('id',currentUser.id);
+  if (error) { toast('❌ ' + error.message); return; }
+  currentUser = {...currentUser,full_name:name,bio,credentials,schedule};
+  document.getElementById('tphName').textContent = name;
+  if (bio) document.getElementById('tphBio').textContent = '"' + bio + '"';
+  if (credentials) document.getElementById('tphCredentials').textContent = credentials;
+  if (schedule) document.getElementById('tphSchedule').innerHTML = schedule.replace(/\n/g,'<br/>');
+  closeModal('teacherEditModal');
+  toast('✅ Profile updated!');
+  document.getElementById('navUser').textContent = name;
+}
+
+// ── ANNOUNCEMENTS ──────────────────────────────────────────────
+async function loadAnnouncements() {
+  const { data } = await sb.from('announcements').select('*').order('created_at',{ascending:false}).limit(10);
+  const c = document.getElementById('announceList');
+  if (!c) return;
+  if (!data?.length) {
+    c.innerHTML = '<div class="empty"><i class="fas fa-bullhorn"></i><p>No announcements yet. Post your first one!</p></div>';
+    return;
+  }
+  c.innerHTML = data.map(a => `
+    <div style="padding:14px 20px;border-bottom:1px solid var(--border);display:flex;gap:12px;align-items:flex-start">
+      <div style="flex:1">
+        <div style="font-size:13px;color:var(--dark);line-height:1.6">${a.message}</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:4px">${new Date(a.created_at).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric',hour:'2-digit',minute:'2-digit'})}</div>
+      </div>
+      <button class="btn btn-danger btn-sm" onclick="deleteAnnouncement(${a.id})"><i class="fas fa-trash"></i></button>
+    </div>`).join('');
+}
+
+async function postAnnouncement() {
+  const msg = document.getElementById('announceText').value.trim();
+  if (!msg) { toast('Please enter a message'); return; }
+  const { error } = await sb.from('announcements').insert({teacher_id: currentUser.id, message: msg});
+  if (error) { toast('❌ ' + error.message); return; }
+  document.getElementById('announceText').value = '';
+  toast('✅ Announcement posted!');
+  loadAnnouncements();
+}
+
+async function deleteAnnouncement(id) {
+  if (!confirm('Delete this announcement?')) return;
+  await sb.from('announcements').delete().eq('id', id);
+  toast('Deleted');
+  loadAnnouncements();
+}
+
+// ── HELPERS ────────────────────────────────────────────────────
+function statusBadge(status) {
+  if (status === 'completed') return '<span class="badge badge-green">Completed</span>';
+  if (status === 'in_progress') return '<span class="badge badge-yellow">In Progress</span>';
+  return '<span class="badge badge-gray">Pending</span>';
+}
+
+function timeAgo(iso) {
+  const diff = Date.now() - new Date(iso).getTime();
+  const m = Math.floor(diff/60000);
+  if (m < 1) return 'Just now';
+  if (m < 60) return `${m}m ago`;
+  const h = Math.floor(m/60);
+  if (h < 24) return `${h}h ago`;
+  const d = Math.floor(h/24);
+  return `${d}d ago`;
+}
+</script>
+</body>
+</html>

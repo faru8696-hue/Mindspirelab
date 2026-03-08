@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>My Profile — MindSpire Lab AP Chemistry</title>
+<link rel="icon" href="/favicon.ico"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet"/>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="/questions.js"></script>
+<style>
+:root{--p:#6c63ff;--pd:#4f46e5;--grn:#10b981;--org:#f59e0b;--red:#ef4444;
+  --dark:#0f172a;--dark2:#1e293b;--text:#374151;--muted:#6b7280;
+  --border:#e5e7eb;--bg:#f8fafc;--card:#fff}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+a{text-decoration:none;color:inherit}
+button{font-family:inherit;cursor:pointer}
+
+/* NAV */
+.top-nav{position:fixed;top:0;left:0;right:0;z-index:300;background:#fff;
+  border-bottom:1px solid var(--border);padding:0 20px;height:56px;display:flex;
+  align-items:center;justify-content:space-between;box-shadow:0 1px 8px rgba(0,0,0,.06)}
+.nav-brand{display:flex;align-items:center;gap:8px;font-weight:900;font-size:16px;color:var(--dark)}
+.nav-brand svg{width:30px;height:30px}
+.nav-right{display:flex;align-items:center;gap:8px}
+.btn-back{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--muted);
+  padding:6px 12px;border-radius:8px;border:1px solid var(--border);transition:.15s;background:#fff}
+.btn-back:hover{background:var(--bg);color:var(--dark)}
+.btn-logout{font-size:12px;color:#9ca3af;padding:5px 12px;border-radius:8px;
+  border:1px solid var(--border);background:none;transition:.2s}
+.btn-logout:hover{background:#f1f5f9}
+
+/* PAGE */
+.page{padding-top:76px;padding-bottom:48px;max-width:900px;margin:0 auto;padding-left:20px;padding-right:20px}
+
+/* PROFILE HEADER */
+.profile-header{background:linear-gradient(135deg,#0f0c29,#1e1b4b,#2d2566);
+  border-radius:20px;padding:36px;margin-bottom:24px;position:relative;overflow:hidden}
+.profile-header::before{content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse at 20% 50%,rgba(108,99,255,.4),transparent 55%),
+             radial-gradient(ellipse at 80% 20%,rgba(245,158,11,.15),transparent 45%)}
+.ph-inner{position:relative;z-index:1;display:flex;align-items:flex-start;gap:24px}
+.ph-avatar{width:80px;height:80px;border-radius:20px;background:linear-gradient(135deg,#a78bfa,#6c63ff);
+  display:flex;align-items:center;justify-content:center;font-size:32px;flex-shrink:0;
+  border:3px solid rgba(255,255,255,.2)}
+.ph-info{flex:1}
+.ph-name{font-size:24px;font-weight:900;color:#fff;margin-bottom:4px}
+.ph-email{font-size:13px;color:rgba(255,255,255,.6);margin-bottom:12px}
+.ph-badges-row{display:flex;gap:8px;flex-wrap:wrap}
+.ph-badge{display:inline-flex;align-items:center;gap:5px;padding:5px 12px;border-radius:20px;
+  font-size:12px;font-weight:700;border:1px solid rgba(255,255,255,.15);color:rgba(255,255,255,.9);
+  background:rgba(255,255,255,.1)}
+.ph-edit{position:absolute;top:20px;right:20px;background:rgba(255,255,255,.15);color:#fff;
+  border:1px solid rgba(255,255,255,.2);padding:7px 14px;border-radius:9px;font-size:13px;
+  font-weight:600;cursor:pointer;transition:.2s;z-index:2}
+.ph-edit:hover{background:rgba(255,255,255,.25)}
+
+/* QUICK STATS */
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px}
+.stat-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px;text-align:center}
+.sc-icon{font-size:20px;margin-bottom:6px}
+.sc-num{font-size:26px;font-weight:900;color:var(--dark);line-height:1;margin-bottom:3px}
+.sc-lbl{font-size:11px;color:var(--muted);font-weight:500}
+
+/* CARDS */
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;
+  padding:22px;margin-bottom:20px}
+.card-title{font-size:15px;font-weight:800;color:var(--dark);margin-bottom:16px;
+  display:flex;align-items:center;gap:8px}
+
+/* BADGES GRID */
+.badges-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px}
+.badge-item{background:var(--bg);border:1px solid var(--border);border-radius:12px;
+  padding:14px;text-align:center;transition:.2s}
+.badge-item.earned{background:linear-gradient(135deg,#ede9fe,#ddd6fe);border-color:#c4b5fd}
+.badge-item.locked{opacity:.45;filter:grayscale(1)}
+.badge-icon{font-size:28px;margin-bottom:8px}
+.badge-name{font-size:11px;font-weight:700;color:var(--dark);margin-bottom:3px}
+.badge-desc{font-size:10px;color:var(--muted);line-height:1.3}
+.badge-earned-label{font-size:10px;font-weight:700;color:#6d28d9;margin-top:5px}
+
+/* UNIT BARS */
+.unit-row{margin-bottom:12px}
+.unit-row-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:5px}
+.unit-name{font-size:13px;font-weight:600;color:var(--dark);display:flex;align-items:center;gap:6px}
+.unit-pct{font-size:13px;font-weight:800;color:var(--p)}
+.bar-track{height:8px;background:#e5e7eb;border-radius:4px;overflow:hidden}
+.bar-fill{height:100%;border-radius:4px;transition:.6s}
+
+/* HISTORY TABLE */
+.history-table{width:100%;border-collapse:collapse}
+.history-table th{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;
+  color:var(--muted);padding:8px 12px;text-align:left;background:#f8fafc;border-bottom:1px solid var(--border)}
+.history-table td{font-size:13px;padding:11px 12px;border-bottom:1px solid #f1f5f9;color:var(--text)}
+.history-table tr:last-child td{border-bottom:none}
+.history-table tr:hover td{background:#fafafa}
+.tag{display:inline-block;padding:2px 8px;border-radius:20px;font-size:11px;font-weight:700}
+.tag-green{background:#dcfce7;color:#16a34a}
+.tag-yellow{background:#fef3c7;color:#d97706}
+.tag-red{background:#fee2e2;color:#dc2626}
+.tag-blue{background:#dbeafe;color:#1d4ed8}
+.tag-gray{background:#f1f5f9;color:#475569}
+
+/* EDIT MODAL */
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:500;
+  align-items:center;justify-content:center;padding:20px}
+.modal-bg.open{display:flex}
+.modal{background:#fff;border-radius:18px;padding:28px;width:100%;max-width:480px}
+.modal-title{font-size:18px;font-weight:800;color:var(--dark);margin-bottom:18px}
+.form-field{margin-bottom:14px}
+.form-field label{display:block;font-size:11px;font-weight:700;color:var(--text);
+  margin-bottom:5px;text-transform:uppercase;letter-spacing:.5px}
+.form-field input,.form-field textarea,.form-field select{width:100%;padding:10px 13px;
+  border:1.5px solid var(--border);border-radius:9px;font-size:13px;font-family:'Inter',sans-serif;
+  color:var(--dark);transition:.2s}
+.form-field input:focus,.form-field textarea:focus{outline:none;border-color:var(--p);
+  box-shadow:0 0 0 3px rgba(108,99,255,.1)}
+.form-field textarea{resize:vertical;min-height:80px}
+.modal-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:18px}
+.btn{padding:9px 18px;border-radius:9px;font-size:13px;font-weight:700;border:none;
+  cursor:pointer;transition:.2s;display:inline-flex;align-items:center;gap:6px}
+.btn-primary{background:linear-gradient(135deg,var(--p),var(--pd));color:#fff}
+.btn-primary:hover{transform:translateY(-1px);box-shadow:0 4px 14px rgba(108,99,255,.35)}
+.btn-outline{background:#fff;border:1.5px solid var(--border);color:var(--text)}
+.btn-outline:hover{background:var(--bg)}
+
+/* GOAL SELECT */
+.goal-chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
+.goal-chip{padding:7px 14px;border:1.5px solid var(--border);border-radius:20px;font-size:12px;
+  font-weight:600;cursor:pointer;transition:.15s;color:var(--muted)}
+.goal-chip:hover{border-color:var(--p);color:var(--p)}
+.goal-chip.selected{border-color:var(--p);background:#ede9fe;color:var(--p)}
+
+/* TOAST */
+.toast{position:fixed;bottom:22px;right:22px;background:var(--dark2);color:#fff;
+  padding:11px 18px;border-radius:12px;font-size:13px;font-weight:600;z-index:9999;
+  transform:translateY(70px);opacity:0;transition:.3s;pointer-events:none}
+.toast.show{transform:translateY(0);opacity:1}
+
+/* ANNOUNCEMENTS */
+.announce-banner{background:linear-gradient(135deg,#ede9fe,#dbeafe);border:1px solid #c4b5fd;
+  border-radius:14px;padding:14px 18px;margin-bottom:20px;display:none}
+.announce-title{font-size:12px;font-weight:800;color:#6d28d9;margin-bottom:4px}
+.announce-text{font-size:13px;color:#4338ca;line-height:1.5}
+
+/* EMPTY */
+.empty-state{text-align:center;padding:32px;color:var(--muted)}
+.empty-state .es-icon{font-size:36px;margin-bottom:10px}
+.empty-state p{font-size:13px;font-weight:500}
+
+/* AP SCORE */
+.ap-score-box{display:flex;gap:12px;flex-wrap:wrap}
+.ap-score-item{flex:1;min-width:70px;background:var(--bg);border:1px solid var(--border);
+  border-radius:12px;padding:14px;text-align:center}
+.ap-score-num{font-size:22px;font-weight:900}
+.ap-score-lbl{font-size:11px;color:var(--muted);margin-top:2px}
+
+/* LOADING */
+#authLoading{position:fixed;inset:0;background:#f8fafc;z-index:9999;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px}
+#authLoading .ld-spin{width:28px;height:28px;border:3px solid #e5e7eb;border-top-color:#6c63ff;
+  border-radius:50%;animation:ldSpin .8s linear infinite}
+#authLoading .ld-text{font-size:14px;font-weight:600;color:#6b7280}
+@keyframes ldSpin{to{transform:rotate(360deg)}}
+.page,.top-nav{opacity:0;transition:opacity .3s}
+.page.ready,.top-nav.ready{opacity:1}
+
+@media(max-width:700px){
+  .stats-row{grid-template-columns:1fr 1fr}
+  .ph-inner{flex-direction:column;gap:16px}
+  .ph-edit{top:14px;right:14px;padding:5px 10px;font-size:12px}
+}
+</style>
+</head>
+<body>
+
+<!-- AUTH LOADING -->
+<div id="authLoading">
+  <svg width="48" height="48" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <defs><linearGradient id="pldlg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#a78bfa"/><stop offset="100%" stop-color="#4f46e5"/></linearGradient></defs>
+    <rect width="36" height="36" rx="10" fill="url(#pldlg)"/>
+    <circle cx="18" cy="18" r="3" fill="white" opacity=".95"/>
+    <ellipse cx="18" cy="18" rx="10.5" ry="4" stroke="white" stroke-width="1.6" fill="none" opacity=".9"/>
+    <ellipse cx="18" cy="18" rx="10.5" ry="4" stroke="white" stroke-width="1.6" fill="none" opacity=".9" transform="rotate(60 18 18)"/>
+    <ellipse cx="18" cy="18" rx="10.5" ry="4" stroke="white" stroke-width="1.6" fill="none" opacity=".9" transform="rotate(120 18 18)"/>
+  </svg>
+  <div class="ld-spin"></div>
+  <div class="ld-text">Loading your profile…</div>
+</div>
+
+<!-- NAV -->
+<nav class="top-nav">
+  <div class="nav-brand">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 36" fill="none">
+      <defs><linearGradient id="nlg" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#a78bfa"/><stop offset="100%" stop-color="#4f46e5"/></linearGradient></defs>
+      <rect width="36" height="36" rx="10" fill="url(#nlg)"/>
+      <circle cx="18" cy="18" r="3" fill="white" opacity=".95"/>
+      <ellipse cx="18" cy="18" rx="10.5" ry="4" stroke="white" stroke-width="1.6" fill="none" opacity=".9"/>
+      <ellipse cx="18" cy="18" rx="10.5" ry="4" stroke="white" stroke-width="1.6" fill="none" opacity=".9" transform="rotate(60 18 18)"/>
+      <ellipse cx="18" cy="18" rx="10.5" ry="4" stroke="white" stroke-width="1.6" fill="none" opacity=".9" transform="rotate(120 18 18)"/>
+      <circle cx="28.5" cy="18" r="1.8" fill="#f59e0b"/>
+    </svg>
+    MindSpire Lab
+  </div>
+  <div class="nav-right">
+    <a href="/" class="btn-back"><i class="fas fa-arrow-left"></i> Dashboard</a>
+    <button class="btn-logout" onclick="doLogout()"><i class="fas fa-sign-out-alt"></i> Logout</button>
+  </div>
+</nav>
+
+<div class="page">
+
+  <!-- ANNOUNCEMENT BANNER -->
+  <div class="announce-banner" id="announceBanner">
+    <div class="announce-title">📣 Announcement from your teacher</div>
+    <div class="announce-text" id="announceText"></div>
+  </div>
+
+  <!-- PROFILE HEADER -->
+  <div class="profile-header">
+    <div class="ph-inner">
+      <div class="ph-avatar" id="phAvatar">🎓</div>
+      <div class="ph-info">
+        <div class="ph-name" id="phName">Loading…</div>
+        <div class="ph-email" id="phEmail"></div>
+        <div class="ph-badges-row">
+          <div class="ph-badge"><i class="fas fa-star"></i> <span id="phLevel">Level 1</span></div>
+          <div class="ph-badge"><i class="fas fa-fire"></i> <span id="phStreak">0 day streak</span></div>
+          <div class="ph-badge" id="phAccessBadge"><i class="fas fa-lock"></i> Free Access</div>
+        </div>
+        <div id="phBio" style="margin-top:12px;font-size:13px;color:rgba(255,255,255,.65);font-style:italic;max-width:480px"></div>
+      </div>
+    </div>
+    <button class="ph-edit" onclick="openEditModal()"><i class="fas fa-pen"></i> Edit Profile</button>
+  </div>
+
+  <!-- QUICK STATS -->
+  <div class="stats-row">
+    <div class="stat-card">
+      <div class="sc-icon">🎯</div>
+      <div class="sc-num" id="statTotal">—</div>
+      <div class="sc-lbl">Total Questions</div>
+    </div>
+    <div class="stat-card">
+      <div class="sc-icon">✅</div>
+      <div class="sc-num" id="statAccuracy">—</div>
+      <div class="sc-lbl">MCQ Accuracy</div>
+    </div>
+    <div class="stat-card">
+      <div class="sc-icon">⭐</div>
+      <div class="sc-num" id="statXP">—</div>
+      <div class="sc-lbl">Total XP Earned</div>
+    </div>
+    <div class="stat-card">
+      <div class="sc-icon">📚</div>
+      <div class="sc-num" id="statUnits">0/9</div>
+      <div class="sc-lbl">Units Practiced</div>
+    </div>
+  </div>
+
+  <!-- AP SCORE PROJECTION -->
+  <div class="card">
+    <div class="card-title"><i class="fas fa-chart-line" style="color:var(--p)"></i> AP Score Projection</div>
+    <div class="ap-score-box" id="apScoreBox">
+      <div class="empty-state"><div class="es-icon">📊</div><p>Answer more questions to unlock your score projection</p></div>
+    </div>
+  </div>
+
+  <!-- UNIT PROGRESS -->
+  <div class="card">
+    <div class="card-title"><i class="fas fa-chart-bar" style="color:var(--grn)"></i> Unit-by-Unit Progress</div>
+    <div id="unitProgressBars">
+      <div class="empty-state"><div class="es-icon">📚</div><p>No data yet — start practicing to see your progress!</p></div>
+    </div>
+  </div>
+
+  <!-- BADGES -->
+  <div class="card">
+    <div class="card-title"><i class="fas fa-medal" style="color:var(--org)"></i> Achievement Badges</div>
+    <div class="badges-grid" id="badgesGrid"></div>
+  </div>
+
+  <!-- WEAK AREAS -->
+  <div class="card" id="weakAreasCard" style="display:none">
+    <div class="card-title"><i class="fas fa-exclamation-triangle" style="color:var(--red)"></i> Areas to Improve</div>
+    <div id="weakAreas"></div>
+  </div>
+
+  <!-- QUIZ HISTORY -->
+  <div class="card">
+    <div class="card-title"><i class="fas fa-history" style="color:var(--muted)"></i> Recent Activity</div>
+    <div id="historySection">
+      <div class="empty-state"><div class="es-icon">📝</div><p>No activity yet — complete some practice to see your history!</p></div>
+    </div>
+  </div>
+
+</div><!-- /page -->
+
+<!-- EDIT PROFILE MODAL -->
+<div class="modal-bg" id="editModal" onclick="if(event.target===this)closeEditModal()">
+  <div class="modal">
+    <div class="modal-title">Edit Profile</div>
+    <div class="form-field">
+      <label>Display Name</label>
+      <input type="text" id="editName" placeholder="Your full name"/>
+    </div>
+    <div class="form-field">
+      <label>Bio (optional)</label>
+      <textarea id="editBio" placeholder="Tell us about yourself — your school, grade, goals…"></textarea>
+    </div>
+    <div class="form-field">
+      <label>Study Goal</label>
+      <div class="goal-chips" id="goalChips">
+        <div class="goal-chip" onclick="selectGoal(this,'Score a 5 on AP Chem')">🎯 Score a 5</div>
+        <div class="goal-chip" onclick="selectGoal(this,'Improve my understanding')">📚 Deep Understanding</div>
+        <div class="goal-chip" onclick="selectGoal(this,'Finish all 9 units')">✅ Complete All Units</div>
+        <div class="goal-chip" onclick="selectGoal(this,'Pass AP exam')">📋 Pass AP Exam</div>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="closeEditModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="saveProfile()"><i class="fas fa-save"></i> Save Changes</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const SUPABASE_URL = 'https://qmrpbxiiwbqnmczdxoqr.supabase.co';
+const SUPABASE_ANON = 'sb_publishable_t8Q_10VZIilu1bZlJXyzsA_w-LUu_E2';
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
+
+let currentUser = null;
+let currentProfile = null;
+let selectedGoal = '';
+
+const BADGES_DEF = [
+  {id:'first_q',     icon:'🔥', name:'First Question',    desc:'Answered your first question',          earned: (s,a) => a.length >= 1},
+  {id:'q10',        icon:'💪', name:'10 Questions',       desc:'Answered 10 questions total',           earned: (s,a) => a.length >= 10},
+  {id:'q50',        icon:'🎯', name:'50 Questions',       desc:'Answered 50 questions total',           earned: (s,a) => a.length >= 50},
+  {id:'q100',       icon:'⭐', name:'Century',            desc:'Answered 100+ questions',               earned: (s,a) => a.length >= 100},
+  {id:'q250',       icon:'🚀', name:'250 Club',           desc:'Answered 250+ questions',               earned: (s,a) => a.length >= 250},
+  {id:'acc80',      icon:'🎖️', name:'80% Accuracy',       desc:'MCQ accuracy at 80%+',                  earned: (s,a) => {const m=a.filter(x=>x.correct!==null);return m.length>=10&&(m.filter(x=>x.correct).length/m.length)>=0.8}},
+  {id:'acc90',      icon:'💎', name:'90% Accuracy',       desc:'MCQ accuracy at 90%+',                  earned: (s,a) => {const m=a.filter(x=>x.correct!==null);return m.length>=10&&(m.filter(x=>x.correct).length/m.length)>=0.9}},
+  {id:'unit1',      icon:'⚛️', name:'Unit 1 Master',      desc:'Answered 10+ Unit 1 questions',         earned: (s,a) => a.filter(x=>x.unit===1).length >= 10},
+  {id:'all_units',  icon:'🏆', name:'All Units',          desc:'Practiced all 9 AP Chemistry units',    earned: (s,a) => new Set(a.map(x=>x.unit)).size >= 9},
+  {id:'paid',       icon:'🔓', name:'Full Access',        desc:'Unlocked all 9 units',                  earned: (s,a) => s?.is_paid === true},
+  {id:'perfect',    icon:'✨', name:'Perfect Round',      desc:'10/10 correct in a single session',     earned: (s,a) => {
+    const sessions = {};
+    a.forEach(x=>{if(!sessions[x.session_id])sessions[x.session_id]={t:0,c:0};if(x.correct!==null){sessions[x.session_id].t++;if(x.correct)sessions[x.session_id].c++;}});
+    return Object.values(sessions).some(s=>s.t>=10&&s.c===s.t);
+  }},
+  {id:'streak7',    icon:'🔥', name:'7-Day Streak',       desc:'Practiced 7 days in a row (coming soon)','earned': (s,a) => false},
+];
+
+// ── INIT ──────────────────────────────────────────────────────────
+(async () => {
+  const { data: { session } } = await sb.auth.getSession();
+  if (!session) { window.location.href = '/login'; return; }
+  currentUser = session.user;
+  const { data: profile } = await sb.from('profiles').select('*').eq('id', currentUser.id).single();
+  currentProfile = profile;
+  if (profile?.role === 'teacher') { window.location.href = '/teacher'; return; }
+
+  // Remove loading overlay
+  const ld = document.getElementById('authLoading');
+  if (ld) ld.remove();
+  document.querySelectorAll('.page,.top-nav').forEach(el => el.classList.add('ready'));
+
+  renderProfileHeader(profile);
+  await loadStats();
+  await loadAnnouncements();
+})();
+
+async function doLogout() {
+  await sb.auth.signOut();
+  window.location.href = '/login';
+}
+
+// ── RENDER PROFILE HEADER ─────────────────────────────────────────
+function renderProfileHeader(profile) {
+  const name = profile?.full_name || currentUser.email.split('@')[0];
+  document.getElementById('phName').textContent = name;
+  document.getElementById('phEmail').textContent = currentUser.email;
+  if (profile?.bio) document.getElementById('phBio').textContent = '"' + profile.bio + '"';
+  if (profile?.is_paid) {
+    document.getElementById('phAccessBadge').innerHTML = '<i class="fas fa-unlock"></i> Full Access';
+    document.getElementById('phAccessBadge').style.background = 'rgba(16,185,129,.25)';
+  }
+  // Avatar emoji based on name initial
+  const initial = name.charAt(0).toUpperCase();
+  document.getElementById('phAvatar').textContent = initial;
+}
+
+// ── LOAD STATS ────────────────────────────────────────────────────
+async function loadStats() {
+  const { data: attempts } = await sb.from('attempts')
+    .select('*').eq('student_id', currentUser.id).order('created_at', {ascending:false});
+
+  const all = attempts || [];
+  const mcq = all.filter(a => a.correct !== null);
+  const correct = mcq.filter(a => a.correct).length;
+  const pct = mcq.length ? Math.round((correct/mcq.length)*100) : null;
+  const xp = correct * 10 + all.length * 2;
+  const level = Math.floor(xp / 200) + 1;
+  const unitSet = new Set(all.map(a => a.unit));
+
+  document.getElementById('statTotal').textContent = all.length;
+  document.getElementById('statAccuracy').textContent = pct !== null ? pct + '%' : '—';
+  document.getElementById('statXP').textContent = xp;
+  document.getElementById('statUnits').textContent = unitSet.size + '/9';
+  document.getElementById('phLevel').textContent = 'Level ' + level;
+  document.getElementById('phStreak').textContent = '0 day streak';
+
+  renderAPProjection(pct, all.length);
+  renderUnitBars(all);
+  renderBadges(all);
+  renderWeakAreas(all);
+  renderHistory(all);
+}
+
+// ── AP SCORE PROJECTION ────────────────────────────────────────────
+function renderAPProjection(pct, total) {
+  if (total < 10 || pct === null) return;
+  const box = document.getElementById('apScoreBox');
+  const score = pct >= 90 ? 5 : pct >= 75 ? 4 : pct >= 60 ? 3 : pct >= 45 ? 2 : 1;
+  const colors = {5:'#10b981',4:'#22c55e',3:'#f59e0b',2:'#f97316',1:'#ef4444'};
+  const labels = {5:'Excellent!',4:'Strong',3:'Passing',2:'Developing',1:'Needs Work'};
+  box.innerHTML = [5,4,3,2,1].map(s => `
+    <div class="ap-score-item" style="${s===score?`background:${colors[s]}20;border-color:${colors[s]};`:''}">
+      <div class="ap-score-num" style="color:${s===score?colors[s]:'#9ca3af'}">${s}</div>
+      <div class="ap-score-lbl">${s===score?'<strong>'+labels[s]+'</strong>':''}</div>
+    </div>`).join('') +
+    `<div style="flex:2;background:#f8fafc;border:1px solid var(--border);border-radius:12px;padding:14px;display:flex;align-items:center">
+      <div>
+        <div style="font-size:13px;font-weight:700;color:var(--dark);margin-bottom:4px">Current Projection: AP Score <strong style="color:${colors[score]}">${score}</strong></div>
+        <div style="font-size:12px;color:var(--muted)">Based on ${pct}% MCQ accuracy across ${document.getElementById('statTotal').textContent} questions. Keep practicing to improve!</div>
+      </div>
+    </div>`;
+}
+
+// ── UNIT BARS ──────────────────────────────────────────────────────
+function renderUnitBars(attempts) {
+  if (!attempts.length) return;
+  const unitStats = {};
+  UNITS.forEach(u => unitStats[u.id] = {correct:0,total:0,name:u.name,icon:u.icon,color:u.color});
+  attempts.forEach(a => {
+    if (a.correct !== null && unitStats[a.unit]) {
+      unitStats[a.unit].total++;
+      if (a.correct) unitStats[a.unit].correct++;
+    }
+  });
+
+  const html = UNITS.map(u => {
+    const s = unitStats[u.id];
+    const pct = s.total > 0 ? Math.round((s.correct/s.total)*100) : null;
+    const barColor = pct === null ? '#e5e7eb' : pct >= 80 ? '#10b981' : pct >= 60 ? '#f59e0b' : '#ef4444';
+    return `<div class="unit-row">
+      <div class="unit-row-top">
+        <div class="unit-name">${u.icon} Unit ${u.id}: ${u.name}</div>
+        <div style="display:flex;align-items:center;gap:8px">
+          <span style="font-size:11px;color:var(--muted)">${s.total} Q answered</span>
+          <span class="unit-pct" style="color:${pct!==null?barColor:'#9ca3af'}">${pct !== null ? pct+'%' : '—'}</span>
+        </div>
+      </div>
+      <div class="bar-track">
+        <div class="bar-fill" style="width:${pct||0}%;background:${barColor}"></div>
+      </div>
+    </div>`;
+  }).join('');
+  document.getElementById('unitProgressBars').innerHTML = html;
+}
+
+// ── BADGES ────────────────────────────────────────────────────────
+function renderBadges(attempts) {
+  const html = BADGES_DEF.map(b => {
+    const isEarned = b.earned(currentProfile, attempts);
+    return `<div class="badge-item ${isEarned?'earned':'locked'}">
+      <div class="badge-icon">${b.icon}</div>
+      <div class="badge-name">${b.name}</div>
+      <div class="badge-desc">${b.desc}</div>
+      ${isEarned ? '<div class="badge-earned-label">✓ Earned</div>' : ''}
+    </div>`;
+  }).join('');
+  document.getElementById('badgesGrid').innerHTML = html;
+}
+
+// ── WEAK AREAS ────────────────────────────────────────────────────
+function renderWeakAreas(attempts) {
+  if (!attempts.length) return;
+  const unitStats = {};
+  UNITS.forEach(u => unitStats[u.id] = {correct:0,total:0,name:u.name,icon:u.icon});
+  attempts.forEach(a => {
+    if (a.correct !== null && unitStats[a.unit]) {
+      unitStats[a.unit].total++;
+      if (a.correct) unitStats[a.unit].correct++;
+    }
+  });
+  const weak = UNITS.filter(u => unitStats[u.id].total >= 5)
+    .map(u => ({...u, pct: Math.round((unitStats[u.id].correct/unitStats[u.id].total)*100)}))
+    .filter(u => u.pct < 70)
+    .sort((a,b) => a.pct - b.pct)
+    .slice(0, 3);
+  if (!weak.length) return;
+  document.getElementById('weakAreasCard').style.display = 'block';
+  document.getElementById('weakAreas').innerHTML = weak.map(u => `
+    <div style="display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid #f1f5f9">
+      <div style="font-size:22px">${u.icon}</div>
+      <div style="flex:1">
+        <div style="font-size:13px;font-weight:700;color:var(--dark)">Unit ${u.id}: ${u.name}</div>
+        <div style="font-size:12px;color:var(--muted)">Your accuracy: <strong style="color:#ef4444">${u.pct}%</strong></div>
+      </div>
+      <a href="/" style="background:#fff;border:1.5px solid var(--border);padding:7px 14px;border-radius:9px;
+        font-size:12px;font-weight:700;color:var(--p);transition:.15s">Practice →</a>
+    </div>`).join('');
+}
+
+// ── HISTORY ───────────────────────────────────────────────────────
+function renderHistory(attempts) {
+  if (!attempts.length) return;
+  const sessions = {};
+  attempts.forEach(a => {
+    if (!sessions[a.session_id]) sessions[a.session_id] = {attempts:[],ts:a.created_at};
+    sessions[a.session_id].attempts.push(a);
+  });
+  const sorted = Object.values(sessions).sort((a,b) => new Date(b.ts)-new Date(a.ts)).slice(0,10);
+  const html = `<table class="history-table">
+    <thead><tr><th>Date</th><th>Units</th><th>Questions</th><th>MCQ Score</th><th>Source</th></tr></thead>
+    <tbody>${sorted.map(s => {
+      const mcq = s.attempts.filter(a => a.correct !== null);
+      const correct = mcq.filter(a => a.correct).length;
+      const pct = mcq.length ? Math.round((correct/mcq.length)*100) : null;
+      const units = [...new Set(s.attempts.map(a=>a.unit))].sort();
+      const source = s.attempts[0]?.source || 'practice';
+      const scoreTag = pct === null ? `<span class="tag tag-gray">FRQ</span>`
+        : pct >= 80 ? `<span class="tag tag-green">${pct}%</span>`
+        : pct >= 60 ? `<span class="tag tag-yellow">${pct}%</span>`
+        : `<span class="tag tag-red">${pct}%</span>`;
+      const sourceTag = source === 'test' ? `<span class="tag tag-red">Test</span>`
+        : source === 'assignment' ? `<span class="tag tag-blue">Assignment</span>`
+        : `<span class="tag tag-gray">Practice</span>`;
+      return `<tr>
+        <td style="font-size:12px;color:var(--muted)">${new Date(s.ts).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})}</td>
+        <td>${units.map(u=>`<span class="tag tag-blue" style="margin-right:3px">U${u}</span>`).join('')}</td>
+        <td>${s.attempts.length} Q</td>
+        <td>${scoreTag}</td>
+        <td>${sourceTag}</td>
+      </tr>`;
+    }).join('')}</tbody></table>`;
+  document.getElementById('historySection').innerHTML = html;
+}
+
+// ── ANNOUNCEMENTS ────────────────────────────────────────────────
+async function loadAnnouncements() {
+  const { data } = await sb.from('announcements')
+    .select('*').order('created_at',{ascending:false}).limit(1);
+  if (data?.length) {
+    document.getElementById('announceText').textContent = data[0].message;
+    document.getElementById('announceBanner').style.display = 'block';
+  }
+}
+
+// ── EDIT PROFILE ─────────────────────────────────────────────────
+function openEditModal() {
+  const name = currentProfile?.full_name || '';
+  const bio = currentProfile?.bio || '';
+  const goal = currentProfile?.study_goal || '';
+  document.getElementById('editName').value = name;
+  document.getElementById('editBio').value = bio;
+  selectedGoal = goal;
+  document.querySelectorAll('.goal-chip').forEach(c => {
+    c.classList.toggle('selected', c.getAttribute('onclick').includes(goal));
+  });
+  document.getElementById('editModal').classList.add('open');
+}
+function closeEditModal() {
+  document.getElementById('editModal').classList.remove('open');
+}
+function selectGoal(el, goal) {
+  selectedGoal = goal;
+  document.querySelectorAll('.goal-chip').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+}
+async function saveProfile() {
+  const name = document.getElementById('editName').value.trim();
+  const bio = document.getElementById('editBio').value.trim();
+  if (!name) { showToast('Please enter your name'); return; }
+  const { error } = await sb.from('profiles').update({
+    full_name: name,
+    bio: bio || null,
+    study_goal: selectedGoal || null,
+  }).eq('id', currentUser.id);
+  if (error) { showToast('❌ Error: ' + error.message); return; }
+  currentProfile = {...currentProfile, full_name: name, bio, study_goal: selectedGoal};
+  document.getElementById('phName').textContent = name;
+  document.getElementById('phBio').textContent = bio ? '"' + bio + '"' : '';
+  closeEditModal();
+  showToast('✅ Profile updated!');
+}
+
+// ── TOAST ─────────────────────────────────────────────────────────
+function showToast(msg, dur=3000) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), dur);
+}
+</script>
+</body>
+</html>
