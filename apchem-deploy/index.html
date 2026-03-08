@@ -388,6 +388,7 @@ input[type=range]{width:100%;height:6px;border-radius:3px;outline:none;cursor:po
     <div id="accessPill" class="access-pill locked-access" onclick="openModal()">
       <i class="fas fa-lock"></i> <span id="accessText">Unit 1 Free</span>
     </div>
+    <a id="teacherBackBtn" href="/teacher" style="display:none;font-size:12px;color:#6c63ff;padding:5px 12px;border-radius:8px;border:1.5px solid #6c63ff;background:none;cursor:pointer;font-family:inherit;text-decoration:none;align-items:center;gap:5px"><i class="fas fa-arrow-left"></i> Teacher Dashboard</a>
     <button id="logoutBtn" style="display:none;font-size:12px;color:#9ca3af;padding:5px 12px;border-radius:8px;border:1px solid #e5e7eb;background:none;cursor:pointer;font-family:inherit" onclick="doLogout()"><i class="fas fa-sign-out-alt"></i> Logout</button>
   </div>
 </nav>
@@ -699,26 +700,38 @@ document.addEventListener('DOMContentLoaded', async () => {
   currentUser = session.user;
   const { data: profile } = await sb.from('profiles').select('*').eq('id', currentUser.id).single();
   currentProfile = profile;
-  if (profile?.role === 'teacher') { window.location.href = '/teacher'; return; }
-  if (profile?.is_paid) {
+  if (profile?.role === 'teacher') {
+    // Teachers get full access to the practice platform — show back button
+    isPaid = true;
+    try { localStorage.setItem('msl_paid', '1'); } catch(e) {}
+    const backBtn = document.getElementById('teacherBackBtn');
+    if (backBtn) backBtn.style.display = 'flex';
+  } else if (profile?.is_paid) {
     isPaid = true;
     try { localStorage.setItem('msl_paid', '1'); } catch(e) {}
   }
   const name = profile?.full_name || currentUser.email.split('@')[0];
   document.getElementById('userPillName').textContent = name;
   document.getElementById('userPill').style.cssText = 'display:flex;font-size:12px;font-weight:700;color:#374151;padding:5px 12px;border-radius:20px;border:1.5px solid #e5e7eb;align-items:center;gap:6px';
-  document.getElementById('logoutBtn').style.display = 'block';
-  document.getElementById('sbMyWork').style.display = 'block';
-  document.getElementById('tab-myassignments').style.display = 'flex';
-  document.getElementById('tab-mytests').style.display = 'flex';
+  // Teachers see "Teacher Dashboard" back link; students see logout button + My Work
+  if (profile?.role === 'teacher') {
+    document.getElementById('logoutBtn').style.display = 'none';
+  } else {
+    document.getElementById('logoutBtn').style.display = 'block';
+    document.getElementById('sbMyWork').style.display = 'block';
+    document.getElementById('tab-myassignments').style.display = 'flex';
+    document.getElementById('tab-mytests').style.display = 'flex';
+  }
   renderUnitChips();
   renderSidebarUnits();
   updateAccessUI();
   updateAvail();
   renderPractice();
   document.getElementById('stat-total').textContent = TOTAL_QUESTIONS;
-  loadMyAssignments();
-  loadMyTests();
+  if (profile?.role !== 'teacher') {
+    loadMyAssignments();
+    loadMyTests();
+  }
   loadAnnouncements();
   // Remove loading overlay — show page
   const ld = document.getElementById('authLoading');
