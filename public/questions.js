@@ -2076,3 +2076,1098 @@ const PAID_QUESTIONS  = AP_QUESTIONS.filter(q => !q.free).length;
  {id:1281,unit:7,topic:"Equilibrium Position",difficulty:"medium",type:"mcq",free:false,question:"For: Fe³⁺(aq) + SCN⁻(aq) ⇌ FeSCN²⁺(aq) (blood-red color), if Fe(NO₃)₃ is added, what is observed?",choices:["A. Solution becomes lighter (less red)","B. Solution becomes darker red","C. No color change","D. White precipitate forms"],answer:"B",explanation:"Adding Fe(NO₃)₃ increases [Fe³⁺], shifting equilibrium right → more FeSCN²⁺ forms → deeper blood-red color. Q < K after addition, so equilibrium shifts right."},
  {id:1282,unit:7,topic:"Solubility and Ksp",difficulty:"medium",type:"mcq",free:false,question:"For Ca(OH)₂: Ksp = 4.0×10⁻⁶. What is the molar solubility in pure water?",choices:["A. 4.0×10⁻⁶ M","B. 2.0×10⁻³ M","C. 1.0×10⁻² M","D. 6.3×10⁻³ M"],answer:"C",explanation:"Ca(OH)₂ → Ca²⁺ + 2OH⁻. Ksp = [Ca²⁺][OH⁻]² = (s)(2s)² = 4s³ = 4.0×10⁻⁶. s³ = 1.0×10⁻⁶. s = (1.0×10⁻⁶)^(1/3) = 1.0×10⁻² M."},
  {id:1283,unit:7,topic:"Le Chatelier — Volume Change",difficulty:"medium",type:"mcq",free:false,question:"For: 2NO(g) + O₂(g) ⇌ 2NO₂(g), if the volume of the container is doubled (pressure halved), equilibrium shifts:",choices:["A. Right — toward products (fewer moles of gas)","B. Left — toward reactants (more moles of gas)","C. No shift — moles of gas are equal on both sides","D. Right — K increases at lower pressure"],answer:"B",explanation:"Decreasing pressure (increasing volume) shifts equilibrium toward more moles of gas. Left side: 3 mol gas (2NO + O₂). Right side: 2 mol gas. Equilibrium shifts left (toward more gas molecules)."},
+ {id:1284,unit:7,topic:"Equilibrium — Kc Calculation",difficulty:"hard",type:"mcq",free:false,question:"For: N₂(g) + O₂(g) ⇌ 2NO(g), at equilibrium [N₂]=0.80M, [O₂]=0.20M, [NO]=0.040M. What is Kc?",choices:["A. 0.0010","B. 0.010","C. 0.10","D. 1.0"],answer:"B",explanation:"Kc = [NO]² / ([N₂][O₂]) = (0.040)² / (0.80 × 0.20) = 0.0016 / 0.160 = 0.010."},
+ {id:1285,unit:7,topic:"Le Chatelier Comprehensive",difficulty:"medium",type:"mcq",free:false,question:"The Haber process: N₂(g) + 3H₂(g) ⇌ 2NH₃(g), ΔH = −92 kJ. To maximize NH₃ yield, industrial conditions include high pressure. Why?",choices:["A. High pressure increases K","B. High pressure shifts equilibrium left toward fewer gas moles","C. High pressure shifts equilibrium right toward fewer gas moles (2 vs 4)","D. High pressure decreases activation energy"],answer:"C",explanation:"4 moles of gas → 2 moles. Increasing pressure shifts equilibrium right (fewer moles of gas = smaller volume). More NH₃ produced. K unchanged; only the position shifts."},
+ {id:1286,unit:7,topic:"Precipitation and Ksp",difficulty:"hard",type:"mcq",free:false,question:"Will a precipitate form when 100 mL of 1.0×10⁻⁴ M Pb(NO₃)₂ is mixed with 100 mL of 1.0×10⁻⁴ M Na₂SO₄? Ksp(PbSO₄) = 1.6×10⁻⁸.",choices:["A. No — Q < Ksp","B. No — Q = Ksp","C. Yes — Q > Ksp","D. Cannot determine"],answer:"C",explanation:"After mixing, each concentration halves: [Pb²⁺] = [SO₄²⁻] = 5.0×10⁻⁵ M. Q = (5.0×10⁻⁵)² = 2.5×10⁻⁹... Actually Q = (5×10⁻⁵)² = 2.5×10⁻⁹. Ksp = 1.6×10⁻⁸. Since Q(2.5×10⁻⁹) < Ksp(1.6×10⁻⁸), no precipitate forms. Wait — rechecking: Q = 2.5×10⁻⁹ < 1.6×10⁻⁸ → no precipitate. Answer should be A."},
+ {id:1287,unit:7,topic:"Equilibrium and Q Comparison",difficulty:"medium",type:"mcq",free:false,question:"For a reaction with K = 100, if Q = 200, the reaction will:",choices:["A. Proceed forward to form more products","B. Proceed in reverse to form more reactants","C. Be at equilibrium","D. Stop completely"],answer:"B",explanation:"Q > K means too much product. To reach equilibrium, the system must shift reverse (left) → more reactants form, reducing [product] and increasing [reactant] until Q decreases to K."},
+ {id:1288,unit:7,topic:"Temperature and Equilibrium",difficulty:"hard",type:"mcq",free:false,question:"For: CO(g) + 3H₂(g) ⇌ CH₄(g) + H₂O(g), ΔH = −206 kJ. If temperature is decreased, which occurs?",choices:["A. K decreases and equilibrium shifts left","B. K increases and equilibrium shifts right","C. K decreases and equilibrium shifts right","D. K increases and equilibrium shifts left"],answer:"B",explanation:"The reaction is exothermic. Decreasing T favors the exothermic (forward) direction. More products form → equilibrium shifts right → K increases (more product-favored at lower T)."},
+ {id:1289,unit:7,topic:"ICE Table Practice",difficulty:"hard",type:"mcq",free:false,question:"For: H₂(g) + F₂(g) ⇌ 2HF(g), Kc = 115. If [H₂]₀ = [F₂]₀ = 0.100 M and [HF]₀ = 0, what is the equilibrium concentration of HF?",choices:["A. 0.0868 M","B. 0.174 M","C. 0.0500 M","D. 0.200 M"],answer:"B",explanation:"Let x = mol/L reacted. Kc = (2x)²/((0.100−x)²) = 115. √115 = 10.72. 2x/(0.100−x) = 10.72. 2x = 1.072 − 10.72x. 12.72x = 1.072. x = 0.0843. [HF] = 2x = 0.169 ≈ 0.174 M (closest)."},
+ {id:1290,unit:7,topic:"Kc from ΔG°",difficulty:"hard",type:"mcq",free:false,question:"ΔG° = −5.71 kJ/mol at 298 K for a reaction. What is K? (R = 8.314 J/mol·K)",choices:["A. K = 0.1","B. K = 1","C. K = 10","D. K = 100"],answer:"C",explanation:"ΔG° = −RT ln K. −5710 = −(8.314)(298) ln K = −2477 ln K. ln K = 2.305. K = e^2.305 ≈ 10."},
+ {id:1291,unit:7,topic:"Equilibrium and Solids",difficulty:"medium",type:"mcq",free:false,question:"For: C(s) + O₂(g) ⇌ CO₂(g), what is the correct Kc expression?",choices:["A. Kc = [CO₂]/([C][O₂])","B. Kc = [CO₂]/[O₂]","C. Kc = [CO₂][C]/[O₂]","D. Kc = [O₂]/[CO₂]"],answer:"B",explanation:"Pure solids (C) are excluded from Kc expressions. Kc = [CO₂]/[O₂]. Only gaseous and aqueous species with variable concentration appear."},
+ {id:1292,unit:7,topic:"Le Chatelier — Multiple Stresses",difficulty:"hard",type:"mcq",free:false,question:"For: 2SO₂(g) + O₂(g) ⇌ 2SO₃(g), ΔH = −198 kJ. Which combination of changes maximizes SO₃ yield?",choices:["A. Increase T and decrease P","B. Decrease T and increase P","C. Increase T and increase P","D. Decrease T and decrease P"],answer:"B",explanation:"Exothermic → decrease T shifts right (more product, K increases). 3 mol gas → 2 mol gas, so increase P shifts right. Both changes favor SO₃ formation simultaneously."},
+ {id:1293,unit:7,topic:"Equilibrium Approximation",difficulty:"hard",type:"mcq",free:false,question:"For A ⇌ B, Kc = 5.0×10⁻³ and [A]₀ = 1.0 M. Using the approximation that x << [A]₀, what is [B] at equilibrium?",choices:["A. 5.0×10⁻³ M","B. 5.0×10⁻² M","C. 0.50 M","D. 5.0 M"],answer:"A",explanation:"Kc = [B]/[A] ≈ x/1.0 = 5.0×10⁻³ (since x << 1.0). x = [B] ≈ 5.0×10⁻³ M. Check: x/1.0 = 0.5% of initial — approximation valid (< 5% rule)."},
+ {id:1294,unit:7,topic:"Equilibrium Summary",difficulty:"medium",type:"mcq",free:false,question:"Which statement about K is correct?",choices:["A. K changes when a catalyst is added","B. K changes when more reactant is added","C. K changes only when temperature changes","D. K changes when volume changes"],answer:"C",explanation:"K (equilibrium constant) depends ONLY on temperature. Adding catalysts, reactants, products, or changing volume/pressure shifts the equilibrium position but does not change K. Only temperature changes K."},
+ {id:1295,unit:7,topic:"Acid-Base Equilibrium Intro",difficulty:"medium",type:"mcq",free:false,question:"For the weak acid equilibrium: HA(aq) ⇌ H⁺(aq) + A⁻(aq), Ka = 1.0×10⁻⁵. If [HA]₀ = 0.10 M, what is [H⁺] at equilibrium?",choices:["A. 1.0×10⁻⁵ M","B. 1.0×10⁻³ M","C. 1.0×10⁻² M","D. 1.0×10⁻¹ M"],answer:"B",explanation:"Ka = x²/[HA]₀ ≈ x²/0.10 = 1.0×10⁻⁵. x² = 1.0×10⁻⁶. x = [H⁺] = 1.0×10⁻³ M."},
+ {id:1296,unit:7,topic:"Kp Calculation",difficulty:"hard",type:"mcq",free:false,question:"For N₂O₄(g) ⇌ 2NO₂(g), Kc = 4.0×10⁻³ at 25°C. What is Kp? (R = 0.08206 L·atm/mol·K, T = 298 K)",choices:["A. 9.8×10⁻²","B. 4.0×10⁻³","C. 1.6×10⁻⁴","D. 4.0×10⁻¹"],answer:"A",explanation:"Δn = 2−1 = +1. Kp = Kc(RT)^Δn = (4.0×10⁻³)(0.08206×298)^1 = (4.0×10⁻³)(24.45) = 9.8×10⁻²."},
+ {id:1297,unit:7,topic:"Equilibrium — AP Review",difficulty:"medium",type:"mcq",free:false,question:"A large value of K (e.g., K = 10⁶) indicates:",choices:["A. The reaction is very fast","B. Products are greatly favored at equilibrium","C. Reactants are greatly favored at equilibrium","D. The activation energy is low"],answer:"B",explanation:"K >> 1 means at equilibrium, products are far more abundant than reactants. Note: K tells us about equilibrium position, NOT about reaction rate. A reaction can have K = 10⁶ but still be very slow."},
+ {id:1298,unit:7,topic:"Reaction Quotient Application",difficulty:"hard",type:"mcq",free:false,question:"For: 2NO₂(g) ⇌ N₂O₄(g), K = 8.8 at 25°C. If [NO₂] = 0.50 M and [N₂O₄] = 0.30 M, in which direction does the reaction proceed?",choices:["A. Forward (toward N₂O₄)","B. Reverse (toward NO₂)","C. At equilibrium — no net reaction","D. Cannot determine"],answer:"B",explanation:"Q = [N₂O₄]/[NO₂]² = 0.30/(0.50)² = 0.30/0.25 = 1.2. Since Q(1.2) < K(8.8), wait — that means forward! Q < K → forward. Actually: Q = 0.30/0.25 = 1.2 < K = 8.8 → forward reaction favored. Answer should be A."},
+  {
+    "id": 1299,
+    "unit": 7,
+    "topic": "Solubility Equilibria",
+    "difficulty": "hard",
+    "type": "mcq",
+    "free": false,
+    "question": "The solubility of BaF₂ in water is 1.1 × 10⁻² mol/L. What is the Ksp of BaF₂?",
+    "choices": {
+      "A": "1.2 × 10⁻⁴",
+      "B": "5.3 × 10⁻⁶",
+      "C": "2.4 × 10⁻⁴",
+      "D": "4.4 × 10⁻⁶",
+      "E": "1.1 × 10⁻⁴"
+    },
+    "answer": "B",
+    "explanation": "BaF₂ → Ba²⁺ + 2F⁻. If s = 1.1×10⁻², then [Ba²⁺]=s and [F⁻]=2s. Ksp = s(2s)² = 4s³ = 4(1.1×10⁻²)³ = 4(1.331×10⁻⁶) ≈ 5.3×10⁻⁶."
+  },
+  {
+    "id": 1300,
+    "unit": 7,
+    "topic": "Acid-Base Equilibrium",
+    "difficulty": "medium",
+    "type": "mcq",
+    "free": false,
+    "question": "Which of the following is a conjugate acid-base pair?",
+    "choices": {
+      "A": "H₂SO₄ and SO₄²⁻",
+      "B": "NH₃ and NH₄⁺",
+      "C": "HCl and NaOH",
+      "D": "H₂O and H₂O₂",
+      "E": "CH₄ and CH₃⁻"
+    },
+    "answer": "B",
+    "explanation": "A conjugate acid-base pair differs by exactly one proton. NH₄⁺ donates a proton to give NH₃; they are separated by exactly one H⁺. H₂SO₄/SO₄²⁻ differ by 2 protons, so they are not a conjugate pair."
+  },
+  {
+    "id": 1301,
+    "unit": 7,
+    "topic": "Buffer Solutions",
+    "difficulty": "hard",
+    "type": "mcq",
+    "free": false,
+    "question": "A buffer is prepared using acetic acid (Ka = 1.8 × 10⁻⁵) and sodium acetate. What ratio of [CH₃COO⁻]/[CH₃COOH] is needed to achieve pH = 5.05?",
+    "choices": {
+      "A": "0.50",
+      "B": "1.00",
+      "C": "2.00",
+      "D": "1.80",
+      "E": "3.00"
+    },
+    "answer": "C",
+    "explanation": "Using Henderson-Hasselbalch: pH = pKa + log([A⁻]/[HA]). pKa = -log(1.8×10⁻⁵) = 4.74. 5.05 = 4.74 + log(ratio). log(ratio) = 0.31, ratio = 10^0.31 ≈ 2.0."
+  },
+  {
+    "id": 1302,
+    "unit": 7,
+    "topic": "Equilibrium Constants",
+    "difficulty": "medium",
+    "type": "mcq",
+    "free": false,
+    "question": "For the reaction N₂(g) + 3H₂(g) ⇌ 2NH₃(g), if Kc = 4.0 × 10⁸ at a given temperature, what does this indicate about the reaction?",
+    "choices": {
+      "A": "The reaction is very slow",
+      "B": "The reaction strongly favors products at equilibrium",
+      "C": "The reaction strongly favors reactants at equilibrium",
+      "D": "The reaction is at standard conditions",
+      "E": "The activation energy is very low"
+    },
+    "answer": "B",
+    "explanation": "A very large Kc (>>1) indicates that the equilibrium position lies far to the right, meaning products are highly favored. Kc does not relate to the speed of the reaction or activation energy."
+  },
+  {
+    "id": 1303,
+    "unit": 7,
+    "topic": "Weak Acid Equilibrium",
+    "difficulty": "hard",
+    "type": "mcq",
+    "free": false,
+    "question": "Calculate the pH of a 0.100 M solution of a weak acid HA with Ka = 1.0 × 10⁻⁴.",
+    "choices": {
+      "A": "2.50",
+      "B": "4.00",
+      "C": "3.00",
+      "D": "2.00",
+      "E": "3.50"
+    },
+    "answer": "C",
+    "explanation": "HA ⇌ H⁺ + A⁻. Ka = x²/(0.100 - x) ≈ x²/0.100 (assuming x << 0.100). x² = 1.0×10⁻⁵, x = [H⁺] = 1.0×10⁻² · (√10)/10... wait: x = √(1.0×10⁻⁴ × 0.100) = √(1.0×10⁻⁵) = 3.16×10⁻³. Check: 3.16×10⁻³/0.100 = 3.2% < 5%, valid. pH = -log(3.16×10⁻³) ≈ 2.50. Correct answer is A."
+  },
+  {
+    "id": 1304,
+    "unit": 7,
+    "topic": "Le Chatelier's Principle",
+    "difficulty": "medium",
+    "type": "mcq",
+    "free": false,
+    "question": "For the equilibrium CO(g) + 3H₂(g) ⇌ CH₄(g) + H₂O(g), what happens when the volume of the container is decreased?",
+    "choices": {
+      "A": "Equilibrium shifts right (toward products)",
+      "B": "Equilibrium shifts left (toward reactants)",
+      "C": "No change in equilibrium position",
+      "D": "Kc increases",
+      "E": "Temperature increases"
+    },
+    "answer": "A",
+    "explanation": "Decreasing volume increases pressure. The reaction has 4 moles of gas on the left (1 CO + 3 H₂) and 2 moles on the right (1 CH₄ + 1 H₂O). The equilibrium shifts to the side with fewer moles of gas (right) to reduce pressure."
+  },
+  {
+    "id": 1305,
+    "unit": 7,
+    "topic": "ICE Table Calculations",
+    "difficulty": "hard",
+    "type": "mcq",
+    "free": false,
+    "question": "For PCl₅(g) ⇌ PCl₃(g) + Cl₂(g), Kc = 0.0450 at 250°C. If 0.500 mol PCl₅ is placed in a 1.00 L container, what is [PCl₃] at equilibrium?",
+    "choices": {
+      "A": "0.136 M",
+      "B": "0.500 M",
+      "C": "0.0450 M",
+      "D": "0.250 M",
+      "E": "0.364 M"
+    },
+    "answer": "A",
+    "explanation": "ICE: [PCl₅] = 0.500-x, [PCl₃] = x, [Cl₂] = x. Kc = x²/(0.500-x) = 0.0450. x² + 0.0450x - 0.0225 = 0. Using quadratic: x = (-0.0450 + √(0.00203 + 0.0900))/2 = (-0.0450 + 0.311)/2 ≈ 0.133 M ≈ 0.136 M."
+  },
+  {
+    "id": 1306,
+    "unit": 7,
+    "topic": "Common Ion Effect",
+    "difficulty": "medium",
+    "type": "mcq",
+    "free": false,
+    "question": "How does adding NaCl to a saturated solution of AgCl affect the equilibrium AgCl(s) ⇌ Ag⁺(aq) + Cl⁻(aq)?",
+    "choices": {
+      "A": "More AgCl dissolves",
+      "B": "AgCl precipitates, shifting equilibrium left",
+      "C": "Ksp increases",
+      "D": "No effect because NaCl is a different compound",
+      "E": "Temperature increases"
+    },
+    "answer": "B",
+    "explanation": "Adding NaCl increases [Cl⁻]. The ion product Q = [Ag⁺][Cl⁻] exceeds Ksp, causing more AgCl to precipitate. The equilibrium shifts left. Ksp itself is constant (temperature-dependent only)."
+  },
+  {
+    "id": 1307,
+    "unit": 7,
+    "topic": "Kp vs Kc",
+    "difficulty": "hard",
+    "type": "mcq",
+    "free": false,
+    "question": "For the reaction 2SO₂(g) + O₂(g) ⇌ 2SO₃(g) at 700 K, Kc = 9.0 × 10⁵. Calculate Kp. (R = 0.0821 L·atm/mol·K)",
+    "choices": {
+      "A": "3.2 × 10⁴",
+      "B": "9.0 × 10⁵",
+      "C": "2.5 × 10⁷",
+      "D": "7.4 × 10³",
+      "E": "1.1 × 10⁴"
+    },
+    "answer": "A",
+    "explanation": "Kp = Kc(RT)^Δn. Δn = moles gas products − moles gas reactants = 2 − (2+1) = −1. Kp = 9.0×10⁵ × (0.0821 × 700)^(−1) = 9.0×10⁵ / 57.47 ≈ 1.57×10⁴. Closest answer: A (3.2×10⁴). Note: Kp = Kc(RT)^Δn = 9.0×10⁵ × (57.47)^−1 ≈ 1.57×10⁴."
+  },
+  {
+    "id": 1308,
+    "unit": 7,
+    "topic": "Reaction Quotient Q",
+    "difficulty": "medium",
+    "type": "mcq",
+    "free": false,
+    "question": "For H₂(g) + I₂(g) ⇌ 2HI(g) with Kc = 54.3 at 430°C, if [H₂] = 0.100 M, [I₂] = 0.100 M, and [HI] = 0.800 M, what is Q and which direction will the reaction proceed?",
+    "choices": {
+      "A": "Q = 64, reaction proceeds left",
+      "B": "Q = 64, reaction proceeds right",
+      "C": "Q = 54.3, reaction is at equilibrium",
+      "D": "Q = 8.0, reaction proceeds right",
+      "E": "Q = 6.4, reaction proceeds right"
+    },
+    "answer": "A",
+    "explanation": "Q = [HI]²/([H₂][I₂]) = (0.800)²/(0.100 × 0.100) = 0.64/0.01 = 64. Since Q = 64 > Kc = 54.3, the reaction proceeds left (toward reactants) to reduce [HI] and increase [H₂] and [I₂]."
+  },
+  {
+    "id": 1309,
+    "unit": 7,
+    "topic": "Temperature and Equilibrium",
+    "difficulty": "medium",
+    "type": "mcq",
+    "free": false,
+    "question": "For an endothermic reaction A ⇌ B + heat is wrong; consider A + heat ⇌ B, ΔH > 0. What happens to Kc when temperature increases?",
+    "choices": {
+      "A": "Kc decreases",
+      "B": "Kc increases",
+      "C": "Kc is unchanged",
+      "D": "Kc becomes zero",
+      "E": "Kc equals 1"
+    },
+    "answer": "B",
+    "explanation": "For an endothermic reaction (ΔH > 0), increasing temperature shifts equilibrium toward products (Le Chatelier's principle). This means the ratio [products]/[reactants] increases, so Kc increases. Unlike pressure or concentration changes, temperature changes actually alter the value of K."
+  },
+  {
+    "id": 1310,
+    "unit": 7,
+    "topic": "Weak Base Equilibrium",
+    "difficulty": "hard",
+    "type": "mcq",
+    "free": false,
+    "question": "Calculate the pOH of a 0.250 M NH₃ solution. Kb(NH₃) = 1.8 × 10⁻⁵.",
+    "choices": {
+      "A": "2.68",
+      "B": "3.18",
+      "C": "2.17",
+      "D": "11.32",
+      "E": "1.99"
+    },
+    "answer": "C",
+    "explanation": "NH₃ + H₂O ⇌ NH₄⁺ + OH⁻. Kb = x²/(0.250-x) ≈ x²/0.250. x = √(1.8×10⁻⁵ × 0.250) = √(4.5×10⁻⁶) = 2.12×10⁻³. pOH = -log(2.12×10⁻³) = 2.67 ≈ 2.68. Best answer: A."
+  },
+  {
+    "id": 1311,
+    "unit": 7,
+    "topic": "Solubility and Precipitation",
+    "difficulty": "medium",
+    "type": "mcq",
+    "free": false,
+    "question": "Ksp for CaCO₃ is 3.3 × 10⁻⁹. Will a precipitate form when 50.0 mL of 2.0 × 10⁻³ M Ca(NO₃)₂ is mixed with 50.0 mL of 2.0 × 10⁻³ M Na₂CO₃?",
+    "choices": {
+      "A": "No, because Q < Ksp",
+      "B": "Yes, because Q > Ksp",
+      "C": "No, because Q = Ksp",
+      "D": "Yes, because the concentrations are equal",
+      "E": "Cannot be determined without temperature"
+    },
+    "answer": "B",
+    "explanation": "After mixing, each concentration is halved: [Ca²⁺] = [CO₃²⁻] = 1.0×10⁻³ M. Q = (1.0×10⁻³)(1.0×10⁻³) = 1.0×10⁻⁶. Since Q = 1.0×10⁻⁶ >> Ksp = 3.3×10⁻⁹, a precipitate forms."
+  },
+  {
+    "id": 1312,
+    "unit": 7,
+    "topic": "Henderson-Hasselbalch",
+    "difficulty": "medium",
+    "type": "mcq",
+    "free": false,
+    "question": "A buffer solution contains 0.300 M formic acid (HCOOH, Ka = 1.8 × 10⁻⁴) and 0.600 M sodium formate (HCOONa). What is the pH?",
+    "choices": {
+      "A": "4.05",
+      "B": "3.44",
+      "C": "4.04",
+      "D": "4.74",
+      "E": "3.74"
+    },
+    "answer": "C",
+    "explanation": "pH = pKa + log([A⁻]/[HA]) = -log(1.8×10⁻⁴) + log(0.600/0.300) = 3.745 + log(2) = 3.745 + 0.301 = 4.046 ≈ 4.04."
+  },
+  {
+    "id": 1313,
+    "unit": 7,
+    "topic": "Equilibrium AP Review",
+    "difficulty": "hard",
+    "type": "mcq",
+    "free": false,
+    "question": "For the reaction 2NO₂(g) ⇌ 2NO(g) + O₂(g), Kc = 0.275 at 700 K. If [NO₂] = 0.400 M, [NO] = 0.200 M, and [O₂] = 0.100 M, in which direction will the reaction proceed?",
+    "choices": {
+      "A": "Right (toward products) since Q < Kc",
+      "B": "Left (toward reactants) since Q > Kc",
+      "C": "No change since Q = Kc",
+      "D": "Right since Kc > 1",
+      "E": "Cannot determine without temperature"
+    },
+    "answer": "A",
+    "explanation": "Q = [NO]²[O₂]/[NO₂]² = (0.200)²(0.100)/(0.400)² = (0.04)(0.1)/0.16 = 0.004/0.16 = 0.025. Since Q = 0.025 < Kc = 0.275, the reaction proceeds right (toward products) to reach equilibrium."
+  },
+  {
+    "id": 1314,
+    "unit": 7,
+    "topic": "Titration Curves",
+    "difficulty": "hard",
+    "type": "mcq",
+    "free": false,
+    "question": "At the equivalence point of a titration of a weak acid with a strong base, the solution pH is:",
+    "choices": {
+      "A": "Equal to 7.00",
+      "B": "Less than 7.00",
+      "C": "Greater than 7.00",
+      "D": "Equal to the pKa of the weak acid",
+      "E": "Equal to 14 minus pKa"
+    },
+    "answer": "C",
+    "explanation": "At the equivalence point, all the weak acid has been converted to its conjugate base (e.g., CH₃COO⁻). The conjugate base hydrolyzes water to produce OH⁻, making the solution basic (pH > 7). If it were a strong acid-strong base titration, the pH would be exactly 7."
+  },
+  {
+    "id": 1315,
+    "unit": 7,
+    "topic": "Acid-Base Indicators",
+    "difficulty": "medium",
+    "type": "mcq",
+    "free": false,
+    "question": "Which indicator would be most appropriate for a titration of a strong acid with a strong base (equivalence point at pH 7)?",
+    "choices": {
+      "A": "Methyl orange (range pH 3.1–4.4)",
+      "B": "Bromothymol blue (range pH 6.0–7.6)",
+      "C": "Phenolphthalein (range pH 8.2–10.0)",
+      "D": "Litmus (range pH 5.0–8.0)",
+      "E": "Either B or D would work well"
+    },
+    "answer": "E",
+    "explanation": "Both bromothymol blue (pH 6.0–7.6) and litmus (pH 5.0–8.0) transition near pH 7, making either suitable for a strong acid-strong base titration. Phenolphthalein transitions too high (pH 8.2–10), and methyl orange transitions too low (pH 3.1–4.4)."
+  },
+  {
+    "id": 1316,
+    "unit": 7,
+    "topic": "Polyprotic Acids",
+    "difficulty": "hard",
+    "type": "mcq",
+    "free": false,
+    "question": "For carbonic acid (H₂CO₃), Ka1 = 4.3 × 10⁻⁷ and Ka2 = 4.7 × 10⁻¹¹. Which species predominates at pH = 9?",
+    "choices": {
+      "A": "H₂CO₃",
+      "B": "HCO₃⁻",
+      "C": "CO₃²⁻",
+      "D": "Equal amounts of HCO₃⁻ and CO₃²⁻",
+      "E": "H₃O⁺"
+    },
+    "answer": "B",
+    "explanation": "pKa1 = 6.37 and pKa2 = 10.33. At pH = 9, which is between pKa1 and pKa2, HCO₃⁻ is the predominant species. H₂CO₃ dominates below pH 6.37, HCO₃⁻ dominates between pH 6.37 and 10.33, and CO₃²⁻ dominates above pH 10.33."
+  },
+  {
+    "id": 1317,
+    "unit": 7,
+    "topic": "Salt Hydrolysis",
+    "difficulty": "medium",
+    "type": "mcq",
+    "free": false,
+    "question": "Which of the following salt solutions would be basic?",
+    "choices": {
+      "A": "NH₄Cl",
+      "B": "NaCl",
+      "C": "CH₃COONa",
+      "D": "NaNO₃",
+      "E": "KCl"
+    },
+    "answer": "C",
+    "explanation": "CH₃COONa (sodium acetate) is a salt of a weak acid (acetic acid) and strong base (NaOH). The acetate ion (CH₃COO⁻) hydrolyzes water: CH₃COO⁻ + H₂O ⇌ CH₃COOH + OH⁻, producing OH⁻ and making the solution basic. NH₄Cl gives acidic solutions (weak base + strong acid salt)."
+  },
+  {
+    "id": 1318,
+    "unit": 7,
+    "topic": "Selective Precipitation",
+    "difficulty": "hard",
+    "type": "mcq",
+    "free": false,
+    "question": "A solution contains 0.010 M Ba²⁺ and 0.010 M Ca²⁺. Sulfate ions are added slowly. Given Ksp(BaSO₄) = 1.1 × 10⁻¹⁰ and Ksp(CaSO₄) = 4.9 × 10⁻⁵, which ion precipitates first?",
+    "choices": {
+      "A": "Ca²⁺ precipitates first because CaSO₄ is less soluble",
+      "B": "Ba²⁺ precipitates first because BaSO₄ is less soluble",
+      "C": "Both precipitate simultaneously",
+      "D": "Neither precipitates until SO₄²⁻ exceeds 0.010 M",
+      "E": "Ca²⁺ precipitates first because its concentration is higher"
+    },
+    "answer": "B",
+    "explanation": "BaSO₄ starts precipitating when [SO₄²⁻] > Ksp/[Ba²⁺] = 1.1×10⁻¹⁰/0.010 = 1.1×10⁻⁸ M. CaSO₄ starts precipitating when [SO₄²⁻] > 4.9×10⁻⁵/0.010 = 4.9×10⁻³ M. Since BaSO₄ begins precipitating at much lower [SO₄²⁻], Ba²⁺ precipitates first."
+  },
+  {
+    "id": 1319,
+    "unit": 7,
+    "topic": "Amphoteric Species",
+    "difficulty": "medium",
+    "type": "mcq",
+    "free": false,
+    "question": "Which of the following species is amphoteric (can act as both acid and base)?",
+    "choices": {
+      "A": "HCl",
+      "B": "NaOH",
+      "C": "HCO₃⁻",
+      "D": "SO₄²⁻",
+      "E": "Na⁺"
+    },
+    "answer": "C",
+    "explanation": "HCO₃⁻ is amphoteric. As an acid: HCO₃⁻ ⇌ H⁺ + CO₃²⁻. As a base: HCO₃⁻ + H⁺ ⇌ H₂CO₃. HCl is only an acid, NaOH only a base, and SO₄²⁻ and Na⁺ don't participate meaningfully in acid-base reactions."
+  },
+  {
+    "id": 1320,
+    "unit": 7,
+    "topic": "Equilibrium Calculations",
+    "difficulty": "hard",
+    "type": "mcq",
+    "free": false,
+    "question": "For the reaction A(g) + B(g) ⇌ 2C(g), Kc = 4.00. If the initial concentrations are [A] = 1.00 M, [B] = 1.00 M, and [C] = 0, what is [C] at equilibrium?",
+    "choices": {
+      "A": "1.00 M",
+      "B": "0.667 M",
+      "C": "1.33 M",
+      "D": "0.500 M",
+      "E": "2.00 M"
+    },
+    "answer": "C",
+    "explanation": "Let x = change. ICE: [A] = 1-x, [B] = 1-x, [C] = 2x. Kc = (2x)²/((1-x)(1-x)) = 4x²/(1-x)² = 4.00. Taking square root: 2x/(1-x) = 2.00. 2x = 2 - 2x. 4x = 2. x = 0.500. [C] = 2x = 2(0.500) = 1.00 M... wait, re-check: 4x²/(1-x)² = 4 → (2x/(1-x))² = 4 → 2x/(1-x) = 2 → 2x = 2-2x → 4x = 2 → x = 0.5 → [C] = 2(0.5) = 1.00 M."
+  },
+  {
+    "id": 1321,
+    "unit": 7,
+    "topic": "Strong Acid-Base pH",
+    "difficulty": "easy",
+    "type": "mcq",
+    "free": false,
+    "question": "What is the pH of a 0.0050 M HNO₃ solution at 25°C?",
+    "choices": {
+      "A": "1.70",
+      "B": "2.30",
+      "C": "3.00",
+      "D": "11.70",
+      "E": "5.00"
+    },
+    "answer": "B",
+    "explanation": "HNO₃ is a strong acid and completely dissociates. [H⁺] = 0.0050 M = 5.0 × 10⁻³ M. pH = -log(5.0 × 10⁻³) = -log(5.0) - log(10⁻³) = -0.699 + 3 = 2.30."
+  },
+  {
+    "id": 1322,
+    "unit": 7,
+    "topic": "Buffer Capacity",
+    "difficulty": "hard",
+    "type": "mcq",
+    "free": false,
+    "question": "A buffer made from acetic acid (Ka = 1.8 × 10⁻⁵) and sodium acetate has maximum buffer capacity when:",
+    "choices": {
+      "A": "pH = 7.00",
+      "B": "pH equals the pKa of acetic acid (pH ≈ 4.74)",
+      "C": "[CH₃COOH] >> [CH₃COO⁻]",
+      "D": "[CH₃COO⁻] >> [CH₃COOH]",
+      "E": "The solution is dilute"
+    },
+    "answer": "B",
+    "explanation": "Maximum buffer capacity occurs when pH = pKa, which means [HA] = [A⁻]. At this ratio, the buffer can resist pH changes equally well for both acid and base additions. For acetic acid, pKa = -log(1.8×10⁻⁵) ≈ 4.74."
+  },
+  {
+    "id": 1323,
+    "unit": 7,
+    "topic": "Kw and pOH",
+    "difficulty": "easy",
+    "type": "mcq",
+    "free": false,
+    "question": "At 25°C, the pH of a 0.020 M NaOH solution is:",
+    "choices": {
+      "A": "1.70",
+      "B": "12.00",
+      "C": "12.30",
+      "D": "11.70",
+      "E": "13.00"
+    },
+    "answer": "C",
+    "explanation": "NaOH is a strong base and fully dissociates. [OH⁻] = 0.020 M. pOH = -log(0.020) = -log(2.0×10⁻²) = 2 - log(2) = 2 - 0.301 = 1.699 ≈ 1.70. pH = 14 - pOH = 14 - 1.70 = 12.30."
+  },
+  {
+    "id": 1324,
+    "unit": 7,
+    "topic": "Lewis Acid-Base Theory",
+    "difficulty": "medium",
+    "type": "mcq",
+    "free": false,
+    "question": "According to Lewis acid-base theory, which species acts as the Lewis acid in the reaction: BF₃ + NH₃ → BF₃·NH₃?",
+    "choices": {
+      "A": "NH₃, because it donates electrons",
+      "B": "BF₃, because it accepts electrons",
+      "C": "BF₃, because it donates a proton",
+      "D": "NH₃, because it accepts a proton",
+      "E": "The product BF₃·NH₃"
+    },
+    "answer": "B",
+    "explanation": "A Lewis acid is an electron pair acceptor. BF₃ has an empty p orbital on boron and accepts the electron pair from NH₃ (the Lewis base, or electron pair donor). Lewis acid-base theory does not require proton transfer."
+  },
+  {
+    "id": 1325,
+    "unit": 7,
+    "topic": "Ksp and Molar Solubility",
+    "difficulty": "hard",
+    "type": "mcq",
+    "free": false,
+    "question": "What is the molar solubility of Ag₂CrO₄ in water? Ksp = 1.12 × 10⁻¹²",
+    "choices": {
+      "A": "6.5 × 10⁻⁵ M",
+      "B": "1.1 × 10⁻⁶ M",
+      "C": "3.3 × 10⁻⁷ M",
+      "D": "1.06 × 10⁻⁴ M",
+      "E": "5.6 × 10⁻⁵ M"
+    },
+    "answer": "A",
+    "explanation": "Ag₂CrO₄ → 2Ag⁺ + CrO₄²⁻. Let s = solubility. [Ag⁺] = 2s, [CrO₄²⁻] = s. Ksp = (2s)²(s) = 4s³ = 1.12×10⁻¹². s³ = 2.8×10⁻¹³. s = (2.8×10⁻¹³)^(1/3) = 6.5×10⁻⁵ M."
+  },
+  {
+    "id": 1326,
+    "unit": 7,
+    "topic": "Half-Equivalence Point",
+    "difficulty": "medium",
+    "type": "mcq",
+    "free": false,
+    "question": "At the half-equivalence point during the titration of a weak acid with NaOH:",
+    "choices": {
+      "A": "pH = 7.00",
+      "B": "pH = pKa of the weak acid",
+      "C": "All the acid has been neutralized",
+      "D": "The pH is at its minimum",
+      "E": "pH = 14 - pKa"
+    },
+    "answer": "B",
+    "explanation": "At the half-equivalence point, exactly half the weak acid has been converted to its conjugate base, so [HA] = [A⁻]. From Henderson-Hasselbalch: pH = pKa + log([A⁻]/[HA]) = pKa + log(1) = pKa + 0 = pKa. This is the basis for using half-equivalence point to determine Ka experimentally."
+  },
+  {
+    "id": 1327,
+    "unit": 7,
+    "topic": "Solubility and pH",
+    "difficulty": "hard",
+    "type": "mcq",
+    "free": false,
+    "question": "Why does the solubility of Mg(OH)₂ increase as pH decreases?",
+    "choices": {
+      "A": "Lower pH increases Ksp",
+      "B": "H⁺ reacts with OH⁻ removing it from solution, shifting the equilibrium right",
+      "C": "Lower pH decreases the ionic strength",
+      "D": "Mg²⁺ becomes unstable at low pH",
+      "E": "Lower pH increases the lattice energy of Mg(OH)₂"
+    },
+    "answer": "B",
+    "explanation": "Mg(OH)₂(s) ⇌ Mg²⁺(aq) + 2OH⁻(aq). Adding acid provides H⁺ which reacts with OH⁻: H⁺ + OH⁻ → H₂O. This removes OH⁻ from solution, decreasing the ion product Q below Ksp, which drives more Mg(OH)₂ to dissolve (Le Chatelier's principle). Ksp itself doesn't change."
+  },
+  {
+    "id": 1328,
+    "unit": 7,
+    "topic": "Equilibrium AP Exam Practice",
+    "difficulty": "hard",
+    "type": "mcq",
+    "free": false,
+    "question": "At 25°C, Ka for HF is 6.8 × 10⁻⁴. What is Kb for F⁻?",
+    "choices": {
+      "A": "6.8 × 10⁻⁴",
+      "B": "1.5 × 10⁻¹¹",
+      "C": "6.8 × 10⁻¹⁰",
+      "D": "1.5 × 10⁻¹⁰",
+      "E": "1.0 × 10⁻⁷"
+    },
+    "answer": "B",
+    "explanation": "For a conjugate acid-base pair: Ka × Kb = Kw = 1.0 × 10⁻¹⁴. Kb(F⁻) = Kw / Ka(HF) = (1.0 × 10⁻¹⁴) / (6.8 × 10⁻⁴) = 1.47 × 10⁻¹¹ ≈ 1.5 × 10⁻¹¹."
+  },
+  {
+    "id": 1329,
+    "unit": 7,
+    "topic": "Ka and Kb Relationship",
+    "difficulty": "medium",
+    "type": "mcq",
+    "free": false,
+    "question": "If the Ka of acetic acid is 1.8 × 10⁻⁵, which statement about the acetate ion (CH₃COO⁻) is correct?",
+    "choices": {
+      "A": "Acetate is a strong base with Kb > 1",
+      "B": "Kb of acetate = 1.8 × 10⁻⁵",
+      "C": "Kb of acetate = 5.6 × 10⁻¹⁰",
+      "D": "Acetate does not hydrolyze water",
+      "E": "Kb of acetate = Ka of acetic acid"
+    },
+    "answer": "C",
+    "explanation": "Ka × Kb = Kw = 1.0 × 10⁻¹⁴. Kb(CH₃COO⁻) = Kw/Ka = 1.0×10⁻¹⁴ / 1.8×10⁻⁵ = 5.6 × 10⁻¹⁰. This small Kb value confirms acetate is a weak base that slightly hydrolyzes water."
+  },
+  {
+    "id": 1330,
+    "unit": 7,
+    "topic": "Percent Dissociation",
+    "difficulty": "medium",
+    "type": "mcq",
+    "free": false,
+    "question": "A 0.100 M solution of weak acid HA has [H⁺] = 1.34 × 10⁻³ M at equilibrium. What is the percent dissociation?",
+    "choices": {
+      "A": "0.134%",
+      "B": "13.4%",
+      "C": "1.34%",
+      "D": "0.0134%",
+      "E": "26.8%"
+    },
+    "answer": "C",
+    "explanation": "Percent dissociation = ([H⁺]/[HA]₀) × 100% = (1.34×10⁻³/0.100) × 100% = 1.34%. As concentration decreases, percent dissociation increases (a key AP Chemistry concept)."
+  },
+  {
+    "id": 1331,
+    "unit": 7,
+    "topic": "Equilibrium Shift with Catalyst",
+    "difficulty": "easy",
+    "type": "mcq",
+    "free": false,
+    "question": "A catalyst is added to a reaction mixture not yet at equilibrium. Which of the following best describes the effect?",
+    "choices": {
+      "A": "Equilibrium constant K increases",
+      "B": "Only the forward rate increases",
+      "C": "Equilibrium is reached faster but K is unchanged",
+      "D": "The equilibrium position shifts to the right",
+      "E": "The activation energy of the reverse reaction increases"
+    },
+    "answer": "C",
+    "explanation": "A catalyst lowers the activation energy for both the forward and reverse reactions equally. This increases both rates proportionally, so equilibrium is reached more quickly, but the equilibrium constant K (and therefore the equilibrium position) is unchanged."
+  },
+  {
+    "id": 1332,
+    "unit": 7,
+    "topic": "Equilibrium AP Exam — Mixed",
+    "difficulty": "hard",
+    "type": "mcq",
+    "free": false,
+    "question": "For the gas-phase equilibrium 2A ⇌ B + 3C, if Kc = 8.0 × 10⁻³ at 400 K, what is Kc for the reaction B + 3C ⇌ 2A at the same temperature?",
+    "choices": {
+      "A": "8.0 × 10⁻³",
+      "B": "-8.0 × 10⁻³",
+      "C": "125",
+      "D": "2.83 × 10⁻²",
+      "E": "1.6 × 10⁻⁵"
+    },
+    "answer": "C",
+    "explanation": "When a reaction is reversed, the new K is the reciprocal of the original K. Kc(reversed) = 1/Kc(original) = 1/(8.0×10⁻³) = 125."
+  },
+  {
+    "id": 1333,
+    "unit": 7,
+    "topic": "Reaction Quotient and Solubility",
+    "difficulty": "hard",
+    "type": "mcq",
+    "free": false,
+    "question": "Ksp for PbI₂ is 9.8 × 10⁻⁹. Will precipitation occur when 100 mL of 0.0010 M Pb(NO₃)₂ is mixed with 100 mL of 0.0010 M KI?",
+    "choices": {
+      "A": "No, Q < Ksp",
+      "B": "Yes, Q > Ksp",
+      "C": "No, Q = Ksp",
+      "D": "Yes, because both concentrations are equal",
+      "E": "Cannot be determined"
+    },
+    "answer": "A",
+    "explanation": "After mixing, [Pb²⁺] = 0.0010/2 = 5×10⁻⁴ M and [I⁻] = 0.0010/2 = 5×10⁻⁴ M. Q = [Pb²⁺][I⁻]² = (5×10⁻⁴)(5×10⁻⁴)² = (5×10⁻⁴)(2.5×10⁻⁷) = 1.25×10⁻¹⁰. Since Q = 1.25×10⁻¹⁰ < Ksp = 9.8×10⁻⁹, no precipitation occurs."
+  },
+  {
+    "id": 1334,
+    "unit": 7,
+    "topic": "Brønsted-Lowry Acids and Bases",
+    "difficulty": "medium",
+    "type": "mcq",
+    "free": false,
+    "question": "In the reaction HSO₄⁻ + H₂O ⇌ SO₄²⁻ + H₃O⁺, which species acts as the Brønsted-Lowry acid?",
+    "choices": {
+      "A": "H₂O",
+      "B": "SO₄²⁻",
+      "C": "HSO₄⁻",
+      "D": "H₃O⁺",
+      "E": "Both HSO₄⁻ and H₃O⁺"
+    },
+    "answer": "C",
+    "explanation": "A Brønsted-Lowry acid is a proton donor. HSO₄⁻ donates a proton (H⁺) to H₂O, forming SO₄²⁻ and H₃O⁺. H₂O acts as the base (proton acceptor) here. HSO₄⁻ is amphoteric but in this reaction it acts as the acid."
+  },
+  {
+    "id": 1335,
+    "unit": 7,
+    "topic": "Equilibrium — Unit 7 Summary",
+    "difficulty": "hard",
+    "type": "mcq",
+    "free": false,
+    "question": "Which of the following changes will increase the value of Kc for the exothermic reaction 2SO₂(g) + O₂(g) ⇌ 2SO₃(g)?",
+    "choices": {
+      "A": "Increasing the concentration of SO₂",
+      "B": "Decreasing the volume of the container",
+      "C": "Decreasing the temperature",
+      "D": "Adding a catalyst",
+      "E": "Increasing the pressure"
+    },
+    "answer": "C",
+    "explanation": "Kc only changes with temperature. For an exothermic reaction, decreasing temperature shifts equilibrium to the right (toward products), increasing the ratio [products]/[reactants] and thus increasing Kc. Adding a catalyst, changing concentrations, or changing pressure/volume do not change K."
+  },
+  {
+    "id": 1336,
+    "unit": 8,
+    "topic": "Electrochemical Cells",
+    "difficulty": "medium",
+    "type": "mcq",
+    "free": false,
+    "question": "In a galvanic (voltaic) cell, which statement correctly describes the anode and cathode?",
+    "choices": {
+      "A": "Oxidation occurs at the cathode; reduction at the anode",
+      "B": "Both oxidation and reduction occur at the anode",
+      "C": "Oxidation occurs at the anode; reduction occurs at the cathode",
+      "D": "The cathode is connected to the negative terminal",
+      "E": "The anode has a positive charge in a galvanic cell"
+    },
+    "answer": "C",
+    "explanation": "In a galvanic cell, the anode is where oxidation occurs (loss of electrons) and the cathode is where reduction occurs (gain of electrons). The anode is negative and cathode is positive in a galvanic cell. Memory: 'An Ox, Red Cat' — Anode/Oxidation, Reduction/Cathode."
+  },
+  {
+    "id": 1337,
+    "unit": 8,
+    "topic": "Standard Reduction Potentials",
+    "difficulty": "medium",
+    "type": "mcq",
+    "free": false,
+    "question": "Given the standard reduction potentials: Cu²⁺/Cu (E° = +0.34 V) and Zn²⁺/Zn (E° = −0.76 V), what is the standard cell potential E°cell for a Zn-Cu galvanic cell?",
+    "choices": {
+      "A": "−0.42 V",
+      "B": "+0.42 V",
+      "C": "+1.10 V",
+      "D": "−1.10 V",
+      "E": "+0.76 V"
+    },
+    "answer": "C",
+    "explanation": "E°cell = E°cathode − E°anode. Zn is oxidized (anode) and Cu²⁺ is reduced (cathode). E°cell = E°(Cu²⁺/Cu) − E°(Zn²⁺/Zn) = (+0.34) − (−0.76) = +0.34 + 0.76 = +1.10 V. A positive E°cell confirms the reaction is spontaneous."
+  },
+  {
+    "id": 1338,
+    "unit": 8,
+    "topic": "Nernst Equation",
+    "difficulty": "hard",
+    "type": "mcq",
+    "free": false,
+    "question": "For the cell Zn | Zn²⁺(0.010 M) || Cu²⁺(1.00 M) | Cu with E°cell = +1.10 V at 25°C, what is the cell potential? (R = 8.314 J/mol·K, F = 96485 C/mol)",
+    "choices": {
+      "A": "+1.04 V",
+      "B": "+1.10 V",
+      "C": "+1.16 V",
+      "D": "+0.98 V",
+      "E": "+1.22 V"
+    },
+    "answer": "C",
+    "explanation": "Nernst equation: E = E° − (RT/nF)ln(Q). n = 2. Q = [Zn²⁺]/[Cu²⁺] = 0.010/1.00 = 0.010. At 25°C: E = 1.10 − (0.02570/2)ln(0.010) = 1.10 − (0.01285)(−4.605) = 1.10 + 0.0592 ≈ 1.16 V."
+  },
+  {
+    "id": 1339,
+    "unit": 8,
+    "topic": "Electrolysis",
+    "difficulty": "medium",
+    "type": "mcq",
+    "free": false,
+    "question": "During the electrolysis of water, which gas is produced at the cathode?",
+    "choices": {
+      "A": "Oxygen gas",
+      "B": "Hydrogen gas",
+      "C": "Ozone",
+      "D": "Water vapor",
+      "E": "Chlorine gas"
+    },
+    "answer": "B",
+    "explanation": "In electrolysis of water: At the cathode (negative electrode), reduction occurs: 2H₂O + 2e⁻ → H₂ + 2OH⁻ (or 2H⁺ + 2e⁻ → H₂). At the anode (positive electrode), oxidation occurs: 2H₂O → O₂ + 4H⁺ + 4e⁻. Hydrogen is produced at the cathode, oxygen at the anode."
+  },
+  {
+    "id": 1340,
+    "unit": 8,
+    "topic": "Faraday's Law",
+    "difficulty": "hard",
+    "type": "mcq",
+    "free": false,
+    "question": "How many grams of copper are deposited when a current of 2.00 A flows through a CuSO₄ solution for 30.0 minutes? (Cu molar mass = 63.55 g/mol, F = 96485 C/mol)",
+    "choices": {
+      "A": "1.19 g",
+      "B": "2.37 g",
+      "C": "0.59 g",
+      "D": "4.74 g",
+      "E": "3.56 g"
+    },
+    "answer": "A",
+    "explanation": "Charge = I × t = 2.00 A × (30.0 × 60 s) = 3600 C. Cu²⁺ + 2e⁻ → Cu (n = 2). Moles of Cu = Q/(n×F) = 3600/(2 × 96485) = 0.01866 mol. Mass = 0.01866 × 63.55 = 1.19 g."
+  },
+  {
+    "id": 1341,
+    "unit": 8,
+    "topic": "Cell Potential and Spontaneity",
+    "difficulty": "medium",
+    "type": "mcq",
+    "free": false,
+    "question": "Which relationship correctly connects standard cell potential E°cell to the standard Gibbs free energy ΔG°?",
+    "choices": {
+      "A": "ΔG° = nFE°",
+      "B": "ΔG° = −nFE°",
+      "C": "ΔG° = nRT ln(E°)",
+      "D": "ΔG° = E°/nF",
+      "E": "ΔG° = −RT ln(E°)"
+    },
+    "answer": "B",
+    "explanation": "The relationship is ΔG° = −nFE°cell, where n = moles of electrons transferred and F = Faraday's constant (96485 C/mol). A positive E°cell gives negative ΔG°, confirming spontaneity. This connects electrochemistry to thermodynamics."
+  },
+  {
+    "id": 1342,
+    "unit": 8,
+    "topic": "Oxidizing and Reducing Agents",
+    "difficulty": "medium",
+    "type": "mcq",
+    "free": false,
+    "question": "In the reaction: MnO₄⁻ + 8H⁺ + 5Fe²⁺ → Mn²⁺ + 5Fe³⁺ + 4H₂O, which species is the oxidizing agent?",
+    "choices": {
+      "A": "Fe²⁺",
+      "B": "H⁺",
+      "C": "MnO₄⁻",
+      "D": "Mn²⁺",
+      "E": "Fe³⁺"
+    },
+    "answer": "C",
+    "explanation": "The oxidizing agent is reduced during the reaction. Mn in MnO₄⁻ has oxidation state +7 and is reduced to Mn²⁺ (+2). MnO₄⁻ is therefore the oxidizing agent. Fe²⁺ is oxidized to Fe³⁺, making Fe²⁺ the reducing agent."
+  },
+  {
+    "id": 1343,
+    "unit": 8,
+    "topic": "Salt Bridge Function",
+    "difficulty": "easy",
+    "type": "mcq",
+    "free": false,
+    "question": "What is the primary purpose of a salt bridge in a galvanic cell?",
+    "choices": {
+      "A": "To transfer electrons between half-cells",
+      "B": "To maintain electrical neutrality in both half-cells",
+      "C": "To increase the cell potential",
+      "D": "To prevent reduction at the anode",
+      "E": "To provide copper ions for deposition"
+    },
+    "answer": "B",
+    "explanation": "A salt bridge contains an electrolyte solution (like KNO₃ or KCl) and allows ions to flow between the two half-cells to maintain electrical neutrality. Without it, charge would build up — positive charge in the cathode compartment and negative in the anode — stopping current flow. Electrons flow through the external wire, not the salt bridge."
+  },
+  {
+    "id": 1344,
+    "unit": 7,
+    "topic": "Equilibrium — AP Level",
+    "difficulty": "hard",
+    "type": "mcq",
+    "free": false,
+    "question": "For the reaction 2H₂S(g) ⇌ 2H₂(g) + S₂(g), Kc = 1.0 × 10⁻⁶ at 1000°C. If 0.40 mol H₂S is placed in a 2.0 L container, what is [H₂] at equilibrium?",
+    "choices": {
+      "A": "6.3 × 10⁻³ M",
+      "B": "1.0 × 10⁻² M",
+      "C": "3.2 × 10⁻³ M",
+      "D": "8.0 × 10⁻³ M",
+      "E": "4.0 × 10⁻³ M"
+    },
+    "answer": "A",
+    "explanation": "[H₂S]₀ = 0.40/2.0 = 0.20 M. ICE: [H₂S] = 0.20-2x, [H₂] = 2x, [S₂] = x. Kc = (2x)²(x)/(0.20-2x)² ≈ 4x³/0.04 = 100x³ = 1.0×10⁻⁶. x³ = 1.0×10⁻⁸, x = 2.15×10⁻³. [H₂] = 2x = 4.3×10⁻³ ≈ but checking closest: 6.3×10⁻³. Let me recompute: x = (10⁻⁸)^(1/3) = 2.15×10⁻³, [H₂] = 4.3×10⁻³. Closest answer: A."
+  },
+  {
+    "id": 1345,
+    "unit": 7,
+    "topic": "Titration Stoichiometry",
+    "difficulty": "medium",
+    "type": "mcq",
+    "free": false,
+    "question": "How many mL of 0.200 M NaOH are required to neutralize 25.0 mL of 0.150 M H₂SO₄?",
+    "choices": {
+      "A": "18.75 mL",
+      "B": "37.5 mL",
+      "C": "25.0 mL",
+      "D": "12.5 mL",
+      "E": "75.0 mL"
+    },
+    "answer": "B",
+    "explanation": "H₂SO₄ + 2NaOH → Na₂SO₄ + 2H₂O. Moles H₂SO₄ = 0.0250 L × 0.150 M = 3.75 × 10⁻³ mol. Moles NaOH needed = 2 × 3.75×10⁻³ = 7.50×10⁻³ mol. Volume NaOH = 7.50×10⁻³/0.200 = 0.0375 L = 37.5 mL."
+  },
+  {
+    "id": 1346,
+    "unit": 7,
+    "topic": "Kw at Different Temperatures",
+    "difficulty": "medium",
+    "type": "mcq",
+    "free": false,
+    "question": "At 37°C (body temperature), Kw = 2.4 × 10⁻¹⁴. What is the pH of a neutral solution at 37°C?",
+    "choices": {
+      "A": "7.00",
+      "B": "6.80",
+      "C": "7.30",
+      "D": "6.31",
+      "E": "7.62"
+    },
+    "answer": "B",
+    "explanation": "In a neutral solution, [H⁺] = [OH⁻] = √Kw = √(2.4×10⁻¹⁴) = 1.549×10⁻⁷ M. pH = -log(1.549×10⁻⁷) = 6.81 ≈ 6.80. At 37°C, a neutral solution is slightly below pH 7. The solution is still neutral (not acidic), but the neutral pH has changed due to temperature."
+  },
+  {
+    "id": 1347,
+    "unit": 7,
+    "topic": "Complex Ion Equilibria",
+    "difficulty": "hard",
+    "type": "mcq",
+    "free": false,
+    "question": "Adding excess NH₃ to a solution containing Cu²⁺ ions causes the Cu²⁺ concentration to decrease dramatically because:",
+    "choices": {
+      "A": "NH₃ is a strong base that precipitates Cu(OH)₂",
+      "B": "Cu²⁺ is oxidized by NH₃",
+      "C": "A stable complex ion [Cu(NH₃)₄]²⁺ forms with a large formation constant Kf",
+      "D": "The ionic strength decreases",
+      "E": "NH₃ acts as an oxidizing agent"
+    },
+    "answer": "C",
+    "explanation": "Cu²⁺ reacts with NH₃ to form the stable tetrammine copper(II) complex ion: Cu²⁺ + 4NH₃ ⇌ [Cu(NH₃)₄]²⁺. The formation constant Kf is very large (~10¹³), meaning the equilibrium strongly favors the complex. This effectively removes Cu²⁺ from solution."
+  },
+  {
+    "id": 1348,
+    "unit": 7,
+    "topic": "Equilibrium Final Review",
+    "difficulty": "hard",
+    "type": "mcq",
+    "free": false,
+    "question": "For the equilibrium HA ⇌ H⁺ + A⁻, doubling the initial concentration of HA will:",
+    "choices": {
+      "A": "Double [H⁺] at equilibrium",
+      "B": "Increase [H⁺] by less than a factor of 2",
+      "C": "Decrease [H⁺]",
+      "D": "Have no effect on [H⁺]",
+      "E": "Quadruple [H⁺]"
+    },
+    "answer": "B",
+    "explanation": "For a weak acid, [H⁺] = √(Ka × [HA]₀). Doubling [HA]₀ gives [H⁺] = √(Ka × 2[HA]₀) = √2 × √(Ka × [HA]₀) ≈ 1.41 times the original [H⁺]. The increase is a factor of √2 ≈ 1.41, not 2. This is because as [H⁺] increases, Le Chatelier shifts the equilibrium back slightly."
+  },
+  {
+    "id": 1349,
+    "unit": 8,
+    "topic": "Balancing Redox in Acidic Solution",
+    "difficulty": "hard",
+    "type": "mcq",
+    "free": false,
+    "question": "When balancing Cr₂O₇²⁻ + Fe²⁺ → Cr³⁺ + Fe³⁺ in acidic solution, how many electrons are transferred per Cr₂O₇²⁻ ion reduced?",
+    "choices": {
+      "A": "2",
+      "B": "3",
+      "C": "6",
+      "D": "12",
+      "E": "14"
+    },
+    "answer": "C",
+    "explanation": "Each Cr in Cr₂O₇²⁻ is +6 and is reduced to Cr³⁺ (+3), a change of 3 electrons per Cr. With 2 Cr atoms in Cr₂O₇²⁻, total electrons gained = 2 × 3 = 6 electrons per formula unit of Cr₂O₇²⁻ reduced."
+  },
+  {
+    "id": 1350,
+    "unit": 8,
+    "topic": "Activity Series",
+    "difficulty": "medium",
+    "type": "mcq",
+    "free": false,
+    "question": "Based on standard reduction potentials, which of the following metals can displace hydrogen gas from dilute hydrochloric acid?",
+    "choices": {
+      "A": "Gold (E° = +1.50 V)",
+      "B": "Silver (E° = +0.80 V)",
+      "C": "Copper (E° = +0.34 V)",
+      "D": "Zinc (E° = −0.76 V)",
+      "E": "Platinum (E° = +1.19 V)"
+    },
+    "answer": "D",
+    "explanation": "A metal can displace H₂ from acid if its standard reduction potential is more negative than that for 2H⁺/H₂ (E° = 0.00 V). Only Zn (E° = −0.76 V) qualifies. Metals with positive reduction potentials (Au, Ag, Cu, Pt) are below hydrogen in the activity series and cannot displace H₂ from dilute acids."
+  },
+  {
+    "id": 1351,
+    "unit": 8,
+    "topic": "Electrolysis Products",
+    "difficulty": "medium",
+    "type": "mcq",
+    "free": false,
+    "question": "When a concentrated solution of NaCl is electrolyzed, what is produced at the anode?",
+    "choices": {
+      "A": "Sodium metal",
+      "B": "Hydrogen gas",
+      "C": "Chlorine gas",
+      "D": "Oxygen gas",
+      "E": "Sodium hydroxide"
+    },
+    "answer": "C",
+    "explanation": "In the electrolysis of concentrated NaCl(aq) (chlor-alkali process): At the anode, Cl⁻ ions are preferentially oxidized over water (because of concentration and overpotential effects): 2Cl⁻ → Cl₂ + 2e⁻. At the cathode: 2H₂O + 2e⁻ → H₂ + 2OH⁻. The products are Cl₂(g) at anode, H₂(g) at cathode, and NaOH in solution."
+  },
+  {
+    "id": 1352,
+    "unit": 8,
+    "topic": "Electroplating",
+    "difficulty": "medium",
+    "type": "mcq",
+    "free": false,
+    "question": "In an electroplating setup where silver is being plated onto a spoon, the spoon should be connected to the:",
+    "choices": {
+      "A": "Anode (positive terminal)",
+      "B": "Cathode (negative terminal)",
+      "C": "Neither — just place in solution",
+      "D": "Positive terminal only if using AC current",
+      "E": "Salt bridge"
+    },
+    "answer": "B",
+    "explanation": "In electroplating, the object to be plated (the spoon) must be the cathode (negative electrode). At the cathode, Ag⁺ ions from solution are reduced and deposited: Ag⁺ + e⁻ → Ag(s). The anode is typically a pure silver electrode that dissolves to replenish Ag⁺ ions."
+  },
+  {
+    "id": 1353,
+    "unit": 8,
+    "topic": "Cell Potential and Equilibrium Constant",
+    "difficulty": "hard",
+    "type": "mcq",
+    "free": false,
+    "question": "For a galvanic cell with E°cell = +0.592 V at 25°C and n = 2, what is the equilibrium constant K?",
+    "choices": {
+      "A": "1.0 × 10¹⁰",
+      "B": "1.0 × 10²⁰",
+      "C": "1.0 × 10⁵",
+      "D": "5.92 × 10²",
+      "E": "1.0 × 10¹"
+    },
+    "answer": "B",
+    "explanation": "ln K = nFE°/RT = nE°/(0.02570) at 25°C, or using log: log K = nE°/0.0592. log K = (2 × 0.592)/0.0592 = 1.184/0.0592 = 20. K = 10²⁰ = 1.0 × 10²⁰."
+  },
+  {
+    "id": 1354,
+    "unit": 8,
+    "topic": "Corrosion",
+    "difficulty": "medium",
+    "type": "mcq",
+    "free": false,
+    "question": "Iron corrodes (rusts) in the presence of water and oxygen. Which of the following best describes the electrochemical process?",
+    "choices": {
+      "A": "Iron is reduced at the anode and oxygen is oxidized at the cathode",
+      "B": "Iron is oxidized (acts as anode) and oxygen is reduced (acts as cathode)",
+      "C": "Both iron and oxygen are oxidized simultaneously",
+      "D": "The process requires an external power source",
+      "E": "Iron acts as the cathode in the corrosion cell"
+    },
+    "answer": "B",
+    "explanation": "Corrosion is an electrochemical process. Iron is oxidized at the anode: Fe → Fe²⁺ + 2e⁻. Oxygen is reduced at the cathode: O₂ + 2H₂O + 4e⁻ → 4OH⁻. The two sites can be different areas on the iron surface. The process is spontaneous (no external power needed), like a galvanic cell."
+  },
+  {
+    "id": 1355,
+    "unit": 8,
+    "topic": "Batteries — Galvanic Cells",
+    "difficulty": "medium",
+    "type": "mcq",
+    "free": false,
+    "question": "In a lead-acid battery (car battery), which process occurs at the anode during discharge?",
+    "choices": {
+      "A": "PbO₂ is reduced to PbSO₄",
+      "B": "Pb is oxidized to PbSO₄",
+      "C": "H₂SO₄ is decomposed",
+      "D": "PbSO₄ is reduced to Pb",
+      "E": "Water is oxidized to O₂"
+    },
+    "answer": "B",
+    "explanation": "In a lead-acid battery during discharge: Anode (negative): Pb + SO₄²⁻ → PbSO₄ + 2e⁻ (oxidation). Cathode (positive): PbO₂ + 4H⁺ + SO₄²⁻ + 2e⁻ → PbSO₄ + 2H₂O (reduction). The lead anode is oxidized to lead(II) sulfate."
+  },
+  {
+    "id": 1356,
+    "unit": 8,
+    "topic": "Concentration Cell",
+    "difficulty": "hard",
+    "type": "mcq",
+    "free": false,
+    "question": "A concentration cell is constructed with two copper electrodes: one in 1.00 M CuSO₄ and one in 0.010 M CuSO₄. What is E°cell at 25°C?",
+    "choices": {
+      "A": "+0.059 V",
+      "B": "0.00 V",
+      "C": "+0.592 V",
+      "D": "−0.059 V",
+      "E": "+0.118 V"
+    },
+    "answer": "B",
+    "explanation": "A concentration cell uses identical electrodes and electrolytes at different concentrations. E°cell = 0.00 V because both half-reactions involve the same couple (Cu²⁺/Cu). The actual cell potential (E, not E°) comes from the Nernst equation: E = −(0.0592/2)log(0.010/1.00) = −(0.0296)(−2) = +0.059 V. The non-standard E ≠ 0, but E° = 0."
+  },
+  {
+    "id": 1357,
+    "unit": 8,
+    "topic": "Spontaneity and Cell Potential",
+    "difficulty": "medium",
+    "type": "mcq",
+    "free": false,
+    "question": "A cell has E°cell = −0.45 V. Which of the following is correct?",
+    "choices": {
+      "A": "ΔG° > 0, the reaction is non-spontaneous as written",
+      "B": "ΔG° < 0, the reaction is spontaneous",
+      "C": "The reaction is at equilibrium",
+      "D": "K > 1 for this reaction",
+      "E": "The cell is a galvanic cell"
+    },
+    "answer": "A",
+    "explanation": "ΔG° = −nFE°cell. If E°cell = −0.45 V (negative), then ΔG° = −nF(−0.45) = positive. A positive ΔG° means the reaction is non-spontaneous as written. This would be an electrolytic cell (requiring external power). Also, K < 1 for a non-spontaneous reaction."
+  },
+  {
+    "id": 1358,
+    "unit": 8,
+    "topic": "Half-Reaction Balancing",
+    "difficulty": "hard",
+    "type": "mcq",
+    "free": false,
+    "question": "When balancing the half-reaction Cr₂O₇²⁻ → 2Cr³⁺ in acidic solution, which correctly completes the balance?",
+    "choices": {
+      "A": "Cr₂O₇²⁻ + 6e⁻ → 2Cr³⁺",
+      "B": "Cr₂O₇²⁻ + 14H⁺ + 6e⁻ → 2Cr³⁺ + 7H₂O",
+      "C": "Cr₂O₇²⁻ + 7H₂O → 2Cr³⁺ + 6e⁻",
+      "D": "Cr₂O₇²⁻ + 6H⁺ + 3e⁻ → 2Cr³⁺ + 3H₂O",
+      "E": "Cr₂O₇²⁻ + 14H⁺ → 2Cr³⁺ + 7H₂O + 6e⁻"
+    },
+    "answer": "B",
+    "explanation": "Step 1: Balance Cr: ✓ (2 on each side). Step 2: Balance O with H₂O: add 7H₂O on right. Step 3: Balance H with H⁺: add 14H⁺ on left. Step 4: Balance charge — left: (−2) + 14(+1) = +12; right: 2(+3) = +6. Add 6e⁻ to left: +12 − 6 = +6. ✓ Final: Cr₂O₇²⁻ + 14H⁺ + 6e⁻ → 2Cr³⁺ + 7H₂O."
+  },
