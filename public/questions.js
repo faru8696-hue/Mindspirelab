@@ -4251,3 +4251,813 @@ const PAID_QUESTIONS  = AP_QUESTIONS.filter(q => !q.free).length;
     "answer": "B",
     "explanation": "NO₂⁻: N has 5 valence e⁻ + 1 (negative charge) = 6 for the extra charge spread over 3 atoms. Total valence e⁻ = 5 + 2(6) + 1 = 18. Structure: O=N-O⁻ with resonance. Central N has one double bond, one single bond, and one lone pair. Lone pairs on N = 1."
   },
+  {
+    "id": 1419,
+    "unit": 8,
+    "topic": "Electrochemistry — Inorganic Chemistry",
+    "difficulty": "hard",
+    "type": "mcq",
+    "free": false,
+    "question": "In the electrolysis of aqueous Na₂SO₄, what products are formed at each electrode?",
+    "choices": {
+      "A": "Na at cathode, SO₄²⁻ oxidized at anode",
+      "B": "H₂ at cathode, O₂ at anode",
+      "C": "NaOH at both electrodes",
+      "D": "H₂ at anode, O₂ at cathode",
+      "E": "SO₂ at anode, H₂ at cathode"
+    },
+    "answer": "B",
+    "explanation": "In aqueous Na₂SO₄, Na⁺ and SO₄²⁻ are spectator ions (too difficult to discharge compared to water). At cathode: 2H₂O + 2e⁻ → H₂ + 2OH⁻ (water is reduced). At anode: 2H₂O → O₂ + 4H⁺ + 4e⁻ (water is oxidized). Net: 2H₂O → 2H₂ + O₂. Na₂SO₄ acts only as electrolyte."
+  },
+  {
+    "id": 1420,
+    "unit": 8,
+    "topic": "Electrochemistry — AP Style 2",
+    "difficulty": "hard",
+    "type": "mcq",
+    "free": false,
+    "question": "The cell notation Fe | Fe²⁺(1.0 M) || MnO₄⁻(1.0 M), Mn²⁺(1.0 M), H⁺(1.0 M) | Pt represents a galvanic cell. If E°(MnO₄⁻/Mn²⁺) = +1.51 V and E°(Fe²⁺/Fe) = −0.44 V, what is E°cell?",
+    "choices": {
+      "A": "+1.07 V",
+      "B": "+1.95 V",
+      "C": "−1.07 V",
+      "D": "−1.95 V",
+      "E": "+1.51 V"
+    },
+    "answer": "B",
+    "explanation": "Fe is oxidized (anode, E° = −0.44 V). MnO₄⁻ is reduced (cathode, E° = +1.51 V). E°cell = E°cathode − E°anode = 1.51 − (−0.44) = +1.95 V."
+  },
+  {
+    "id": 1421,
+    "unit": 8,
+    "topic": "Electrochemistry AP Summary",
+    "difficulty": "medium",
+    "type": "mcq",
+    "free": false,
+    "question": "Which of the following is always true about the cathode in any electrochemical cell (both galvanic and electrolytic)?",
+    "choices": {
+      "A": "It is always connected to the negative terminal",
+      "B": "Oxidation always occurs at the cathode",
+      "C": "The cathode is always positively charged",
+      "D": "Reduction always occurs at the cathode",
+      "E": "Cations are repelled from the cathode"
+    },
+    "answer": "D",
+    "explanation": "Regardless of whether the cell is galvanic or electrolytic, REDUCTION always occurs at the cathode and OXIDATION always occurs at the anode. This is a fundamental rule of electrochemistry. (Memory: 'Red Cat' — Reduction at Cathode; 'An Ox' — Anode Oxidation). The charge on the cathode differs between cell types."
+  },
+  {
+    "id": 1422,
+    "unit": 8,
+    "topic": "Electrochemistry — Unit 8 Complete",
+    "difficulty": "hard",
+    "type": "mcq",
+    "free": false,
+    "question": "For the galvanic cell: Pt | H₂(g, 1 atm) | H⁺(? M) || SHE, the cell voltage is measured as +0.177 V. What is the pH of the H⁺ solution?",
+    "choices": {
+      "A": "pH = 1.0",
+      "B": "pH = 2.0",
+      "C": "pH = 3.0",
+      "D": "pH = 0.5",
+      "E": "pH = 1.5"
+    },
+    "answer": "C",
+    "explanation": "This is a concentration cell. SHE is cathode (E° = 0.00 V), H₂/H⁺ half-cell is anode. Ecell = E°cell − (0.0592/n)log Q. Since both half-cells are H⁺/H₂, E°cell = 0. For the anode half-cell: E = 0 − (0.0592/2)log(P_H₂/[H⁺]²). Cell voltage = +0.177 V comes from the concentration difference. 0.177 = (0.0592/1)pH. pH = 0.177/0.0592 ≈ 3.0."
+  },
+  {
+    "id": 1423,
+    "unit": 9,
+    "topic": "VSEPR — Bond Angles",
+    "difficulty": "medium",
+    "type": "mcq",
+    "free": false,
+    "question": "What is the approximate H-N-H bond angle in ammonia (NH₃)?",
+    "choices": {
+      "A": "90°",
+      "B": "109.5°",
+      "C": "107°",
+      "D": "120°",
+      "E": "180°"
+    },
+    "answer": "C",
+    "explanation": "NH₃ has 3 bonding pairs and 1 lone pair on nitrogen. Electron geometry is tetrahedral (109.5°), but the lone pair exerts greater repulsion than bonding pairs, compressing the H-N-H angles to approximately 107°. This is less than the tetrahedral angle of 109.5° but more than the water angle of 104.5°."
+  },
+  {
+    "id": 1424,
+    "unit": 9,
+    "topic": "London Dispersion Forces",
+    "difficulty": "medium",
+    "type": "mcq",
+    "free": false,
+    "question": "Which of the following noble gases has the highest boiling point?",
+    "choices": {
+      "A": "He (M = 4 g/mol)",
+      "B": "Ne (M = 20 g/mol)",
+      "C": "Ar (M = 40 g/mol)",
+      "D": "Kr (M = 84 g/mol)",
+      "E": "Xe (M = 131 g/mol)"
+    },
+    "answer": "E",
+    "explanation": "Noble gases only experience London dispersion forces (temporary dipoles). These forces increase with molar mass and number of electrons, which makes molecules more polarizable. Xe has the highest molar mass (131 g/mol) and most electrons, giving it the strongest London dispersion forces and therefore the highest boiling point (−108°C)."
+  },
+  {
+    "id": 1425,
+    "unit": 9,
+    "topic": "Sigma and Pi Bonds",
+    "difficulty": "medium",
+    "type": "mcq",
+    "free": false,
+    "question": "How many sigma (σ) and pi (π) bonds are present in acetylene (HC≡CH)?",
+    "choices": {
+      "A": "2 sigma, 1 pi",
+      "B": "3 sigma, 2 pi",
+      "C": "2 sigma, 2 pi",
+      "D": "4 sigma, 0 pi",
+      "E": "3 sigma, 1 pi"
+    },
+    "answer": "B",
+    "explanation": "In acetylene H-C≡C-H: There are 3 sigma bonds (H-C, C≡C sigma, C-H) and 2 pi bonds (from the triple bond, which consists of 1 sigma + 2 pi). Total: 3σ + 2π. The triple bond is formed from 1 sp-sp head-on overlap (sigma) and 2 side-by-side p orbital overlaps (pi)."
+  },
+  {
+    "id": 1426,
+    "unit": 9,
+    "topic": "Formal Charge",
+    "difficulty": "hard",
+    "type": "mcq",
+    "free": false,
+    "question": "In the Lewis structure of SO₃, what is the formal charge on the sulfur atom if it forms one double bond and two single bonds (with complete octets on oxygen)?",
+    "choices": {
+      "A": "+2",
+      "B": "0",
+      "C": "+1",
+      "D": "−1",
+      "E": "+3"
+    },
+    "answer": "A",
+    "explanation": "Formal charge = valence electrons − non-bonding electrons − (1/2 × bonding electrons). For S in SO₃ with 1 double bond (4e) + 2 single bonds (2e each): bonding e⁻ = 4 + 2 + 2 = 8; S has no lone pairs (0 non-bonding). FC = 6 − 0 − (8/2) = 6 − 4 = +2."
+  },
+  {
+    "id": 1427,
+    "unit": 9,
+    "topic": "Phase Changes",
+    "difficulty": "medium",
+    "type": "mcq",
+    "free": false,
+    "question": "Which of the following phase transitions is endothermic (absorbs heat)?",
+    "choices": {
+      "A": "Condensation: gas → liquid",
+      "B": "Freezing: liquid → solid",
+      "C": "Deposition: gas → solid",
+      "D": "Vaporization: liquid → gas",
+      "E": "All phase transitions release heat"
+    },
+    "answer": "D",
+    "explanation": "Vaporization (boiling) is endothermic — the liquid absorbs heat energy to overcome intermolecular forces and transition to gas. Condensation, freezing, and deposition are all exothermic (release heat). Memory: processes that increase disorder (solid→liquid→gas) are endothermic; those that decrease disorder are exothermic."
+  },
+  {
+    "id": 1428,
+    "unit": 9,
+    "topic": "Vapor Pressure",
+    "difficulty": "medium",
+    "type": "mcq",
+    "free": false,
+    "question": "Which factor best explains why diethyl ether has a much higher vapor pressure than water at the same temperature?",
+    "choices": {
+      "A": "Diethyl ether has a higher molar mass",
+      "B": "Diethyl ether experiences only weak London dispersion and dipole-dipole forces, while water has strong hydrogen bonding",
+      "C": "Water has a lower surface tension",
+      "D": "Diethyl ether molecules are smaller",
+      "E": "Water has stronger London dispersion forces"
+    },
+    "answer": "B",
+    "explanation": "Vapor pressure reflects how easily molecules escape to the gas phase. Diethyl ether lacks O-H or N-H groups for hydrogen bonding, experiencing only weak London dispersion and dipole-dipole forces. Water forms extensive O-H···O hydrogen bonds. The weaker the intermolecular forces, the easier molecules escape and the higher the vapor pressure."
+  },
+  {
+    "id": 1429,
+    "unit": 9,
+    "topic": "Colligative Properties",
+    "difficulty": "hard",
+    "type": "mcq",
+    "free": false,
+    "question": "What is the boiling point elevation of a 0.500 molal solution of NaCl in water? Kb(water) = 0.512 °C/m",
+    "choices": {
+      "A": "0.256 °C",
+      "B": "0.512 °C",
+      "C": "1.024 °C",
+      "D": "0.768 °C",
+      "E": "2.048 °C"
+    },
+    "answer": "B",
+    "explanation": "ΔTb = i × Kb × m. NaCl is a strong electrolyte: NaCl → Na⁺ + Cl⁻ (i = 2). ΔTb = 2 × 0.512 × 0.500 = 0.512°C. The actual boiling point elevation is 0.512°C, making the boiling point 100.512°C."
+  },
+  {
+    "id": 1430,
+    "unit": 9,
+    "topic": "Intermolecular Forces Comparison",
+    "difficulty": "medium",
+    "type": "mcq",
+    "free": false,
+    "question": "Rank the following in order of increasing boiling point: CH₄, CH₃OH, NaCl, H₂O.",
+    "choices": {
+      "A": "CH₄ < H₂O < CH₃OH < NaCl",
+      "B": "CH₄ < CH₃OH < H₂O < NaCl",
+      "C": "NaCl < H₂O < CH₃OH < CH₄",
+      "D": "CH₄ < NaCl < CH₃OH < H₂O",
+      "E": "H₂O < CH₄ < CH₃OH < NaCl"
+    },
+    "answer": "B",
+    "explanation": "CH₄ (−161°C): only weak London dispersion forces. CH₃OH (65°C): hydrogen bonding but weaker network than water. H₂O (100°C): extensive hydrogen bonding network, high ΔHvap. NaCl (1413°C): ionic bonds require enormous energy to break. Increasing boiling point: CH₄ < CH₃OH < H₂O < NaCl."
+  },
+  {
+    "id": 1431,
+    "unit": 9,
+    "topic": "VSEPR — Expanded Octet",
+    "difficulty": "hard",
+    "type": "mcq",
+    "free": false,
+    "question": "What is the molecular geometry of SF₄?",
+    "choices": {
+      "A": "Tetrahedral",
+      "B": "See-saw (seesaw)",
+      "C": "Trigonal bipyramidal",
+      "D": "Square planar",
+      "E": "Octahedral"
+    },
+    "answer": "B",
+    "explanation": "SF₄: S has 6 valence e⁻, forms 4 bonds to F using 8 e⁻ + 1 lone pair = 10 electrons (5 electron pairs). Electron geometry is trigonal bipyramidal. The 4 bonding pairs + 1 lone pair (which prefers the equatorial position) gives a see-saw molecular geometry with axial F-S-F angle ≈ 173° and equatorial F-S-F angle ≈ 102°."
+  },
+  {
+    "id": 1432,
+    "unit": 9,
+    "topic": "Molecular Polarity",
+    "difficulty": "medium",
+    "type": "mcq",
+    "free": false,
+    "question": "Which of the following molecules has a dipole moment (is polar)?",
+    "choices": {
+      "A": "BF₃ (trigonal planar)",
+      "B": "CCl₄ (tetrahedral)",
+      "C": "XeF₄ (square planar)",
+      "D": "CHCl₃ (tetrahedral, not symmetric)",
+      "E": "SF₆ (octahedral)"
+    },
+    "answer": "D",
+    "explanation": "CHCl₃ (chloroform) has a tetrahedral geometry but is not symmetric — 3 Cl atoms on one side and 1 H on the other. The C-Cl and C-H bond dipoles do not cancel, giving a net dipole moment. BF₃, CCl₄, XeF₄, and SF₆ all have symmetric geometries where bond dipoles cancel perfectly, giving zero net dipole moment."
+  },
+  {
+    "id": 1433,
+    "unit": 9,
+    "topic": "Solutions and IMFs",
+    "difficulty": "medium",
+    "type": "mcq",
+    "free": false,
+    "question": "Why does 'like dissolves like' explain why oil does not dissolve in water?",
+    "choices": {
+      "A": "Oil molecules are too large to dissolve",
+      "B": "Oil is nonpolar (London dispersion forces only) and water is polar (hydrogen bonding); the unlike forces cannot replace each other effectively",
+      "C": "Oil and water react chemically to form an emulsion",
+      "D": "Water molecules repel oil molecules through electrostatic forces",
+      "E": "Oil has a higher density than water"
+    },
+    "answer": "B",
+    "explanation": "'Like dissolves like' means polar solvents dissolve polar/ionic solutes and nonpolar solvents dissolve nonpolar solutes. Oil consists of nonpolar hydrocarbons (only London dispersion forces). Water has strong hydrogen bonds. For dissolution, the new solute-solvent interactions must be comparable to the broken solute-solute and solvent-solvent interactions. The weak London forces between water and oil molecules cannot replace the strong H-bonds broken in water, so oil does not dissolve."
+  },
+  {
+    "id": 1434,
+    "unit": 8,
+    "topic": "Electrochemistry — Final 6",
+    "difficulty": "hard",
+    "type": "mcq",
+    "free": false,
+    "question": "Silver is purified by electrolysis. An impure silver anode is placed in AgNO₃ solution with a pure silver cathode. What happens to the impurities (copper, zinc, etc.) present in the anode?",
+    "choices": {
+      "A": "They deposit on the cathode along with Ag",
+      "B": "They remain in solution permanently",
+      "C": "More active metals (Zn, Cu) dissolve but cannot deposit at cathode due to higher voltage requirements; they form anode slime",
+      "D": "They form gaseous products",
+      "E": "They are oxidized to form salts that immediately precipitate"
+    },
+    "answer": "C",
+    "explanation": "In electrorefining of silver: The impure anode dissolves, releasing Ag⁺, Cu²⁺, Zn²⁺, etc. into solution. At the voltage used, only Ag⁺ is reduced at the cathode (E° = +0.80 V for Ag is much higher than Cu²⁺ = +0.34 V or Zn²⁺ = −0.76 V). More active metals like Cu and Zn dissolve but cannot deposit at the operating voltage — they accumulate in solution. Even less active metals like Au, Pt that won't dissolve fall to the bottom as 'anode slime' containing valuable metals."
+  },
+  {
+    "id": 1435,
+    "unit": 8,
+    "topic": "Electrolytic Cells — Power",
+    "difficulty": "hard",
+    "type": "mcq",
+    "free": false,
+    "question": "What electrical power (in watts) is needed to run an electrolytic cell at 5.00 A and 12.0 V?",
+    "choices": {
+      "A": "60.0 W",
+      "B": "2.40 W",
+      "C": "17.0 W",
+      "D": "0.417 W",
+      "E": "120 W"
+    },
+    "answer": "A",
+    "explanation": "Power = Voltage × Current = P = V × I = 12.0 V × 5.00 A = 60.0 W. This is the direct application of Ohm's law to electrical power. Industrial electrolytic processes (like aluminum production) consume enormous amounts of electrical power."
+  },
+  {
+    "id": 1436,
+    "unit": 8,
+    "topic": "Galvanic Cell — Summary Review",
+    "difficulty": "medium",
+    "type": "mcq",
+    "free": false,
+    "question": "In a Daniell cell (Zn | ZnSO₄ || CuSO₄ | Cu), which correctly describes electron flow?",
+    "choices": {
+      "A": "Electrons flow from Cu to Zn through the external circuit",
+      "B": "Electrons flow from Zn to Cu through the external circuit",
+      "C": "Electrons flow through the salt bridge from Zn to Cu",
+      "D": "Current flows from anode (+) to cathode (−)",
+      "E": "No electron flow occurs; only ion flow"
+    },
+    "answer": "B",
+    "explanation": "In the Daniell cell, Zn is oxidized (anode, more negative): Zn → Zn²⁺ + 2e⁻. The released electrons flow through the external circuit (wire) from the anode (Zn) to the cathode (Cu), where Cu²⁺ is reduced: Cu²⁺ + 2e⁻ → Cu. Electrons always flow from anode to cathode in the external circuit. Ions flow through the salt bridge."
+  },
+  {
+    "id": 1437,
+    "unit": 8,
+    "topic": "Unit 8 — Complete",
+    "difficulty": "hard",
+    "type": "mcq",
+    "free": false,
+    "question": "For a cell at 25°C with E°cell = 0.000 V and n = 2, what is the Nernst equation simplification, and when does the cell produce a positive EMF?",
+    "choices": {
+      "A": "E = −(0.0296)log Q; E > 0 when Q < 1",
+      "B": "E = +(0.0296)log Q; E > 0 when Q > 1",
+      "C": "E = (0.0592)log Q; E > 0 always",
+      "D": "E = 0 always since E° = 0",
+      "E": "E = −(0.0592)log Q; E > 0 when Q < 1"
+    },
+    "answer": "A",
+    "explanation": "E = E° − (0.0592/n)log Q = 0 − (0.0592/2)log Q = −0.0296 log Q. For E > 0: −0.0296 log Q > 0 → log Q < 0 → Q < 1. This is a concentration cell — it only produces a positive EMF when Q < 1 (reactant concentrations exceed product concentrations, or the more dilute side is the cathode)."
+  },
+  {
+    "id": 1438,
+    "unit": 8,
+    "topic": "Unit 8 — Last Question",
+    "difficulty": "hard",
+    "type": "mcq",
+    "free": false,
+    "question": "A student passes a current through three electrolytic cells in series containing Ag⁺, Cu²⁺, and Fe³⁺ solutions. If the same number of moles of electrons passes through all three, which cell deposits the LEAST mass?",
+    "choices": {
+      "A": "Ag (M = 107.9, n = 1)",
+      "B": "Cu (M = 63.55, n = 2)",
+      "C": "Fe (M = 55.85, n = 3)",
+      "D": "All deposit equal mass",
+      "E": "Cannot determine without current value"
+    },
+    "answer": "C",
+    "explanation": "Mass deposited = (moles of electrons × M) / n. For the same moles of electrons (say 1 mol e⁻): Ag: (1 × 107.9)/1 = 107.9 g; Cu: (1 × 63.55)/2 = 31.8 g; Fe: (1 × 55.85)/3 = 18.6 g. Iron deposits the least mass because it has the highest charge (n = 3) relative to its molar mass — each mole of electrons deposits only 1/3 mole of Fe."
+  },
+  {
+    "id": 1439,
+    "unit": 9,
+    "topic": "Atomic Orbitals and Electron Configuration",
+    "difficulty": "medium",
+    "type": "mcq",
+    "free": false,
+    "question": "Which of the following represents the correct electron configuration for iron (Fe, Z = 26)?",
+    "choices": {
+      "A": "[Ar] 4s² 3d⁶",
+      "B": "[Ar] 3d⁶ 4s²",
+      "C": "[Ne] 3s² 3p⁶ 3d⁸",
+      "D": "[Ar] 4d⁶ 5s²",
+      "E": "[Kr] 3d⁶"
+    },
+    "answer": "A",
+    "explanation": "Iron (Z = 26): [Ar] = 1s² 2s² 2p⁶ 3s² 3p⁶ (18 electrons). Remaining 8 electrons fill 4s² (2 e⁻) and 3d⁶ (6 e⁻). So [Ar] 4s² 3d⁶. Note: A and B show the same configuration, just written in different order. The conventional format is [Ar] 3d⁶ 4s² (energy order), but [Ar] 4s² 3d⁶ is also acceptable."
+  },
+  {
+    "id": 1440,
+    "unit": 9,
+    "topic": "Periodic Trends — Ionization Energy",
+    "difficulty": "medium",
+    "type": "mcq",
+    "free": false,
+    "question": "Which of the following best explains why the first ionization energy of oxygen (O) is LOWER than that of nitrogen (N)?",
+    "choices": {
+      "A": "Oxygen has more protons than nitrogen",
+      "B": "Nitrogen's half-filled 2p subshell is extra stable; oxygen must remove an electron from a paired orbital, which is easier",
+      "C": "Oxygen has a larger atomic radius",
+      "D": "Nitrogen has a higher electron affinity",
+      "E": "Oxygen's 2p electrons are shielded more effectively"
+    },
+    "answer": "B",
+    "explanation": "N has electron configuration [He] 2s² 2p³ — a half-filled 2p subshell (extra stability due to exchange energy). O has [He] 2s² 2p⁴ — the 4th 2p electron must pair up in an orbital already occupied. The electron-electron repulsion in the paired orbital makes this electron easier to remove, giving O a lower first ionization energy than N."
+  },
+  {
+    "id": 1441,
+    "unit": 9,
+    "topic": "Resonance Structures",
+    "difficulty": "medium",
+    "type": "mcq",
+    "free": false,
+    "question": "Which statement about resonance structures is correct?",
+    "choices": {
+      "A": "The molecule exists as a mixture of its resonance structures",
+      "B": "Resonance structures differ in the positions of atoms",
+      "C": "The actual molecule is a hybrid with bond properties intermediate between the resonance structures",
+      "D": "Molecules with more resonance structures are less stable",
+      "E": "Only aromatic compounds can have resonance structures"
+    },
+    "answer": "C",
+    "explanation": "Resonance structures are drawn structures that differ only in the positions of electrons (not atoms). The actual molecule is the resonance hybrid — a weighted average of all resonance structures. This hybrid is more stable than any individual resonance structure (resonance stabilization). For example, benzene's actual C-C bonds are all equal in length (1.40 Å), intermediate between single (1.54 Å) and double (1.34 Å)."
+  },
+  {
+    "id": 1442,
+    "unit": 9,
+    "topic": "VSEPR Electron Geometry",
+    "difficulty": "medium",
+    "type": "mcq",
+    "free": false,
+    "question": "For PCl₅, which correctly identifies electron geometry and molecular geometry?",
+    "choices": {
+      "A": "Electron geometry: trigonal bipyramidal; Molecular geometry: trigonal bipyramidal",
+      "B": "Electron geometry: octahedral; Molecular geometry: square pyramidal",
+      "C": "Electron geometry: tetrahedral; Molecular geometry: trigonal pyramidal",
+      "D": "Electron geometry: trigonal planar; Molecular geometry: T-shaped",
+      "E": "Electron geometry: octahedral; Molecular geometry: trigonal bipyramidal"
+    },
+    "answer": "A",
+    "explanation": "PCl₅: P forms 5 bonds to Cl, with no lone pairs. 5 electron groups → trigonal bipyramidal electron geometry. Since there are no lone pairs, the molecular geometry = electron geometry = trigonal bipyramidal. Bond angles: 90° (axial-equatorial) and 120° (equatorial-equatorial)."
+  },
+  {
+    "id": 1443,
+    "unit": 9,
+    "topic": "Dipole-Dipole and H-Bonding",
+    "difficulty": "medium",
+    "type": "mcq",
+    "free": false,
+    "question": "Which of the following can form hydrogen bonds with water?",
+    "choices": {
+      "A": "CH₄",
+      "B": "C₂H₆",
+      "C": "CCl₄",
+      "D": "NH₃",
+      "E": "CO₂"
+    },
+    "answer": "D",
+    "explanation": "Hydrogen bonding requires an N-H, O-H, or F-H bond (donor) or a lone pair on N, O, or F (acceptor). NH₃ has N-H bonds (as donor) and a lone pair on N (as acceptor), allowing it to form hydrogen bonds with water molecules (H₂O). CH₄, C₂H₆, CCl₄, and CO₂ lack the required electronegative atoms bonded to hydrogen."
+  },
+  {
+    "id": 1444,
+    "unit": 9,
+    "topic": "Lattice Energy",
+    "difficulty": "hard",
+    "type": "mcq",
+    "free": false,
+    "question": "Which of the following ionic compounds has the highest lattice energy?",
+    "choices": {
+      "A": "NaF (Na⁺ radius = 102 pm, F⁻ radius = 133 pm)",
+      "B": "NaCl (Na⁺ radius = 102 pm, Cl⁻ radius = 181 pm)",
+      "C": "MgO (Mg²⁺ radius = 72 pm, O²⁻ radius = 140 pm)",
+      "D": "KCl (K⁺ radius = 138 pm, Cl⁻ radius = 181 pm)",
+      "E": "CsCl (Cs⁺ radius = 167 pm, Cl⁻ radius = 181 pm)"
+    },
+    "answer": "C",
+    "explanation": "Lattice energy ∝ (charge₊ × charge₋) / (r₊ + r₋). MgO has higher charges (+2 and −2) compared to +1/−1 for the others. Lattice energy ∝ (+2)(−2)/(72+140) = 4/212 ≈ 0.019. For NaF: (1)(1)/(102+133) = 1/235 ≈ 0.004. The charge factor of 4× dominates, giving MgO by far the highest lattice energy (~3795 kJ/mol vs ~923 kJ/mol for NaF)."
+  },
+  {
+    "id": 1445,
+    "unit": 9,
+    "topic": "Bond Energy and Stability",
+    "difficulty": "medium",
+    "type": "mcq",
+    "free": false,
+    "question": "Which of the following diatomic molecules has the highest bond energy (strongest bond)?",
+    "choices": {
+      "A": "F₂ (bond order = 1)",
+      "B": "Cl₂ (bond order = 1)",
+      "C": "N₂ (bond order = 3)",
+      "D": "O₂ (bond order = 2)",
+      "E": "H₂ (bond order = 1)"
+    },
+    "answer": "C",
+    "explanation": "Bond energy increases with bond order. N₂ has a triple bond (bond order = 3), giving it the highest bond energy among the choices (945 kJ/mol). For comparison: O₂ (498 kJ/mol, double bond), F₂ (159 kJ/mol), Cl₂ (243 kJ/mol), H₂ (432 kJ/mol). N₂'s triple bond is one of the strongest bonds in chemistry."
+  },
+  {
+    "id": 1446,
+    "unit": 9,
+    "topic": "Molecular Orbital Theory",
+    "difficulty": "hard",
+    "type": "mcq",
+    "free": false,
+    "question": "According to molecular orbital theory, which of the following species is paramagnetic (has unpaired electrons)?",
+    "choices": {
+      "A": "N₂",
+      "B": "F₂",
+      "C": "O₂",
+      "D": "Ne₂ (hypothetical)",
+      "E": "H₂"
+    },
+    "answer": "C",
+    "explanation": "O₂ MO electron configuration: (σ1s)²(σ*1s)²(σ2s)²(σ*2s)²(σ2p)²(π2p)⁴(π*2p)². The two π*2p orbitals each get 1 electron by Hund's rule, giving 2 unpaired electrons. O₂ is therefore paramagnetic (attracted to magnets). This was a key success of MO theory — it correctly predicts O₂'s paramagnetism, which Lewis structures fail to show."
+  },
+  {
+    "id": 1447,
+    "unit": 9,
+    "topic": "Crystal Field Theory",
+    "difficulty": "hard",
+    "type": "mcq",
+    "free": false,
+    "question": "In an octahedral crystal field, transition metal d orbitals split into two groups. Which orbitals are in the higher-energy (eg) set?",
+    "choices": {
+      "A": "dxy and dxz",
+      "B": "dyz and dxz",
+      "C": "dz² and dx²-y²",
+      "D": "dxy, dxz, and dyz",
+      "E": "All five d orbitals are degenerate"
+    },
+    "answer": "C",
+    "explanation": "In an octahedral crystal field, the six ligands approach along the x, y, and z axes. The dz² and dx²-y² orbitals (eg set) point directly at the ligands, causing maximum electron-electron repulsion and higher energy. The dxy, dxz, and dyz orbitals (t2g set) point between the ligand axes, experiencing less repulsion and lower energy. Δ₀ is the energy gap between t2g and eg sets."
+  },
+  {
+    "id": 1448,
+    "unit": 9,
+    "topic": "VSEPR — Multiple Geometries",
+    "difficulty": "medium",
+    "type": "mcq",
+    "free": false,
+    "question": "What is the molecular geometry of XeF₂?",
+    "choices": {
+      "A": "Bent",
+      "B": "T-shaped",
+      "C": "Linear",
+      "D": "Trigonal bipyramidal",
+      "E": "V-shaped"
+    },
+    "answer": "C",
+    "explanation": "XeF₂: Xe has 8 valence electrons, forms 2 bonds to F (4 electrons) leaving 3 lone pairs (6 electrons). Total of 5 electron pairs → trigonal bipyramidal electron geometry. The 3 lone pairs occupy equatorial positions (to minimize lone pair-lone pair repulsion), and the 2 F atoms occupy the axial positions. Molecular geometry = Linear. F-Xe-F angle = 180°."
+  },
+  {
+    "id": 1449,
+    "unit": 8,
+    "topic": "Electrochemistry — Final",
+    "difficulty": "medium",
+    "type": "mcq",
+    "free": false,
+    "question": "In a voltaic cell, which electrode gains mass over time?",
+    "choices": {
+      "A": "The anode, because metal is deposited there",
+      "B": "The cathode, because metal ions are reduced and deposit as solid metal",
+      "C": "Both electrodes gain mass equally",
+      "D": "Neither electrode changes mass",
+      "E": "The anode gains mass due to oxidation"
+    },
+    "answer": "B",
+    "explanation": "In a voltaic (galvanic) cell: The ANODE loses mass as the metal oxidizes and dissolves into solution (M → M^n+ + ne⁻). The CATHODE gains mass as metal ions from solution are reduced and deposit as solid metal (M^n+ + ne⁻ → M). In the classic Zn-Cu cell, the Zn anode decreases in mass while the Cu cathode increases in mass over time."
+  },
+  {
+    "id": 1450,
+    "unit": 9,
+    "topic": "Atomic Radius Trends",
+    "difficulty": "easy",
+    "type": "mcq",
+    "free": false,
+    "question": "Which of the following correctly describes how atomic radius changes across Period 3 (Na to Cl)?",
+    "choices": {
+      "A": "Atomic radius increases because more electrons are added",
+      "B": "Atomic radius decreases because nuclear charge increases while electrons are added to the same shell",
+      "C": "Atomic radius remains constant across a period",
+      "D": "Atomic radius increases then decreases",
+      "E": "Atomic radius decreases because electrons move to higher energy levels"
+    },
+    "answer": "B",
+    "explanation": "Across a period (left to right), protons are added to the nucleus (increasing nuclear charge) while electrons are added to the same principal energy level. The increased nuclear charge pulls electrons closer to the nucleus, decreasing atomic radius. Shielding by same-shell electrons is minimal. Therefore, atomic radius decreases from Na to Cl across Period 3."
+  },
+  {
+    "id": 1451,
+    "unit": 9,
+    "topic": "Electron Affinity",
+    "difficulty": "medium",
+    "type": "mcq",
+    "free": false,
+    "question": "Which of the following has the most negative electron affinity (greatest tendency to accept an electron)?",
+    "choices": {
+      "A": "Na",
+      "B": "Mg",
+      "C": "Al",
+      "D": "Cl",
+      "E": "Ne"
+    },
+    "answer": "D",
+    "explanation": "Electron affinity measures the energy released when an atom gains an electron. Chlorine (Cl) has one of the most negative electron affinities (−349 kJ/mol) because adding an electron completes its outer shell (3p⁶), giving exceptional stability. Noble gases (Ne) have nearly zero or positive electron affinities (repulsive — they don't want more electrons). Metals (Na, Mg, Al) have much less negative electron affinities."
+  },
+  {
+    "id": 1452,
+    "unit": 9,
+    "topic": "Intermolecular Forces — Surface Tension",
+    "difficulty": "medium",
+    "type": "mcq",
+    "free": false,
+    "question": "Why does water have an unusually high surface tension compared to most liquids?",
+    "choices": {
+      "A": "Water has a high molar mass",
+      "B": "Water molecules have strong hydrogen bonding that pulls surface molecules inward",
+      "C": "Water has high viscosity due to its small size",
+      "D": "Surface tension is related to density, and water is dense",
+      "E": "Water molecules at the surface have extra kinetic energy"
+    },
+    "answer": "B",
+    "explanation": "Surface tension arises because molecules at the surface of a liquid experience a net inward force (they are only attracted to molecules below and beside them, not above). In water, the strong hydrogen bonds between molecules create large cohesive forces. This makes it harder to break the surface, resulting in unusually high surface tension. The water strider insect can walk on water due to this high surface tension."
+  },
+  {
+    "id": 1453,
+    "unit": 9,
+    "topic": "Molecular Geometry — Square Planar",
+    "difficulty": "hard",
+    "type": "mcq",
+    "free": false,
+    "question": "What is the molecular geometry of XeF₄?",
+    "choices": {
+      "A": "Tetrahedral",
+      "B": "Square pyramidal",
+      "C": "Octahedral",
+      "D": "Square planar",
+      "E": "Trigonal bipyramidal"
+    },
+    "answer": "D",
+    "explanation": "XeF₄: Xe has 8 valence electrons. 4 bonds to F (8 e⁻) + 2 lone pairs (4 e⁻) = 6 electron pairs → octahedral electron geometry. The 2 lone pairs occupy opposite positions (trans) to minimize repulsion → square planar molecular geometry. F-Xe-F angles = 90°."
+  },
+  {
+    "id": 1454,
+    "unit": 9,
+    "topic": "Hybridization — sp3d",
+    "difficulty": "hard",
+    "type": "mcq",
+    "free": false,
+    "question": "What hybridization does the central atom in PCl₅ exhibit?",
+    "choices": {
+      "A": "sp²",
+      "B": "sp³",
+      "C": "sp³d",
+      "D": "sp³d²",
+      "E": "sp"
+    },
+    "answer": "C",
+    "explanation": "PCl₅ has 5 bond pairs and 0 lone pairs around P. To accommodate 5 groups, P must hybridize 1 s + 3 p + 1 d orbital = sp³d hybridization. This gives 5 hybrid orbitals arranged in trigonal bipyramidal geometry. Note: only elements in Period 3 and below can use d orbitals for expanded octets."
+  },
+  {
+    "id": 1455,
+    "unit": 9,
+    "topic": "Valence Bond Theory",
+    "difficulty": "medium",
+    "type": "mcq",
+    "free": false,
+    "question": "In valence bond theory, a pi (π) bond is formed by:",
+    "choices": {
+      "A": "Head-on (end-to-end) overlap of orbitals along the internuclear axis",
+      "B": "Side-by-side (lateral) overlap of parallel p orbitals",
+      "C": "Overlap of s and p orbitals",
+      "D": "Overlap of two hybridized orbitals",
+      "E": "Overlap of s orbitals only"
+    },
+    "answer": "B",
+    "explanation": "In valence bond theory: A sigma (σ) bond forms by head-on (end-to-end) overlap of orbitals along the internuclear axis. A pi (π) bond forms by side-by-side (lateral) overlap of parallel p orbitals, with electron density above and below the internuclear axis. The first bond in a double or triple bond is always σ; additional bonds are π."
+  },
+  {
+    "id": 1456,
+    "unit": 9,
+    "topic": "Ideal Gas Law and IMFs",
+    "difficulty": "medium",
+    "type": "mcq",
+    "free": false,
+    "question": "Real gases deviate from ideal behavior most significantly under which conditions?",
+    "choices": {
+      "A": "High temperature and low pressure",
+      "B": "Low temperature and high pressure",
+      "C": "Standard temperature and pressure (STP)",
+      "D": "When gas molecules have no intermolecular forces",
+      "E": "At very low concentration"
+    },
+    "answer": "B",
+    "explanation": "Ideal gas behavior assumes negligible molecular volume and no intermolecular forces. Real gases deviate most under: (1) High pressure — molecules are forced close together, and their finite volume becomes significant; (2) Low temperature — molecules move slowly, and intermolecular attractions become important (can cause condensation). At high T and low P, molecules are far apart and fast-moving, behaving nearly ideally."
+  },
+  {
+    "id": 1457,
+    "unit": 9,
+    "topic": "Electron Configuration — Ions",
+    "difficulty": "medium",
+    "type": "mcq",
+    "free": false,
+    "question": "What is the electron configuration of Fe³⁺?",
+    "choices": {
+      "A": "[Ar] 3d⁵ 4s²",
+      "B": "[Ar] 3d⁵",
+      "C": "[Ar] 3d³",
+      "D": "[Ar] 3d⁶",
+      "E": "[Kr] 3d⁵"
+    },
+    "answer": "B",
+    "explanation": "Fe has [Ar] 4s² 3d⁶. When Fe forms Fe³⁺, 3 electrons are removed. The first electrons removed are from 4s (2 electrons) and then one from 3d: [Ar] 4s² 3d⁶ → remove 2 from 4s → [Ar] 3d⁶ → remove 1 from 3d → [Ar] 3d⁵. Fe³⁺ = [Ar] 3d⁵ (half-filled, extra stable)."
+  },
+  {
+    "id": 1458,
+    "unit": 9,
+    "topic": "Periodic Trends — Electronegativity",
+    "difficulty": "easy",
+    "type": "mcq",
+    "free": false,
+    "question": "Which element has the highest electronegativity on the Pauling scale?",
+    "choices": {
+      "A": "Oxygen (2nd period, Group 16)",
+      "B": "Nitrogen (2nd period, Group 15)",
+      "C": "Chlorine (3rd period, Group 17)",
+      "D": "Fluorine (2nd period, Group 17)",
+      "E": "Cesium (6th period, Group 1)"
+    },
+    "answer": "D",
+    "explanation": "Fluorine has the highest electronegativity of all elements (Pauling scale: 4.0). Electronegativity increases going across a period (left to right) and up a group. Fluorine is in the top-right of the periodic table (Period 2, Group 17). It has a very small atomic radius and high effective nuclear charge, giving it an extreme tendency to attract shared electrons."
+  },
+  {
+    "id": 1459,
+    "unit": 9,
+    "topic": "Bond Length and Bond Order",
+    "difficulty": "medium",
+    "type": "mcq",
+    "free": false,
+    "question": "Arrange the following in order of increasing bond length: C-C single bond, C=C double bond, C≡C triple bond.",
+    "choices": {
+      "A": "C≡C < C=C < C-C",
+      "B": "C-C < C=C < C≡C",
+      "C": "C=C < C-C < C≡C",
+      "D": "All have the same bond length",
+      "E": "C≡C < C-C < C=C"
+    },
+    "answer": "A",
+    "explanation": "Bond length decreases as bond order increases (more electron density pulls atoms closer). C≡C (triple bond, 1.20 Å) < C=C (double bond, 1.34 Å) < C-C (single bond, 1.54 Å). Similarly, bond energy increases with bond order: C≡C (839 kJ/mol) > C=C (614 kJ/mol) > C-C (347 kJ/mol)."
+  },
+  {
+    "id": 1460,
+    "unit": 9,
+    "topic": "Colligative Properties — Osmosis",
+    "difficulty": "hard",
+    "type": "mcq",
+    "free": false,
+    "question": "Calculate the osmotic pressure of a 0.100 M NaCl solution at 25°C. (R = 0.0821 L·atm/mol·K)",
+    "choices": {
+      "A": "2.45 atm",
+      "B": "4.89 atm",
+      "C": "1.22 atm",
+      "D": "7.34 atm",
+      "E": "9.78 atm"
+    },
+    "answer": "B",
+    "explanation": "Osmotic pressure: π = iMRT. NaCl dissociates completely: i = 2 (Na⁺ + Cl⁻). π = 2 × 0.100 mol/L × 0.0821 L·atm/mol·K × 298 K = 2 × 0.100 × 24.47 = 4.89 atm."
+  },
+  {
+    "id": 1461,
+    "unit": 9,
+    "topic": "Freezing Point Depression",
+    "difficulty": "hard",
+    "type": "mcq",
+    "free": false,
+    "question": "What mass of ethylene glycol (C₂H₆O₂, M = 62.07 g/mol) must be added to 1.00 kg of water to lower the freezing point to −10.0°C? (Kf water = 1.86 °C/m)",
+    "choices": {
+      "A": "167 g",
+      "B": "334 g",
+      "C": "83.4 g",
+      "D": "537 g",
+      "E": "1074 g"
+    },
+    "answer": "B",
+    "explanation": "ΔTf = i × Kf × m. Ethylene glycol is a molecular (non-electrolyte) solute, so i = 1. 10.0 = 1 × 1.86 × m. m = 10.0/1.86 = 5.376 mol/kg. Mass = 5.376 mol × 62.07 g/mol × 1.00 kg = 333.7 g ≈ 334 g."
+  },
+  {
+    "id": 1462,
+    "unit": 9,
+    "topic": "Raoult's Law",
+    "difficulty": "hard",
+    "type": "mcq",
+    "free": false,
+    "question": "A solution contains 1.00 mol glucose (C₆H₁₂O₆) in 9.00 mol water. The vapor pressure of pure water at 25°C is 23.8 mmHg. What is the vapor pressure of the solution?",
+    "choices": {
+      "A": "21.4 mmHg",
+      "B": "23.8 mmHg",
+      "C": "26.4 mmHg",
+      "D": "22.4 mmHg",
+      "E": "2.38 mmHg"
+    },
+    "answer": "A",
+    "explanation": "Raoult's Law: P_solution = χ_solvent × P°_solvent. χ_water = 9.00/(9.00 + 1.00) = 0.900. P = 0.900 × 23.8 = 21.42 ≈ 21.4 mmHg. The vapor pressure is lowered by 2.38 mmHg (10% reduction due to 10% mole fraction of solute)."
+  },
+  {
+    "id": 1463,
+    "unit": 9,
+    "topic": "Atomic Structure — Quantum Numbers",
+    "difficulty": "medium",
+    "type": "mcq",
+    "free": false,
+    "question": "For an electron in a 3d orbital, which set of quantum numbers is possible?",
+    "choices": {
+      "A": "n=3, l=3, ml=0, ms=+½",
+      "B": "n=3, l=2, ml=3, ms=+½",
+      "C": "n=3, l=2, ml=−2, ms=+½",
+      "D": "n=3, l=0, ml=1, ms=+½",
+      "E": "n=2, l=2, ml=0, ms=+½"
+    },
+    "answer": "C",
+    "explanation": "For a 3d orbital: n = 3 (principal), l = 2 (d subshell, since l = n-1 max = 2 for 3d). ml can range from −l to +l: for l=2, ml = −2, −1, 0, +1, +2. ms = ±½. Option C: n=3, l=2, ml=−2, ms=+½ — all rules satisfied. Option A: l=3 is invalid for n=3 (l max = 2). Option B: ml=3 exceeds |l|=2. Option D: for l=0, ml must be 0. Option E: n=2 with l=2 is invalid (l max = 1 for n=2)."
+  },
