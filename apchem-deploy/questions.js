@@ -678,9 +678,7 @@ answer:"C",explanation:"Relationship: ΔG = −nFE°cell. For spontaneous reacti
 q:"A galvanic cell is constructed using Fe/Fe²⁺ and Ag/Ag⁺ half-cells.\nE°(Fe²⁺/Fe) = −0.44 V, E°(Ag⁺/Ag) = +0.80 V\n\n(a) Write the half-reactions for each electrode and the overall cell reaction.\n(b) Calculate the standard cell potential E°cell. Is the reaction spontaneous under standard conditions?\n(c) Calculate ΔG° for the cell reaction. (n=2, F=96,485 C/mol)\n(d) If the concentration of Ag⁺ is increased from 1.00 M to 2.00 M while [Fe²⁺] remains at 1.00 M, does E_cell increase, decrease, or remain the same? Explain using the Nernst equation.",
 choices:null,
 answer:"(a) Anode (oxidation): Fe(s) → Fe²⁺(aq) + 2e⁻\nCathode (reduction): 2Ag⁺(aq) + 2e⁻ → 2Ag(s)\nOverall: Fe(s) + 2Ag⁺(aq) → Fe²⁺(aq) + 2Ag(s)\n\n(b) E°cell = E°cathode − E°anode = 0.80 − (−0.44) = +1.24 V\nPositive E°cell → spontaneous under standard conditions.\n\n(c) ΔG° = −nFE°cell = −(2)(96,485)(+1.24) = −239,283 J ≈ −239 kJ\n\n(d) E_cell INCREASES. Q = [Fe²⁺]/[Ag⁺]² = 1.00/(2.00)² = 0.25\nNernst: E = E° − (0.0592/2)log(0.25) = 1.24 − (0.0296)(−0.602) = 1.24 + 0.018 = 1.26 V\nIncreasing [Ag⁺] decreases Q → Nernst equation shows E increases above E°. More reactant → more driving force → higher cell potential.",
-explanation:"(a) 2 pts: correct half-reactions and overall. (b) 1 pt: E°cell + spontaneity. (c) 1 pt: ΔG°. (d) 1 pt: E increases with correct Nernst reasoning."}
-
-
+explanation:"(a) 2 pts: correct half-reactions and overall. (b) 1 pt: E°cell + spontaneity. (c) 1 pt: ΔG°. (d) 1 pt: E increases with correct Nernst reasoning."},
 {id:809,unit:1,topic:"Isotopes",type:"MCQ",difficulty:"Medium",free:true,
 question:"Silicon has three isotopes: ²⁸Si (92.2%), ²⁹Si (4.7%), ³⁰Si (3.1%). How many neutrons are in the most abundant isotope?",
 choices:{A:"14",B:"28",C:"16",D:"12"},answer:"A",
@@ -1819,13 +1817,6 @@ explanation:"Zn is higher in the activity series (more easily oxidized) than Cu.
 question:"In the reaction: HCl(aq) + KOH(aq) → KCl(aq) + H₂O(l), which ions are spectators?",
 choices:{A:"H⁺ and OH⁻",B:"K⁺ and Cl⁻",C:"K⁺ and OH⁻",D:"H⁺ and Cl⁻"},answer:"B",
 explanation:"K⁺ and Cl⁻ appear on both sides (KOH and KCl are both soluble/dissociated). They don't participate in the reaction. Net ionic equation: H⁺(aq) + OH⁻(aq) → H₂O(l)."},
-
-]; // end AP_QUESTIONS
-
-const TOTAL_QUESTIONS = AP_QUESTIONS.length;
-const FREE_QUESTIONS  = AP_QUESTIONS.filter(q => q.free).length;
-const PAID_QUESTIONS  = AP_QUESTIONS.filter(q => !q.free).length;
-
  {id:1034,unit:4,topic:"Types of Chemical Reactions",difficulty:"easy",type:"mcq",free:false,question:"Which of the following is the best classification for the reaction: 2Na(s) + 2H₂O(l) → 2NaOH(aq) + H₂(g)?",choices:["A. Synthesis","B. Decomposition","C. Single displacement","D. Double displacement"],answer:"C",explanation:"Sodium displaces hydrogen from water — one element replaces another element in a compound, making this a single displacement reaction."},
  {id:1035,unit:4,topic:"Net Ionic Equations",difficulty:"medium",type:"mcq",free:false,question:"What is the net ionic equation for the reaction between aqueous sodium chloride and aqueous silver nitrate?",choices:["A. Na⁺(aq) + NO₃⁻(aq) → NaNO₃(aq)","B. Ag⁺(aq) + Cl⁻(aq) → AgCl(s)","C. Na⁺(aq) + Ag⁺(aq) → Na⁺(aq) + Ag⁺(aq)","D. NaCl(aq) + AgNO₃(aq) → AgCl(s) + NaNO₃(aq)"],answer:"B",explanation:"Spectator ions (Na⁺ and NO₃⁻) are removed. Only the ions that form the precipitate AgCl(s) appear in the net ionic equation."},
  {id:1036,unit:4,topic:"Oxidation States",difficulty:"medium",type:"mcq",free:false,question:"What is the oxidation state of manganese in KMnO₄?",choices:["A. +2","B. +4","C. +6","D. +7"],answer:"D",explanation:"K is +1, each O is −2 (×4 = −8). For the compound to be neutral: +1 + Mn + (−8) = 0, so Mn = +7."},
@@ -5798,4 +5789,25 @@ const PAID_QUESTIONS  = AP_QUESTIONS.filter(q => !q.free).length;
     },
     "answer": "A",
     "explanation": "π = MRT → M = π/(RT) = (1.50×10⁻³)/(0.0821 × 298) = (1.50×10⁻³)/24.47 = 6.13×10⁻⁵ mol/L. Wait — M is given as 2.00×10⁻⁵ mol/L. Mass concentration = π/(RT) = 6.13×10⁻⁵... Let me use the given data: if π = MRT, and M = 2.00×10⁻⁵, then sample mass/V is needed. Actually: molar mass = (mass concentration)/M. From π = MRT: M = π/RT = 6.13×10⁻⁵ mol/L... the given M = 2.00×10⁻⁵. Molar mass = (2.00×10⁻⁵ mol/L × Molar mass g/mol = concentration in g/L): Molar mass = π/(MRT) × M... = 1/(RT/π × M) ... Molar mass = 1 g / (M × V) → Molar mass = (g/L) / M = π×g/L/(RT×M_mol). Final: Molar mass = (g/L)/M = π/RT × 1/M_mol → Re-solve: π = iMRT = (1)(c/Mw)(RT), where c = g/L. c = unknown. Actually, c (in mol/L) = 2.00×10⁻⁵. Molar mass = (measured mass/L) / c... Since no mass given, standard approach: Molar mass ≈ π/(cRT) × 1 ... π = cRT → c = π/RT = 6.13×10⁻⁵ ≠ 2.00×10⁻⁵. If c = 2.00×10⁻⁵, expected π = 2.00×10⁻⁵ × 24.47 = 4.89×10⁻⁴ atm. The problem likely intends: Molar mass = (g/L) / c, and mass concentration = π/RT: g/L = 1.50×10⁻³/24.47 = 6.13×10⁻⁵ g/L. Molar mass = 6.13×10⁻⁵ / 2.00×10⁻⁵... wait that's not right either. Standard formula: Molar mass = (g solute)/(V in L) × RT/π = mass concentration × RT/π... Probably: g/L = some value, Mw = (g/L)×RT/π. Given concentration 2.00×10⁻⁵ mol/L: Mw = mass/n = c_mass/c_mol. Not enough to solve without mass. Answer A (2.73×10⁵) comes from: Mw = (5.45 g/L)×(RT/π) = (5.45)(24.47)/(1.50×10⁻³)... most likely intended answer for a typical AP protein."
-  },
+  }
+];
+
+const TOTAL_QUESTIONS = AP_QUESTIONS.length;
+const FREE_QUESTIONS  = AP_QUESTIONS.filter(q => q.free).length;
+const PAID_QUESTIONS  = AP_QUESTIONS.filter(q => !q.free).length;
+
+// ── Normalise all question fields to a consistent format ──────
+// Some questions use q.q / q.choices (array), others use q.question / q.choices (object)
+AP_QUESTIONS.forEach(q => {
+  // Normalise question text: ensure q.q exists
+  if (!q.q && q.question) q.q = q.question;
+  // Normalise type to uppercase
+  if (q.type) q.type = q.type.toUpperCase();
+  // Normalise choices: convert object {A:"...",B:"..."} to array ["A. ...","B. ..."]
+  if (q.choices && !Array.isArray(q.choices) && typeof q.choices === 'object' && q.choices !== null) {
+    q.choices = Object.entries(q.choices).map(([k, v]) => k + '. ' + v);
+  }
+  // Handle null choices (FRQ)
+  if (!q.choices) q.choices = null;
+});
+
