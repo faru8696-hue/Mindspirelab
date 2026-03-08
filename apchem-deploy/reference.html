@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>AP Chemistry Formula Reference Sheet | MindSpire Lab</title>
+<link rel="icon" href="/favicon.ico"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet"/>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root{--p:#6c63ff;--pd:#4f46e5;--grn:#10b981;--org:#f59e0b;--red:#ef4444;
+  --dark:#0f172a;--text:#374151;--muted:#6b7280;--border:#e5e7eb;--bg:#f8fafc;--card:#fff}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+a{text-decoration:none;color:inherit}
+button{font-family:inherit;cursor:pointer}
+
+/* NAV */
+.top-nav{position:fixed;top:0;left:0;right:0;z-index:300;background:#fff;
+  border-bottom:1px solid var(--border);padding:0 20px;height:56px;display:flex;
+  align-items:center;justify-content:space-between;box-shadow:0 1px 8px rgba(0,0,0,.06)}
+.nav-brand{display:flex;align-items:center;gap:8px;font-weight:900;font-size:16px;color:var(--dark)}
+.nav-brand svg{width:30px;height:30px}
+.nav-right{display:flex;align-items:center;gap:8px}
+.btn-back{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--muted);
+  padding:6px 12px;border-radius:8px;border:1px solid var(--border);transition:.15s;background:#fff}
+.btn-back:hover{background:var(--bg);color:var(--dark)}
+.btn-print{display:flex;align-items:center;gap:6px;font-size:13px;color:#fff;
+  padding:7px 14px;border-radius:8px;background:var(--p);border:none;cursor:pointer;transition:.2s}
+.btn-print:hover{background:var(--pd)}
+.btn-logout{font-size:12px;color:#9ca3af;padding:5px 12px;border-radius:8px;
+  border:1px solid var(--border);background:none;transition:.2s}
+
+/* PAGE */
+.page{padding-top:76px;padding-bottom:60px;max-width:960px;margin:0 auto;padding-left:20px;padding-right:20px}
+
+/* HEADER */
+.ref-header{background:linear-gradient(135deg,#0f0c29,#1e1b4b);border-radius:20px;
+  padding:32px 36px;margin-bottom:28px;position:relative;overflow:hidden}
+.ref-header::before{content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse at 15% 50%,rgba(108,99,255,.4),transparent 55%)}
+.ref-header h1{position:relative;z-index:1;font-size:clamp(20px,2.5vw,26px);
+  font-weight:900;color:#fff;margin-bottom:8px}
+.ref-header p{position:relative;z-index:1;font-size:13px;color:rgba(255,255,255,.6);
+  margin-bottom:16px;line-height:1.6;max-width:600px}
+.ref-note{position:relative;z-index:1;display:inline-flex;align-items:center;gap:8px;
+  background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);
+  padding:8px 14px;border-radius:10px;font-size:12px;color:rgba(255,255,255,.8);font-weight:600}
+
+/* SEARCH */
+.search-wrap{margin-bottom:20px}
+.search-input{width:100%;padding:11px 16px;border:1.5px solid var(--border);border-radius:12px;
+  font-size:14px;font-family:'Inter',sans-serif;outline:none;transition:.2s;background:#fff}
+.search-input:focus{border-color:var(--p);box-shadow:0 0 0 3px rgba(108,99,255,.1)}
+
+/* SECTION CARDS */
+.ref-section{background:var(--card);border:1px solid var(--border);border-radius:14px;
+  margin-bottom:18px;overflow:hidden}
+.rs-header{display:flex;align-items:center;gap:12px;padding:16px 20px;
+  border-bottom:1px solid var(--border);background:#f8fafc}
+.rs-icon{width:36px;height:36px;border-radius:9px;display:flex;align-items:center;
+  justify-content:center;font-size:16px;flex-shrink:0}
+.rs-title{font-size:14px;font-weight:800;color:var(--dark)}
+.rs-sub{font-size:11px;color:var(--muted);margin-top:1px}
+.rs-body{padding:16px 20px}
+
+/* FORMULA TABLES */
+.ref-table{width:100%;border-collapse:collapse;font-size:13px;margin-bottom:12px}
+.ref-table th{background:#f8fafc;font-size:11px;font-weight:700;text-transform:uppercase;
+  letter-spacing:.5px;color:var(--muted);padding:8px 12px;text-align:left;
+  border-bottom:1px solid var(--border)}
+.ref-table td{padding:10px 12px;border-bottom:1px solid #f1f5f9;color:var(--text);line-height:1.5}
+.ref-table tr:last-child td{border-bottom:none}
+.ref-table .formula-cell{font-family:'Courier New',monospace;font-size:13px;
+  font-weight:700;color:var(--dark)}
+.ref-table .name-cell{font-weight:600;color:var(--dark)}
+.ref-table .desc-cell{color:var(--muted);font-size:12px}
+
+/* CONSTANTS TABLE */
+.const-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px}
+.const-item{background:#f8fafc;border:1px solid var(--border);border-radius:10px;padding:12px 14px}
+.const-name{font-size:12px;font-weight:700;color:var(--dark);margin-bottom:3px}
+.const-val{font-family:'Courier New',monospace;font-size:13px;color:var(--p);font-weight:700}
+.const-unit{font-size:11px;color:var(--muted);margin-top:2px}
+
+/* COLOUR CODING BY SECTION */
+.s1{background:#ede9fe20} .s1 .rs-icon{background:#ede9fe;color:#6c63ff}
+.s2{background:#dcfce720} .s2 .rs-icon{background:#dcfce7;color:#16a34a}
+.s3{background:#dbeafe20} .s3 .rs-icon{background:#dbeafe;color:#2563eb}
+.s4{background:#fef3c720} .s4 .rs-icon{background:#fef3c7;color:#d97706}
+.s5{background:#fee2e220} .s5 .rs-icon{background:#fee2e2;color:#dc2626}
+.s6{background:#f3e8ff20} .s6 .rs-icon{background:#f3e8ff;color:#7c3aed}
+.s7{background:#cffafe20} .s7 .rs-icon{background:#cffafe;color:#0891b2}
+
+/* PRINT STYLES */
+@media print{
+  .top-nav{display:none}
+  .page{padding-top:10px}
+  .ref-header{padding:20px;background:#1e1b4b!important;-webkit-print-color-adjust:exact}
+  .btn-print,.btn-back,.btn-logout{display:none}
+  .ref-section{break-inside:avoid;margin-bottom:12px}
+}
+
+/* TOAST */
+.toast{position:fixed;bottom:22px;right:22px;background:#1e293b;color:#fff;
+  padding:11px 18px;border-radius:12px;font-size:13px;font-weight:600;z-index:9999;
+  transform:translateY(70px);opacity:0;transition:.3s;pointer-events:none}
+.toast.show{transform:translateY(0);opacity:1}
+
+@media(max-width:600px){
+  .const-grid{grid-template-columns:1fr 1fr}
+  .ref-table{font-size:12px}
+  .ref-table .desc-cell{display:none}
+/* LOADING */
+#authLoading{position:fixed;inset:0;background:#f8fafc;z-index:9999;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px}
+#authLoading .ld-spin{width:28px;height:28px;border:3px solid #e5e7eb;border-top-color:#6c63ff;
+  border-radius:50%;animation:ldSpin .8s linear infinite}
+#authLoading .ld-text{font-size:14px;font-weight:600;color:#6b7280}
+@keyframes ldSpin{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+<div id="authLoading"><div class="ld-spin"></div><div class="ld-text">Loading…</div></div>
+<!-- NAV -->
+<nav class="top-nav">
+  <div class="nav-brand">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 36" fill="none">
+      <defs><linearGradient id="nlg" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#a78bfa"/><stop offset="100%" stop-color="#4f46e5"/></linearGradient></defs>
+      <rect width="36" height="36" rx="10" fill="url(#nlg)"/>
+      <circle cx="18" cy="18" r="3" fill="white" opacity=".95"/>
+      <ellipse cx="18" cy="18" rx="10.5" ry="4" stroke="white" stroke-width="1.6" fill="none" opacity=".9"/>
+      <ellipse cx="18" cy="18" rx="10.5" ry="4" stroke="white" stroke-width="1.6" fill="none" opacity=".9" transform="rotate(60 18 18)"/>
+      <ellipse cx="18" cy="18" rx="10.5" ry="4" stroke="white" stroke-width="1.6" fill="none" opacity=".9" transform="rotate(120 18 18)"/>
+      <circle cx="28.5" cy="18" r="1.8" fill="#f59e0b"/>
+    </svg>
+    MindSpire Lab
+  </div>
+  <div class="nav-right">
+    <button class="btn-print" onclick="window.print()"><i class="fas fa-print"></i> Print</button>
+    <a href="/" class="btn-back"><i class="fas fa-arrow-left"></i> Dashboard</a>
+    <button class="btn-logout" onclick="doLogout()"><i class="fas fa-sign-out-alt"></i> Logout</button>
+  </div>
+</nav>
+
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="ref-header">
+    <h1>📋 AP Chemistry Equations & Constants</h1>
+    <p>Official College Board AP Chemistry reference content — all equations and constants provided on the AP exam. Available on both MCQ and FRQ sections.</p>
+    <div class="ref-note"><i class="fas fa-info-circle"></i> This matches the official 2024–2025 College Board AP Chemistry formula sheet</div>
+  </div>
+
+  <!-- SEARCH -->
+  <div class="search-wrap">
+    <input type="text" class="search-input" id="searchInput" placeholder="🔍 Search formulas, constants, equations…" oninput="filterRef(this.value)"/>
+  </div>
+
+  <!-- SECTIONS CONTAINER -->
+  <div id="refContent">
+
+  <!-- 1. ATOMIC STRUCTURE -->
+  <div class="ref-section s1" data-keywords="atomic structure photoelectric energy frequency wavelength planck de broglie electron bohr">
+    <div class="rs-header">
+      <div class="rs-icon">⚛️</div>
+      <div><div class="rs-title">Atomic Structure & Light</div>
+        <div class="rs-sub">Units 1 — Electromagnetic radiation, Bohr model, de Broglie</div></div>
+    </div>
+    <div class="rs-body">
+      <table class="ref-table">
+        <thead><tr><th>Equation</th><th>Name / Quantity</th><th>Variables</th></tr></thead>
+        <tbody>
+          <tr><td class="formula-cell">E = hν</td><td class="name-cell">Photon energy</td><td class="desc-cell">h = 6.626×10⁻³⁴ J·s; ν = frequency (Hz)</td></tr>
+          <tr><td class="formula-cell">c = λν</td><td class="name-cell">Speed of light</td><td class="desc-cell">c = 3.00×10⁸ m/s; λ = wavelength (m)</td></tr>
+          <tr><td class="formula-cell">E = hc/λ</td><td class="name-cell">Photon energy (wavelength)</td><td class="desc-cell">Combined from E=hν and c=λν</td></tr>
+          <tr><td class="formula-cell">λ = h/mv</td><td class="name-cell">de Broglie wavelength</td><td class="desc-cell">m = mass (kg); v = velocity (m/s)</td></tr>
+          <tr><td class="formula-cell">E = −2.178×10⁻¹⁸ J (Z²/n²)</td><td class="name-cell">Bohr model energy</td><td class="desc-cell">Z = atomic number; n = principal quantum number</td></tr>
+          <tr><td class="formula-cell">ΔE = −2.178×10⁻¹⁸ J (1/n₁² − 1/n₂²)</td><td class="name-cell">Energy of photon emitted/absorbed</td><td class="desc-cell">For hydrogen atom transitions</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 2. EQUILIBRIUM -->
+  <div class="ref-section s2" data-keywords="equilibrium constant K Kc Kp Ka Kb Kw reaction quotient Q ICE Henderson Hasselbalch buffer pH pOH">
+    <div class="rs-header">
+      <div class="rs-icon">⚖️</div>
+      <div><div class="rs-title">Equilibrium</div>
+        <div class="rs-sub">Units 7–8 — K expressions, Q, solubility, buffers, pH</div></div>
+    </div>
+    <div class="rs-body">
+      <table class="ref-table">
+        <thead><tr><th>Equation</th><th>Name / Quantity</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td class="formula-cell">Kc = [C]^c[D]^d / [A]^a[B]^b</td><td class="name-cell">Equilibrium constant expression (aA + bB ⇌ cC + dD)</td><td class="desc-cell">Pure solids and liquids excluded</td></tr>
+          <tr><td class="formula-cell">Kp = Kc(RT)^Δn</td><td class="name-cell">Kp from Kc</td><td class="desc-cell">Δn = Σ mol gas products − Σ mol gas reactants</td></tr>
+          <tr><td class="formula-cell">Kw = [H⁺][OH⁻] = 1.0×10⁻¹⁴ at 25°C</td><td class="name-cell">Water dissociation constant</td><td class="desc-cell">Always 1.0×10⁻¹⁴ at 25°C</td></tr>
+          <tr><td class="formula-cell">Ka × Kb = Kw</td><td class="name-cell">Conjugate acid-base relationship</td><td class="desc-cell">For conjugate pair</td></tr>
+          <tr><td class="formula-cell">pH = −log[H⁺]</td><td class="name-cell">pH definition</td><td class="desc-cell">[H⁺] in mol/L</td></tr>
+          <tr><td class="formula-cell">pOH = −log[OH⁻]</td><td class="name-cell">pOH definition</td><td class="desc-cell"></td></tr>
+          <tr><td class="formula-cell">pH + pOH = 14 (at 25°C)</td><td class="name-cell">pH-pOH relationship</td><td class="desc-cell">Only valid at 25°C</td></tr>
+          <tr><td class="formula-cell">pKa = −log Ka</td><td class="name-cell">pKa definition</td><td class="desc-cell"></td></tr>
+          <tr><td class="formula-cell">pH = pKa + log([A⁻]/[HA])</td><td class="name-cell">Henderson-Hasselbalch equation</td><td class="desc-cell">Buffer systems</td></tr>
+          <tr><td class="formula-cell">Ka = [H⁺][A⁻] / [HA]</td><td class="name-cell">Acid dissociation constant</td><td class="desc-cell"></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 3. KINETICS -->
+  <div class="ref-section s3" data-keywords="kinetics rate law order rate constant activation energy Arrhenius half life first second zero">
+    <div class="rs-header">
+      <div class="rs-icon">⏱️</div>
+      <div><div class="rs-title">Kinetics</div>
+        <div class="rs-sub">Unit 5 — Rate laws, integrated rate laws, Arrhenius, half-life</div></div>
+    </div>
+    <div class="rs-body">
+      <table class="ref-table">
+        <thead><tr><th>Equation</th><th>Name / Quantity</th><th>Order / Notes</th></tr></thead>
+        <tbody>
+          <tr><td class="formula-cell">Rate = k[A]^m[B]^n</td><td class="name-cell">Rate law</td><td class="desc-cell">m, n determined experimentally</td></tr>
+          <tr><td class="formula-cell">[A]t = [A]₀ − kt</td><td class="name-cell">Zero order integrated rate law</td><td class="desc-cell">Linear: [A] vs t; k units: M/s</td></tr>
+          <tr><td class="formula-cell">ln[A]t = ln[A]₀ − kt</td><td class="name-cell">First order integrated rate law</td><td class="desc-cell">Linear: ln[A] vs t; k units: s⁻¹</td></tr>
+          <tr><td class="formula-cell">1/[A]t = 1/[A]₀ + kt</td><td class="name-cell">Second order integrated rate law</td><td class="desc-cell">Linear: 1/[A] vs t; k units: M⁻¹s⁻¹</td></tr>
+          <tr><td class="formula-cell">t½ = [A]₀ / 2k</td><td class="name-cell">Half-life (zero order)</td><td class="desc-cell">Depends on initial concentration</td></tr>
+          <tr><td class="formula-cell">t½ = 0.693 / k = ln 2 / k</td><td class="name-cell">Half-life (first order)</td><td class="desc-cell">Constant — independent of [A]₀</td></tr>
+          <tr><td class="formula-cell">t½ = 1 / (k[A]₀)</td><td class="name-cell">Half-life (second order)</td><td class="desc-cell">Depends on initial concentration</td></tr>
+          <tr><td class="formula-cell">k = Ae^(−Ea/RT)</td><td class="name-cell">Arrhenius equation</td><td class="desc-cell">A = frequency factor; Ea = activation energy</td></tr>
+          <tr><td class="formula-cell">ln(k₂/k₁) = (Ea/R)(1/T₁ − 1/T₂)</td><td class="name-cell">Arrhenius (two-temperature form)</td><td class="desc-cell">R = 8.314 J/mol·K; T in Kelvin</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 4. THERMODYNAMICS -->
+  <div class="ref-section s4" data-keywords="thermodynamics enthalpy entropy Gibbs free energy spontaneous Hess formation bond calorimetry heat capacity">
+    <div class="rs-header">
+      <div class="rs-icon">🌡️</div>
+      <div><div class="rs-title">Thermodynamics</div>
+        <div class="rs-sub">Unit 6 — Enthalpy, entropy, Gibbs free energy, calorimetry</div></div>
+    </div>
+    <div class="rs-body">
+      <table class="ref-table">
+        <thead><tr><th>Equation</th><th>Name / Quantity</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td class="formula-cell">ΔH°rxn = ΣΔHf°(products) − ΣΔHf°(reactants)</td><td class="name-cell">Standard enthalpy of reaction</td><td class="desc-cell">ΔHf° for elements in standard state = 0</td></tr>
+          <tr><td class="formula-cell">ΔH = bonds broken − bonds formed</td><td class="name-cell">Enthalpy from bond energies</td><td class="desc-cell">Approximate; use for estimating</td></tr>
+          <tr><td class="formula-cell">q = mcΔT</td><td class="name-cell">Heat transfer (calorimetry)</td><td class="desc-cell">m=mass(g); c=specific heat; ΔT=temp change</td></tr>
+          <tr><td class="formula-cell">q = CΔT</td><td class="name-cell">Heat transfer (calorimeter)</td><td class="desc-cell">C = heat capacity of calorimeter (J/K)</td></tr>
+          <tr><td class="formula-cell">ΔH°rxn = ΔH°f products − ΔH°f reactants</td><td class="name-cell">Hess's Law — standard form</td><td class="desc-cell">Can also add individual reactions</td></tr>
+          <tr><td class="formula-cell">ΔS°rxn = ΣS°(products) − ΣS°(reactants)</td><td class="name-cell">Standard entropy change</td><td class="desc-cell">S° always positive; gas > liquid > solid</td></tr>
+          <tr><td class="formula-cell">ΔG° = ΔH° − TΔS°</td><td class="name-cell">Standard Gibbs free energy</td><td class="desc-cell">T in Kelvin; ΔG°<0 means spontaneous</td></tr>
+          <tr><td class="formula-cell">ΔG° = −RT ln K</td><td class="name-cell">ΔG° and equilibrium constant</td><td class="desc-cell">R=8.314 J/mol·K; T in Kelvin</td></tr>
+          <tr><td class="formula-cell">ΔG = ΔG° + RT ln Q</td><td class="name-cell">Gibbs free energy (non-standard)</td><td class="desc-cell">Q = reaction quotient</td></tr>
+          <tr><td class="formula-cell">ΔG° = −nFE°cell</td><td class="name-cell">ΔG° from electrochemistry</td><td class="desc-cell">n = mol electrons; F = 96,485 C/mol</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 5. ELECTROCHEMISTRY -->
+  <div class="ref-section s5" data-keywords="electrochemistry redox galvanic voltaic electrolytic Nernst cell potential Faraday electrolysis current charge">
+    <div class="rs-header">
+      <div class="rs-icon">⚡</div>
+      <div><div class="rs-title">Electrochemistry</div>
+        <div class="rs-sub">Unit 9 — Cell potential, Nernst equation, electrolysis, Faraday</div></div>
+    </div>
+    <div class="rs-body">
+      <table class="ref-table">
+        <thead><tr><th>Equation</th><th>Name / Quantity</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td class="formula-cell">E°cell = E°cathode − E°anode</td><td class="name-cell">Standard cell potential</td><td class="desc-cell">E° values from standard reduction potential table</td></tr>
+          <tr><td class="formula-cell">ΔG° = −nFE°cell</td><td class="name-cell">Gibbs free energy from E°</td><td class="desc-cell">n = moles of electrons transferred</td></tr>
+          <tr><td class="formula-cell">E°cell = (RT/nF) ln K</td><td class="name-cell">E° and equilibrium constant</td><td class="desc-cell">At 25°C: E° = (0.0592/n) log K</td></tr>
+          <tr><td class="formula-cell">E = E° − (RT/nF) ln Q</td><td class="name-cell">Nernst equation</td><td class="desc-cell">At 25°C: E = E° − (0.0592/n) log Q</td></tr>
+          <tr><td class="formula-cell">E = E° − (0.0592/n) log Q</td><td class="name-cell">Nernst equation at 25°C</td><td class="desc-cell">Simplified for AP exam use</td></tr>
+          <tr><td class="formula-cell">q = It</td><td class="name-cell">Charge from current and time</td><td class="desc-cell">q=coulombs; I=amperes; t=seconds</td></tr>
+          <tr><td class="formula-cell">n = q/F = It/F</td><td class="name-cell">Moles of electrons (electrolysis)</td><td class="desc-cell">F = 96,485 C/mol</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 6. GASES -->
+  <div class="ref-section s6" data-keywords="gases ideal gas law PV nRT Dalton partial pressure Graham effusion diffusion van der Waals kinetic molecular KMT">
+    <div class="rs-header">
+      <div class="rs-icon">💨</div>
+      <div><div class="rs-title">Gases & Kinetic Molecular Theory</div>
+        <div class="rs-sub">Units 3 — Ideal gas law, Dalton's, Graham's law, KMT</div></div>
+    </div>
+    <div class="rs-body">
+      <table class="ref-table">
+        <thead><tr><th>Equation</th><th>Name / Quantity</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td class="formula-cell">PV = nRT</td><td class="name-cell">Ideal gas law</td><td class="desc-cell">R=0.08206 L·atm/mol·K or 8.314 J/mol·K</td></tr>
+          <tr><td class="formula-cell">P₁V₁/T₁ = P₂V₂/T₂</td><td class="name-cell">Combined gas law</td><td class="desc-cell">T must be in Kelvin</td></tr>
+          <tr><td class="formula-cell">Ptotal = P₁ + P₂ + P₃ + …</td><td class="name-cell">Dalton's law of partial pressures</td><td class="desc-cell">For non-reacting gas mixtures</td></tr>
+          <tr><td class="formula-cell">Pa = Xa × Ptotal</td><td class="name-cell">Partial pressure from mole fraction</td><td class="desc-cell">Xa = mole fraction of gas a</td></tr>
+          <tr><td class="formula-cell">r₁/r₂ = √(M₂/M₁)</td><td class="name-cell">Graham's law of effusion/diffusion</td><td class="desc-cell">Lighter gas effuses faster</td></tr>
+          <tr><td class="formula-cell">KE_avg = ³⁄₂ RT</td><td class="name-cell">Average kinetic energy per mole</td><td class="desc-cell">Depends only on temperature (KMT)</td></tr>
+          <tr><td class="formula-cell">u_rms = √(3RT/M)</td><td class="name-cell">Root-mean-square speed</td><td class="desc-cell">M = molar mass in kg/mol; T in Kelvin</td></tr>
+          <tr><td class="formula-cell">(P + n²a/V²)(V − nb) = nRT</td><td class="name-cell">Van der Waals equation</td><td class="desc-cell">a = intermolecular attraction; b = molecular volume</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 7. SOLUTIONS -->
+  <div class="ref-section s7" data-keywords="solutions colligative molality boiling point elevation freezing point depression osmotic pressure Raoult vapour">
+    <div class="rs-header">
+      <div class="rs-icon">🧪</div>
+      <div><div class="rs-title">Solutions & Colligative Properties</div>
+        <div class="rs-sub">Units 3–4 — Concentration, colligative properties, Beer-Lambert</div></div>
+    </div>
+    <div class="rs-body">
+      <table class="ref-table">
+        <thead><tr><th>Equation</th><th>Name / Quantity</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td class="formula-cell">M = n/V</td><td class="name-cell">Molarity</td><td class="desc-cell">n=moles; V=litres of solution</td></tr>
+          <tr><td class="formula-cell">m = n_solute / kg_solvent</td><td class="name-cell">Molality</td><td class="desc-cell">Used in colligative property calculations</td></tr>
+          <tr><td class="formula-cell">χ = n_a / n_total</td><td class="name-cell">Mole fraction</td><td class="desc-cell">Dimensionless</td></tr>
+          <tr><td class="formula-cell">M₁V₁ = M₂V₂</td><td class="name-cell">Dilution equation</td><td class="desc-cell">Moles of solute = constant</td></tr>
+          <tr><td class="formula-cell">ΔTb = iKb m</td><td class="name-cell">Boiling point elevation</td><td class="desc-cell">i=van't Hoff factor; Kb=0.512°C·kg/mol for water</td></tr>
+          <tr><td class="formula-cell">ΔTf = iKf m</td><td class="name-cell">Freezing point depression</td><td class="desc-cell">Kf=1.86°C·kg/mol for water</td></tr>
+          <tr><td class="formula-cell">π = iMRT</td><td class="name-cell">Osmotic pressure</td><td class="desc-cell">π in atm; R=0.08206 L·atm/mol·K</td></tr>
+          <tr><td class="formula-cell">P_solution = χ_solvent × P°_solvent</td><td class="name-cell">Raoult's law (vapour pressure lowering)</td><td class="desc-cell">χ_solvent = mole fraction of pure solvent</td></tr>
+          <tr><td class="formula-cell">A = εbc</td><td class="name-cell">Beer-Lambert law</td><td class="desc-cell">ε=molar absorptivity; b=path length; c=concentration</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 8. CONSTANTS & CONVERSION FACTORS -->
+  <div class="ref-section s1" data-keywords="constants R F h c Avogadro electron volt Faraday Planck speed light gas constant">
+    <div class="rs-header">
+      <div class="rs-icon">🔢</div>
+      <div><div class="rs-title">Constants & Conversion Factors</div>
+        <div class="rs-sub">All physical constants provided on the AP Chemistry exam</div></div>
+    </div>
+    <div class="rs-body">
+      <div class="const-grid" id="constGrid">
+        <div class="const-item">
+          <div class="const-name">Speed of light</div>
+          <div class="const-val">c = 3.00 × 10⁸ m/s</div>
+        </div>
+        <div class="const-item">
+          <div class="const-name">Planck's constant</div>
+          <div class="const-val">h = 6.626 × 10⁻³⁴ J·s</div>
+        </div>
+        <div class="const-item">
+          <div class="const-name">Avogadro's number</div>
+          <div class="const-val">NA = 6.022 × 10²³ mol⁻¹</div>
+        </div>
+        <div class="const-item">
+          <div class="const-name">Electron charge</div>
+          <div class="const-val">e = 1.602 × 10⁻¹⁹ C</div>
+        </div>
+        <div class="const-item">
+          <div class="const-name">Faraday constant</div>
+          <div class="const-val">F = 96,485 C/mol</div>
+        </div>
+        <div class="const-item">
+          <div class="const-name">Gas constant (L·atm)</div>
+          <div class="const-val">R = 0.08206 L·atm/mol·K</div>
+        </div>
+        <div class="const-item">
+          <div class="const-name">Gas constant (J)</div>
+          <div class="const-val">R = 8.314 J/mol·K</div>
+        </div>
+        <div class="const-item">
+          <div class="const-name">Boltzmann constant</div>
+          <div class="const-val">k_B = 1.381 × 10⁻²³ J/K</div>
+        </div>
+        <div class="const-item">
+          <div class="const-name">1 atmosphere</div>
+          <div class="const-val">1 atm = 101.325 kPa = 760 mmHg</div>
+        </div>
+        <div class="const-item">
+          <div class="const-name">Standard temperature</div>
+          <div class="const-val">0°C = 273.15 K</div>
+        </div>
+        <div class="const-item">
+          <div class="const-name">Water Kw at 25°C</div>
+          <div class="const-val">Kw = 1.0 × 10⁻¹⁴</div>
+        </div>
+        <div class="const-item">
+          <div class="const-name">Water specific heat</div>
+          <div class="const-val">c = 4.184 J/g·°C</div>
+        </div>
+        <div class="const-item">
+          <div class="const-name">STP molar volume</div>
+          <div class="const-val">22.4 L/mol at 0°C, 1 atm</div>
+        </div>
+        <div class="const-item">
+          <div class="const-name">1 electron-volt</div>
+          <div class="const-val">1 eV = 1.602 × 10⁻¹⁹ J</div>
+        </div>
+        <div class="const-item">
+          <div class="const-name">Mass of proton</div>
+          <div class="const-val">mp = 1.673 × 10⁻²⁷ kg</div>
+        </div>
+        <div class="const-item">
+          <div class="const-name">Mass of electron</div>
+          <div class="const-val">me = 9.109 × 10⁻³¹ kg</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 9. METRIC PREFIXES -->
+  <div class="ref-section s2" data-keywords="metric prefix kilo mega giga tera milli micro nano pico femto unit conversion SI">
+    <div class="rs-header">
+      <div class="rs-icon">📏</div>
+      <div><div class="rs-title">Metric Prefixes & Unit Conversions</div>
+        <div class="rs-sub">SI prefixes and common unit conversions for AP Chemistry</div></div>
+    </div>
+    <div class="rs-body">
+      <table class="ref-table" style="width:auto;min-width:500px">
+        <thead><tr><th>Prefix</th><th>Symbol</th><th>Factor</th><th>Example</th></tr></thead>
+        <tbody>
+          <tr><td>giga</td><td>G</td><td class="formula-cell">10⁹</td><td class="desc-cell">1 GJ = 10⁹ J</td></tr>
+          <tr><td>mega</td><td>M</td><td class="formula-cell">10⁶</td><td class="desc-cell">1 MHz = 10⁶ Hz</td></tr>
+          <tr><td>kilo</td><td>k</td><td class="formula-cell">10³</td><td class="desc-cell">1 kg = 10³ g</td></tr>
+          <tr><td>deci</td><td>d</td><td class="formula-cell">10⁻¹</td><td class="desc-cell">1 dm = 0.1 m</td></tr>
+          <tr><td>centi</td><td>c</td><td class="formula-cell">10⁻²</td><td class="desc-cell">1 cm = 0.01 m</td></tr>
+          <tr><td>milli</td><td>m</td><td class="formula-cell">10⁻³</td><td class="desc-cell">1 mL = 0.001 L</td></tr>
+          <tr><td>micro</td><td>μ</td><td class="formula-cell">10⁻⁶</td><td class="desc-cell">1 μg = 10⁻⁶ g</td></tr>
+          <tr><td>nano</td><td>n</td><td class="formula-cell">10⁻⁹</td><td class="desc-cell">1 nm = 10⁻⁹ m</td></tr>
+          <tr><td>pico</td><td>p</td><td class="formula-cell">10⁻¹²</td><td class="desc-cell">1 pm = 10⁻¹² m</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  </div><!-- /refContent -->
+</div><!-- /page -->
+
+<div class="toast" id="toast"></div>
+
+<script>
+const SUPABASE_URL = 'https://qmrpbxiiwbqnmczdxoqr.supabase.co';
+const SUPABASE_ANON = 'sb_publishable_t8Q_10VZIilu1bZlJXyzsA_w-LUu_E2';
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
+
+(async () => {
+  const { data: { session } } = await sb.auth.getSession();
+  if (!session) { window.location.href = '/login'; return; }
+  const ld = document.getElementById('authLoading');
+  if (ld) ld.remove();
+})();
+
+async function doLogout() {
+  await sb.auth.signOut();
+  window.location.href = '/login';
+}
+
+function filterRef(q) {
+  const query = q.toLowerCase().trim();
+  document.querySelectorAll('.ref-section').forEach(section => {
+    if (!query) { section.style.display = ''; return; }
+    const keywords = section.dataset.keywords || '';
+    const text = section.textContent.toLowerCase();
+    section.style.display = (text.includes(query) || keywords.includes(query)) ? '' : 'none';
+  });
+}
+</script>
+</body>
+</html>

@@ -314,6 +314,17 @@ input[type=range]{width:100%;height:6px;border-radius:3px;outline:none;cursor:po
   transform:translateY(70px);opacity:0;transition:.3s;pointer-events:none;max-width:300px}
 .toast.show{transform:translateY(0);opacity:1}
 
+/* ── LOADING SCREEN ─────────────────────────────────────── */
+#authLoading{position:fixed;inset:0;background:#f8fafc;z-index:9999;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px}
+#authLoading .ld-logo{width:52px;height:52px}
+#authLoading .ld-text{font-size:15px;font-weight:700;color:#6b7280}
+#authLoading .ld-spin{width:28px;height:28px;border:3px solid #e5e7eb;border-top-color:#6c63ff;
+  border-radius:50%;animation:ldSpin .8s linear infinite}
+@keyframes ldSpin{to{transform:rotate(360deg)}}
+.page-wrap,.top-nav,.tab-bar,.sidebar,.main-wrap{opacity:0;transition:opacity .3s}
+.page-wrap.ready,.top-nav.ready,.tab-bar.ready,.sidebar.ready,.main-wrap.ready{opacity:1}
+
 /* ── MOBILE ──────────────────────────────────────────────── */
 .mob-unit-toggle{display:none;padding:10px 20px;background:#fff;
   border-bottom:1px solid var(--border);font-size:13px;font-weight:700;color:var(--p);cursor:pointer}
@@ -337,6 +348,21 @@ input[type=range]{width:100%;height:6px;border-radius:3px;outline:none;cursor:po
 </style>
 </head>
 <body>
+
+<!-- AUTH LOADING OVERLAY -->
+<div id="authLoading">
+  <svg class="ld-logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 36" fill="none">
+    <defs><linearGradient id="ldlg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#a78bfa"/><stop offset="100%" stop-color="#4f46e5"/></linearGradient></defs>
+    <rect width="36" height="36" rx="10" fill="url(#ldlg)"/>
+    <circle cx="18" cy="18" r="3" fill="white" opacity=".95"/>
+    <ellipse cx="18" cy="18" rx="10.5" ry="4" stroke="white" stroke-width="1.6" fill="none" opacity=".9"/>
+    <ellipse cx="18" cy="18" rx="10.5" ry="4" stroke="white" stroke-width="1.6" fill="none" opacity=".9" transform="rotate(60 18 18)"/>
+    <ellipse cx="18" cy="18" rx="10.5" ry="4" stroke="white" stroke-width="1.6" fill="none" opacity=".9" transform="rotate(120 18 18)"/>
+  </svg>
+  <div class="ld-spin"></div>
+  <div class="ld-text">Checking session…</div>
+</div>
 
 <!-- TOP NAV -->
 <nav class="top-nav">
@@ -407,6 +433,26 @@ input[type=range]{width:100%;height:6px;border-radius:3px;outline:none;cursor:po
         <span class="sb-badge sb-lock" id="testBadge" style="display:none"></span>
       </div>
     </div>
+    <div style="padding:0 12px;margin-top:4px" id="sbExtra">
+      <div class="sb-divider"></div>
+      <div class="sb-label">Resources</div>
+      <div class="sb-item" onclick="window.location.href='/lessons'">
+        <div class="sb-icon" style="background:#dcfce7">📚</div>
+        <span>Lessons</span>
+      </div>
+      <div class="sb-item" onclick="window.location.href='/reference'">
+        <div class="sb-icon" style="background:#dbeafe">📋</div>
+        <span>Formula Sheet</span>
+      </div>
+      <div class="sb-item" onclick="window.location.href='/leaderboard'">
+        <div class="sb-icon" style="background:#fef3c7">🏆</div>
+        <span>Leaderboard</span>
+      </div>
+      <div class="sb-item" onclick="window.location.href='/profile'">
+        <div class="sb-icon" style="background:#ede9fe">👤</div>
+        <span>My Profile</span>
+      </div>
+    </div>
   </aside>
 
   <!-- MAIN -->
@@ -429,6 +475,9 @@ input[type=range]{width:100%;height:6px;border-radius:3px;outline:none;cursor:po
       <div class="tab-btn" id="tab-mytests" style="display:none" onclick="showPanel('mytests')">
         <i class="fas fa-file-alt"></i> Tests <span id="tabTestBadge"></span>
       </div>
+      <a href="/lessons" class="tab-btn" style="text-decoration:none"><i class="fas fa-book"></i> Lessons</a>
+      <a href="/reference" class="tab-btn" style="text-decoration:none"><i class="fas fa-list"></i> Formulas</a>
+      <a href="/leaderboard" class="tab-btn" style="text-decoration:none"><i class="fas fa-trophy"></i> Leaderboard</a>
     </div>
 
     <!-- ── BUILD A TEST PANEL ── -->
@@ -646,11 +695,11 @@ try { if (localStorage.getItem('msl_paid') === '1') { isPaid = true; } } catch(e
 document.addEventListener('DOMContentLoaded', async () => {
   // Auth check
   const { data: { session } } = await sb.auth.getSession();
-  if (!session) { window.location.href = '/login.html'; return; }
+  if (!session) { window.location.href = '/login'; return; }
   currentUser = session.user;
   const { data: profile } = await sb.from('profiles').select('*').eq('id', currentUser.id).single();
   currentProfile = profile;
-  if (profile?.role === 'teacher') { window.location.href = '/teacher.html'; return; }
+  if (profile?.role === 'teacher') { window.location.href = '/teacher'; return; }
   if (profile?.is_paid) {
     isPaid = true;
     try { localStorage.setItem('msl_paid', '1'); } catch(e) {}
@@ -670,12 +719,21 @@ document.addEventListener('DOMContentLoaded', async () => {
   document.getElementById('stat-total').textContent = TOTAL_QUESTIONS;
   loadMyAssignments();
   loadMyTests();
+  loadAnnouncements();
+  // Remove loading overlay — show page
+  const ld = document.getElementById('authLoading');
+  if (ld) ld.remove();
+  document.querySelectorAll('.top-nav,.page-wrap,.sidebar,.main-wrap').forEach(el => el.classList.add('ready'));
+  // Back button support
+  window.addEventListener('popstate', e => {
+    if (e.state?.panel) showPanel(e.state.panel, false);
+  });
 });
 
 async function doLogout() {
   await sb.auth.signOut();
   try { localStorage.removeItem('msl_paid'); } catch(e) {}
-  window.location.href = '/login.html';
+  window.location.href = '/login';
 }
 
 // ═══════════════════════════════════════════════════════════════
@@ -1125,7 +1183,23 @@ function practiceCheckFRQ(idx, qId) {
 }
 
 // ═══════════════════════════════════════════════════════════════
-// PANELS
+// ANNOUNCEMENTS
+// ═══════════════════════════════════════════════════════════════
+async function loadAnnouncements() {
+  const { data } = await sb.from('announcements')
+    .select('*').order('created_at',{ascending:false}).limit(1);
+  if (data?.length) {
+    // Show announcement banner at top of builder panel
+    const banner = document.createElement('div');
+    banner.style.cssText = 'background:linear-gradient(135deg,#ede9fe,#dbeafe);border:1px solid #c4b5fd;border-radius:14px;padding:14px 18px;margin-bottom:18px';
+    banner.innerHTML = `<div style="font-size:12px;font-weight:800;color:#6d28d9;margin-bottom:4px">📣 From your teacher</div><div style="font-size:13px;color:#4338ca">${data[0].message}</div>`;
+    const heroEl = document.querySelector('#panel-builder .hero-banner');
+    if (heroEl) heroEl.parentNode.insertBefore(banner, heroEl);
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════
+// PANELS (with back button support)
 // ═══════════════════════════════════════════════════════════════
 function hideAllPanels() {
   document.querySelectorAll('.panel').forEach(p => { p.style.display='none'; p.classList.remove('active'); });
@@ -1133,7 +1207,7 @@ function hideAllPanels() {
   document.getElementById('resultsArea').style.display = 'none';
 }
 
-function showPanel(name) {
+function showPanel(name, pushHistory=true) {
   hideAllPanels();
   const p = document.getElementById('panel-' + name);
   if (p) { p.style.display = 'block'; p.classList.add('active'); }
@@ -1144,6 +1218,7 @@ function showPanel(name) {
   const s = document.getElementById('snav-' + name);
   if (s) s.classList.add('active');
   if (name === 'practice') renderPractice();
+  if (pushHistory) history.pushState({panel: name}, '', '#' + name);
   window.scrollTo(0,0);
 }
 

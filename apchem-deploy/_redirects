@@ -1,1 +1,8 @@
-# No redirects needed — login handled by JS auth check
+# No redirects needed for .html pages — Cloudflare Pages serves them at clean URLs automatically
+# Only custom routing rules needed below
+
+# Redirect /signup to /login (same page, has tabs)
+/signup       /login         301
+
+# /dashboard → / (index is the student dashboard)
+/dashboard    /              301

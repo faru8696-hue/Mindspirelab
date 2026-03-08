@@ -153,3 +153,24 @@ drop trigger if exists on_auth_user_created on auth.users;
 create trigger on_auth_user_created
   after insert on auth.users
   for each row execute procedure public.handle_new_user();
+
+-- ══════════════════════════════════════════════════════════════
+-- ANNOUNCEMENTS TABLE (add to existing schema)
+-- ══════════════════════════════════════════════════════════════
+create table if not exists public.announcements (
+  id          bigint generated always as identity primary key,
+  teacher_id  uuid references public.profiles(id) on delete cascade,
+  message     text not null,
+  created_at  timestamptz default now()
+);
+alter table public.announcements enable row level security;
+create policy "Teachers can manage announcements" on public.announcements for all
+  using (auth.uid() = teacher_id);
+create policy "Students can read announcements" on public.announcements for select
+  using (true);
+
+-- ADD PROFILE COLUMNS (run if missing)
+alter table public.profiles add column if not exists bio text;
+alter table public.profiles add column if not exists study_goal text;
+alter table public.profiles add column if not exists credentials text;
+alter table public.profiles add column if not exists schedule text;
