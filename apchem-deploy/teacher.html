@@ -228,7 +228,7 @@ tr:hover td{background:#fafafa}
         </div>
         <table>
           <thead><tr>
-            <th>Student</th><th>Questions</th><th>MCQ Score</th><th>Best Unit</th><th>Worst Unit</th><th>Last Active</th><th>Action</th>
+            <th>Student</th><th>Access</th><th>Questions</th><th>MCQ Score</th><th>Best Unit</th><th>Last Active</th><th>Actions</th>
           </tr></thead>
           <tbody id="studentsTableBody"><tr><td colspan="7"><div class="empty"><i class="fas fa-spinner fa-spin"></i><p>Loading…</p></div></td></tr></tbody>
         </table>
@@ -594,14 +594,23 @@ function renderStudentsTable(students, attempts) {
       : pct >= 60 ? `<span class="badge badge-yellow">${pct}%</span>`
       : `<span class="badge badge-red">${pct}%</span>`;
 
-    return `<tr>
+    const accessBadge = s.is_paid
+      ? `<span class="badge badge-green"><i class="fas fa-unlock"></i> Full Access</span>`
+      : `<span class="badge badge-gray"><i class="fas fa-lock"></i> Free Only</span>`;
+
+    const accessBtn = s.is_paid
+      ? `<button class="btn btn-danger btn-sm" onclick="toggleAccess('${s.id}',false,this)"><i class="fas fa-lock"></i> Revoke</button>`
+      : `<button class="btn btn-green btn-sm" onclick="toggleAccess('${s.id}',true,this)"><i class="fas fa-unlock"></i> Grant Access</button>`;
+
+    return `<tr id="srow-${s.id}">
       <td><strong>${s.full_name||'—'}</strong><br><span style="font-size:11px;color:var(--muted)">${s.email}</span></td>
+      <td id="abadge-${s.id}">${accessBadge}</td>
       <td>${sa.length}</td>
       <td>${pctBadge}</td>
       <td>${bestUnit ? `<span class="badge badge-green">Unit ${bestUnit.u} (${bestUnit.pct}%)</span>` : '—'}</td>
-      <td>${worstUnit && worstUnit.u !== bestUnit?.u ? `<span class="badge badge-red">Unit ${worstUnit.u} (${worstUnit.pct}%)</span>` : '—'}</td>
       <td style="font-size:12px;color:var(--muted)">${lastActive ? timeAgo(lastActive) : 'Never'}</td>
-      <td>
+      <td style="display:flex;gap:6px;flex-wrap:wrap">
+        <span id="abtn-${s.id}">${accessBtn}</span>
         <button class="btn btn-outline btn-sm" onclick="viewStudent('${s.id}','${(s.full_name||s.email).replace(/'/g,"\\'")}')">
           <i class="fas fa-chart-bar"></i> Details
         </button>
@@ -623,6 +632,36 @@ function filterStudents() {
     return;
   }
   loadStudents(); // Re-render with filter applied via DOM
+}
+
+// ── GRANT / REVOKE PAID ACCESS ────────────────────────────────────
+async function toggleAccess(studentId, grant, btn) {
+  btn.disabled = true;
+  btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+
+  const { error } = await sb.from('profiles').update({ is_paid: grant }).eq('id', studentId);
+
+  if (error) {
+    showToast('❌ Error: ' + error.message);
+    btn.disabled = false;
+    return;
+  }
+
+  const badgeEl = document.getElementById('abadge-' + studentId);
+  const btnEl   = document.getElementById('abtn-'   + studentId);
+
+  if (grant) {
+    badgeEl.innerHTML = '<span class="badge badge-green"><i class="fas fa-unlock"></i> Full Access</span>';
+    btnEl.innerHTML   = `<button class="btn btn-danger btn-sm" onclick="toggleAccess('${studentId}',false,this)"><i class="fas fa-lock"></i> Revoke</button>`;
+    showToast('✅ Full access granted!');
+  } else {
+    badgeEl.innerHTML = '<span class="badge badge-gray"><i class="fas fa-lock"></i> Free Only</span>';
+    btnEl.innerHTML   = `<button class="btn btn-green btn-sm" onclick="toggleAccess('${studentId}',true,this)"><i class="fas fa-unlock"></i> Grant Access</button>`;
+    showToast('🔒 Access revoked.');
+  }
+
+  const s = allStudents.find(x => x.id === studentId);
+  if (s) s.is_paid = grant;
 }
 
 // ── VIEW STUDENT DETAIL ────────────────────────────────────────
