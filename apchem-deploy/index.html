@@ -1,0 +1,1471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>AP Chemistry Practice Platform | MindSpire Lab</title>
+<meta name="description" content="Build custom AP Chemistry tests, practice 116+ MCQ & FRQ questions across all 9 units. Unit 1 free for everyone — no login required."/>
+<link rel="icon" href="/favicon.ico"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet"/>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="/questions.js"></script>
+<style>
+:root{
+  --p:#6c63ff;--pd:#4f46e5;--grn:#10b981;--org:#f59e0b;
+  --dark:#0f172a;--dark2:#1e293b;--text:#374151;--muted:#6b7280;
+  --border:#e5e7eb;--bg:#f8fafc;--red:#ef4444;--card:#ffffff;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;color:var(--text);background:var(--bg);line-height:1.6;min-height:100vh}
+a{text-decoration:none;color:inherit}
+button{font-family:inherit}
+
+/* ── TOP NAV ─────────────────────────────────────────────── */
+.top-nav{position:fixed;top:0;left:0;right:0;z-index:300;
+  background:#fff;border-bottom:1px solid var(--border);
+  padding:0 20px;height:56px;display:flex;align-items:center;
+  justify-content:space-between;box-shadow:0 1px 8px rgba(0,0,0,.06)}
+.nav-brand{display:flex;align-items:center;gap:8px;font-weight:900;font-size:16px;color:var(--dark)}
+.nav-brand svg{width:30px;height:30px}
+.nav-right{display:flex;align-items:center;gap:10px}
+.back-btn{font-size:13px;color:var(--muted);display:flex;align-items:center;gap:5px;
+  padding:6px 12px;border-radius:8px;border:1px solid var(--border);transition:.2s}
+.back-btn:hover{background:var(--bg);color:var(--dark)}
+.access-pill{font-size:12px;font-weight:700;padding:5px 12px;border-radius:20px;
+  border:1.5px solid;display:flex;align-items:center;gap:5px;cursor:pointer;transition:.2s}
+.access-pill.free-access{background:#dcfce7;color:#16a34a;border-color:#86efac}
+.access-pill.full-access{background:#dbeafe;color:#1d4ed8;border-color:#93c5fd;cursor:default}
+.access-pill.locked-access{background:#fef3c7;color:#d97706;border-color:#fcd34d}
+.access-pill:hover.locked-access{transform:scale(1.02)}
+
+/* ── MAIN LAYOUT ─────────────────────────────────────────── */
+.page-wrap{display:flex;min-height:100vh;padding-top:56px}
+
+/* ── SIDEBAR ─────────────────────────────────────────────── */
+.sidebar{width:260px;min-width:260px;background:#fff;border-right:1px solid var(--border);
+  position:sticky;top:56px;height:calc(100vh - 56px);overflow-y:auto;padding:16px 0}
+.sb-section{padding:0 12px;margin-bottom:8px}
+.sb-label{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:1.2px;
+  color:var(--muted);padding:4px 8px;margin-bottom:4px}
+.sb-item{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:10px;
+  font-size:13px;font-weight:500;color:var(--text);cursor:pointer;transition:.15s;margin-bottom:1px}
+.sb-item:hover{background:var(--bg);color:var(--dark)}
+.sb-item.active{background:rgba(108,99,255,.1);color:var(--p);font-weight:700}
+.sb-icon{width:26px;height:26px;border-radius:7px;display:flex;align-items:center;
+  justify-content:center;font-size:13px;flex-shrink:0}
+.sb-badge{margin-left:auto;font-size:10px;font-weight:800;padding:2px 7px;border-radius:8px}
+.sb-free{background:#dcfce7;color:#16a34a}
+.sb-lock{background:#fef3c7;color:#d97706}
+.sb-divider{height:1px;background:var(--border);margin:8px 12px}
+.sb-promo{margin:0 12px 12px;background:linear-gradient(135deg,#ede9fe,#ddd6fe);
+  border:1px solid #c4b5fd;border-radius:12px;padding:12px;cursor:pointer}
+.sb-promo-title{font-size:12px;font-weight:800;color:var(--p);margin-bottom:3px}
+.sb-promo-sub{font-size:11px;color:#5b21b6;margin-bottom:8px}
+.sb-promo-btn{background:var(--p);color:#fff;padding:5px 12px;border-radius:7px;
+  font-size:11px;font-weight:700;text-align:center}
+
+/* ── MAIN CONTENT ────────────────────────────────────────── */
+.main-wrap{flex:1;overflow-x:hidden;min-width:0}
+
+/* ── TAB BAR ─────────────────────────────────────────────── */
+.tab-bar{background:#fff;border-bottom:1px solid var(--border);
+  padding:0 28px;display:flex;gap:0;position:sticky;top:56px;z-index:100}
+.tab-btn{padding:14px 18px;font-size:14px;font-weight:600;color:var(--muted);
+  cursor:pointer;border-bottom:2.5px solid transparent;transition:.15s;
+  display:flex;align-items:center;gap:7px;white-space:nowrap}
+.tab-btn:hover{color:var(--dark)}
+.tab-btn.active{color:var(--p);border-bottom-color:var(--p)}
+
+/* ── PANELS ──────────────────────────────────────────────── */
+.panel{display:none;padding:28px}
+.panel.active{display:block}
+
+/* ── HERO BANNER ─────────────────────────────────────────── */
+.hero-banner{background:linear-gradient(135deg,#0f0c29,#1e1b4b,#2d2566);
+  border-radius:16px;padding:32px 36px;margin-bottom:28px;position:relative;overflow:hidden}
+.hero-banner::before{content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse at 25% 50%,rgba(108,99,255,.35),transparent 55%),
+             radial-gradient(ellipse at 80% 20%,rgba(245,158,11,.15),transparent 45%)}
+.hero-banner h1{font-size:clamp(20px,2.5vw,26px);font-weight:900;color:#fff;
+  margin-bottom:8px;position:relative;z-index:1}
+.hero-banner p{font-size:14px;color:rgba(255,255,255,.6);
+  margin-bottom:24px;position:relative;z-index:1;max-width:560px}
+.hero-stats{display:flex;gap:16px;flex-wrap:wrap;position:relative;z-index:1}
+.hs{background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.12);
+  padding:12px 18px;border-radius:12px;text-align:center;min-width:90px}
+.hs-num{font-size:20px;font-weight:900;color:#fff}
+.hs-lbl{font-size:10px;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.5px;margin-top:1px}
+
+/* ── BUILDER CARD ────────────────────────────────────────── */
+.builder-card{background:#fff;border:1px solid var(--border);border-radius:16px;padding:28px}
+.bc-title{font-size:18px;font-weight:900;color:var(--dark);margin-bottom:4px}
+.bc-sub{font-size:13px;color:var(--muted);margin-bottom:24px}
+
+.step-header{display:flex;align-items:center;gap:10px;font-size:13px;font-weight:800;
+  color:var(--dark);margin-bottom:12px}
+.step-num{background:linear-gradient(135deg,var(--p),var(--pd));color:#fff;
+  width:22px;height:22px;border-radius:6px;font-size:11px;font-weight:900;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.builder-section{margin-bottom:24px;padding-bottom:24px;border-bottom:1px solid var(--border)}
+.builder-section:last-of-type{border-bottom:none}
+
+/* Unit chips */
+.unit-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:8px}
+.uc{display:flex;align-items:center;gap:8px;padding:9px 12px;border:2px solid var(--border);
+  border-radius:10px;cursor:pointer;transition:.15s;font-size:12px;font-weight:600;
+  background:#fff;position:relative}
+.uc:hover{border-color:rgba(108,99,255,.4);background:rgba(108,99,255,.03)}
+.uc.selected{border-color:var(--p);background:rgba(108,99,255,.07);color:var(--p)}
+.uc.locked{opacity:.7}
+.uc .lock-tag{font-size:10px;margin-left:auto;background:#fef3c7;color:#d97706;
+  padding:1px 5px;border-radius:5px;white-space:nowrap}
+.uc .cnt-tag{font-size:10px;margin-left:auto;color:var(--muted)}
+.uc-checkmark{width:16px;height:16px;border-radius:4px;border:2px solid var(--border);
+  flex-shrink:0;transition:.15s;display:flex;align-items:center;justify-content:center}
+.uc.selected .uc-checkmark{background:var(--p);border-color:var(--p);color:#fff;font-size:9px}
+
+/* Type chips */
+.type-row{display:flex;gap:10px;flex-wrap:wrap}
+.tc{padding:9px 18px;border:2px solid var(--border);border-radius:10px;cursor:pointer;
+  font-size:13px;font-weight:700;transition:.15s;background:#fff;
+  display:flex;align-items:center;gap:7px}
+.tc:hover{border-color:rgba(108,99,255,.4)}
+.tc.selected{border-color:var(--p);background:rgba(108,99,255,.07);color:var(--p)}
+
+/* Count slider */
+.count-val{font-size:28px;font-weight:900;color:var(--p)}
+.count-sub{font-size:12px;color:var(--muted);margin-bottom:10px}
+input[type=range]{width:100%;height:6px;border-radius:3px;outline:none;cursor:pointer;
+  accent-color:var(--p)}
+
+/* Start button */
+.start-row{display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-top:4px}
+.btn-start{background:linear-gradient(135deg,var(--p),var(--pd));color:#fff;
+  padding:13px 28px;border-radius:12px;font-weight:800;font-size:15px;border:none;
+  cursor:pointer;transition:.2s;display:inline-flex;align-items:center;gap:8px}
+.btn-start:hover{transform:translateY(-2px);box-shadow:0 8px 25px rgba(108,99,255,.4)}
+.btn-start:disabled{opacity:.45;cursor:not-allowed;transform:none;box-shadow:none}
+.avail-msg{font-size:13px;color:var(--muted)}
+.warn-msg{font-size:13px;color:#d97706;font-weight:600}
+
+/* ── QUICK PRACTICE ──────────────────────────────────────── */
+.practice-toolbar{display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:20px;flex-wrap:wrap;gap:10px}
+.practice-title{font-size:16px;font-weight:800;color:var(--dark)}
+.btn-refresh{display:flex;align-items:center;gap:6px;background:#fff;border:1px solid var(--border);
+  padding:8px 14px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;transition:.15s}
+.btn-refresh:hover{background:var(--bg)}
+
+/* ── QUESTION CARD ───────────────────────────────────────── */
+.q-area{max-width:800px}
+.progress-bar-wrap{background:#fff;border:1px solid var(--border);border-radius:12px;
+  padding:14px 18px;margin-bottom:18px;display:flex;align-items:center;gap:14px}
+.progress-bar-track{flex:1;height:6px;background:var(--bg);border-radius:3px;overflow:hidden}
+.progress-bar-fill{height:100%;background:linear-gradient(90deg,var(--p),var(--pd));
+  border-radius:3px;transition:.3s}
+.prog-text{font-size:13px;font-weight:600;color:var(--dark);white-space:nowrap}
+.score-text{font-size:13px;font-weight:700;color:var(--grn);white-space:nowrap}
+
+.q-card{background:#fff;border:1px solid var(--border);border-radius:16px;padding:26px;margin-bottom:14px}
+.q-meta{display:flex;align-items:center;gap:7px;margin-bottom:14px;flex-wrap:wrap}
+.tag{font-size:11px;font-weight:700;padding:3px 9px;border-radius:20px;white-space:nowrap}
+.tag-unit{background:rgba(108,99,255,.1);color:var(--p)}
+.tag-mcq{background:#dcfce7;color:#16a34a}
+.tag-frq{background:#dbeafe;color:#2563eb}
+.tag-easy{background:#dcfce7;color:#16a34a}
+.tag-medium{background:#fef3c7;color:#d97706}
+.tag-hard{background:#fee2e2;color:var(--red)}
+.tag-topic{font-size:11px;color:var(--muted)}
+
+.q-text{font-size:15.5px;color:var(--dark);line-height:1.75;margin-bottom:20px;white-space:pre-line}
+
+/* MCQ */
+.choices-list{display:flex;flex-direction:column;gap:9px;margin-bottom:18px}
+.choice-btn{display:flex;align-items:flex-start;gap:12px;padding:12px 15px;
+  border:2px solid var(--border);border-radius:10px;cursor:pointer;transition:.15s;
+  font-size:14px;text-align:left;background:#fff;width:100%}
+.choice-btn:hover:not(:disabled){border-color:rgba(108,99,255,.4);background:rgba(108,99,255,.03)}
+.choice-btn.selected{border-color:var(--p);background:rgba(108,99,255,.06)}
+.choice-btn.correct{border-color:var(--grn);background:#f0fdf4}
+.choice-btn.wrong{border-color:var(--red);background:#fff1f2}
+.choice-btn:disabled{cursor:default}
+.choice-letter{width:26px;height:26px;min-width:26px;border-radius:7px;background:var(--bg);
+  display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;
+  color:var(--muted);transition:.15s}
+.choice-btn.selected .choice-letter{background:var(--p);color:#fff}
+.choice-btn.correct .choice-letter{background:var(--grn);color:#fff}
+.choice-btn.wrong .choice-letter{background:var(--red);color:#fff}
+
+/* FRQ */
+.frq-textarea{width:100%;min-height:160px;padding:14px;border:1.5px solid var(--border);
+  border-radius:10px;font-family:inherit;font-size:14px;resize:vertical;outline:none;transition:.2s;
+  line-height:1.6}
+.frq-textarea:focus{border-color:var(--p);box-shadow:0 0 0 3px rgba(108,99,255,.1)}
+.frq-textarea:disabled{background:var(--bg);color:var(--text);cursor:default}
+
+/* Feedback boxes */
+.explanation-box{border-radius:12px;padding:16px;margin-top:14px}
+.exp-correct{background:#f0fdf4;border:1.5px solid #86efac}
+.exp-wrong{background:#fff1f2;border:1.5px solid #fca5a5}
+.exp-frq{background:#dbeafe;border:1.5px solid #93c5fd}
+.exp-note{background:#f0fdf4;border:1.5px solid #86efac}
+.exp-title{font-size:12px;font-weight:800;margin-bottom:5px}
+.exp-correct .exp-title{color:#16a34a}
+.exp-wrong .exp-title{color:var(--red)}
+.exp-frq .exp-title{color:#2563eb}
+.exp-note .exp-title{color:#16a34a}
+.exp-body{font-size:13.5px;line-height:1.65;white-space:pre-line}
+.exp-answer{font-size:13px;font-family:inherit;line-height:1.7;white-space:pre-wrap}
+
+/* Actions */
+.q-actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:6px}
+.btn{padding:10px 20px;border-radius:10px;font-weight:700;font-size:14px;border:none;
+  cursor:pointer;transition:.2s;display:inline-flex;align-items:center;gap:7px;font-family:inherit}
+.btn-submit{background:linear-gradient(135deg,var(--p),var(--pd));color:#fff}
+.btn-submit:hover:not(:disabled){transform:translateY(-1px);box-shadow:0 4px 14px rgba(108,99,255,.35)}
+.btn-submit:disabled{opacity:.45;cursor:not-allowed;transform:none;box-shadow:none}
+.btn-next{background:var(--bg);color:var(--dark);border:1px solid var(--border)}
+.btn-next:hover{background:#e5e7eb}
+.btn-skip{background:transparent;color:var(--muted);font-size:13px;padding:8px 12px}
+.btn-skip:hover{color:var(--dark)}
+.btn-finish{background:linear-gradient(135deg,#10b981,#059669);color:#fff}
+.btn-finish:hover{transform:translateY(-1px);box-shadow:0 4px 14px rgba(16,185,129,.35)}
+
+/* ── TEST AREA ───────────────────────────────────────────── */
+#testArea{display:none;padding:28px}
+.test-header{display:flex;align-items:center;gap:12px;margin-bottom:22px;flex-wrap:wrap}
+.test-title{font-size:18px;font-weight:900;color:var(--dark)}
+.btn-exit{margin-left:auto;background:#fff;border:1px solid var(--border);padding:8px 14px;
+  border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;color:var(--muted);transition:.15s;font-family:inherit}
+.btn-exit:hover{background:var(--bg);color:var(--dark)}
+
+/* ── RESULTS ─────────────────────────────────────────────── */
+#resultsArea{display:none;padding:28px}
+.results-card{background:#fff;border:1px solid var(--border);border-radius:20px;
+  padding:40px 36px;text-align:center;max-width:580px}
+.score-ring{width:110px;height:110px;border-radius:50%;
+  background:linear-gradient(135deg,var(--p),var(--pd));
+  display:flex;align-items:center;justify-content:center;
+  margin:0 auto 18px;font-size:28px;font-weight:900;color:#fff}
+.res-title{font-size:22px;font-weight:900;color:var(--dark);margin-bottom:6px}
+.res-msg{color:var(--muted);font-size:14px;margin-bottom:22px;line-height:1.5}
+.res-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:24px}
+.res-stat{background:var(--bg);border-radius:12px;padding:14px}
+.rs-num{font-size:22px;font-weight:900;color:var(--dark)}
+.rs-lbl{font-size:11px;color:var(--muted)}
+.res-actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.btn-new-test{background:linear-gradient(135deg,var(--p),var(--pd));color:#fff;
+  padding:11px 22px;border-radius:10px;font-weight:700;font-size:14px;border:none;
+  cursor:pointer;display:inline-flex;align-items:center;gap:7px;font-family:inherit;transition:.2s}
+.btn-new-test:hover{transform:translateY(-1px);box-shadow:0 4px 14px rgba(108,99,255,.35)}
+.btn-review{background:#fff;border:1.5px solid var(--border);color:var(--dark);
+  padding:11px 22px;border-radius:10px;font-weight:700;font-size:14px;cursor:pointer;
+  display:inline-flex;align-items:center;gap:7px;font-family:inherit;transition:.15s}
+.btn-review:hover{background:var(--bg)}
+.upgrade-box{margin-top:22px;background:linear-gradient(135deg,#ede9fe,#ddd6fe);
+  border:1px solid #c4b5fd;border-radius:14px;padding:20px;text-align:left}
+.ub-title{font-size:15px;font-weight:800;color:var(--p);margin-bottom:5px}
+.ub-sub{font-size:13px;color:#5b21b6;margin-bottom:12px}
+
+/* ── LOCK OVERLAY ────────────────────────────────────────── */
+.lock-overlay{background:#fff;border:2px dashed var(--border);border-radius:16px;
+  padding:48px 36px;text-align:center}
+
+/* ── ACCESS MODAL ────────────────────────────────────────── */
+.modal-backdrop{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);
+  z-index:500;align-items:center;justify-content:center;padding:20px}
+.modal-backdrop.open{display:flex}
+.modal-box{background:#fff;border-radius:20px;padding:36px;max-width:450px;width:100%;
+  text-align:center;box-shadow:0 24px 60px rgba(0,0,0,.25);position:relative}
+.modal-close{position:absolute;top:14px;right:14px;background:var(--bg);
+  border:1px solid var(--border);width:30px;height:30px;border-radius:7px;
+  cursor:pointer;font-size:13px;color:var(--muted);display:flex;align-items:center;
+  justify-content:center;font-family:inherit;transition:.15s}
+.modal-close:hover{background:#e5e7eb}
+.modal-icon{font-size:44px;margin-bottom:14px}
+.modal-title{font-size:22px;font-weight:900;color:var(--dark);margin-bottom:6px}
+.modal-sub{font-size:14px;color:var(--muted);margin-bottom:18px;line-height:1.5}
+.code-row{display:flex;gap:8px;margin-bottom:12px}
+.code-input{flex:1;padding:11px 14px;border:1.5px solid var(--border);border-radius:10px;
+  font-size:14px;outline:none;transition:.2s;font-family:inherit}
+.code-input:focus{border-color:var(--p);box-shadow:0 0 0 3px rgba(108,99,255,.1)}
+.btn-unlock{background:var(--p);color:#fff;padding:11px 18px;border-radius:10px;
+  font-weight:700;border:none;cursor:pointer;white-space:nowrap;font-family:inherit;transition:.2s}
+.btn-unlock:hover{background:var(--pd)}
+.code-msg{font-size:13px;min-height:20px;margin-bottom:14px;font-weight:600}
+.code-msg.ok{color:#16a34a}
+.code-msg.err{color:var(--red)}
+.modal-divider{height:1px;background:var(--border);margin-bottom:18px}
+.modal-cta-label{font-size:12px;color:var(--muted);margin-bottom:10px}
+.modal-ctas{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+.btn-wa{background:#25d366;color:#fff;padding:9px 16px;border-radius:9px;
+  font-size:13px;font-weight:700;display:inline-flex;align-items:center;gap:6px;transition:.2s}
+.btn-wa:hover{background:#1ebe5d}
+.btn-plans{background:var(--bg);border:1px solid var(--border);color:var(--dark);
+  padding:9px 16px;border-radius:9px;font-size:13px;font-weight:700;
+  display:inline-flex;align-items:center;gap:6px;transition:.15s}
+.btn-plans:hover{background:#e5e7eb}
+
+/* ── TOAST ───────────────────────────────────────────────── */
+.toast{position:fixed;bottom:22px;right:22px;background:var(--dark2);color:#fff;
+  padding:11px 18px;border-radius:12px;font-size:13px;font-weight:600;z-index:9999;
+  transform:translateY(70px);opacity:0;transition:.3s;pointer-events:none;max-width:300px}
+.toast.show{transform:translateY(0);opacity:1}
+
+/* ── MOBILE ──────────────────────────────────────────────── */
+.mob-unit-toggle{display:none;padding:10px 20px;background:#fff;
+  border-bottom:1px solid var(--border);font-size:13px;font-weight:700;color:var(--p);cursor:pointer}
+@media(max-width:900px){
+  .sidebar{display:none}
+  .mob-unit-toggle{display:block}
+  .panel,.test-header,#testArea,#resultsArea{padding:16px}
+  .hero-banner{padding:22px 20px}
+  .hero-banner h1{font-size:18px}
+  .builder-card{padding:18px}
+  .unit-grid{grid-template-columns:repeat(auto-fill,minmax(130px,1fr))}
+  .tab-bar{padding:0 14px;overflow-x:auto}
+  .results-card{padding:24px 18px}
+}
+@media(max-width:600px){
+  .hero-stats{gap:10px}
+  .hs{padding:9px 12px;min-width:70px}
+  .hs-num{font-size:16px}
+  .res-stats{grid-template-columns:1fr 1fr 1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- TOP NAV -->
+<nav class="top-nav">
+  <div class="nav-brand">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 36" fill="none">
+      <defs><linearGradient id="nlg2" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#a78bfa"/><stop offset="100%" stop-color="#4f46e5"/></linearGradient></defs>
+      <rect width="36" height="36" rx="10" fill="url(#nlg2)"/>
+      <circle cx="18" cy="18" r="3" fill="white" opacity=".95"/>
+      <ellipse cx="18" cy="18" rx="10.5" ry="4" stroke="white" stroke-width="1.6" fill="none" opacity=".9"/>
+      <ellipse cx="18" cy="18" rx="10.5" ry="4" stroke="white" stroke-width="1.6" fill="none" opacity=".9" transform="rotate(60 18 18)"/>
+      <ellipse cx="18" cy="18" rx="10.5" ry="4" stroke="white" stroke-width="1.6" fill="none" opacity=".9" transform="rotate(120 18 18)"/>
+      <circle cx="28.5" cy="18" r="1.8" fill="#f59e0b"/>
+    </svg>
+    MindSpire Lab
+  </div>
+  <div class="nav-right">
+    <a href="https://mindspirelab.com" class="back-btn"><i class="fas fa-arrow-left"></i><span class="hide-xs"> Main Site</span></a>
+    <div id="userPill" style="display:none;font-size:12px;font-weight:700;color:#374151;padding:5px 12px;border-radius:20px;border:1.5px solid #e5e7eb;align-items:center;gap:6px">
+      <i class="fas fa-user-circle" style="color:#6c63ff"></i>
+      <span id="userPillName"></span>
+    </div>
+    <div id="accessPill" class="access-pill locked-access" onclick="openModal()">
+      <i class="fas fa-lock"></i> <span id="accessText">Unit 1 Free</span>
+    </div>
+    <button id="logoutBtn" style="display:none;font-size:12px;color:#9ca3af;padding:5px 12px;border-radius:8px;border:1px solid #e5e7eb;background:none;cursor:pointer;font-family:inherit" onclick="doLogout()"><i class="fas fa-sign-out-alt"></i> Logout</button>
+  </div>
+</nav>
+
+<!-- LAYOUT -->
+<div class="page-wrap">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sb-section">
+      <div class="sb-label">Navigate</div>
+      <div class="sb-item active" onclick="showPanel('builder')" id="snav-builder">
+        <div class="sb-icon" style="background:#ede9fe">🧪</div>
+        <span>Build a Test</span>
+      </div>
+      <div class="sb-item" onclick="showPanel('practice')" id="snav-practice">
+        <div class="sb-icon" style="background:#dcfce7">⚡</div>
+        <span>Quick Practice</span>
+      </div>
+    </div>
+    <div class="sb-divider"></div>
+    <div class="sb-section">
+      <div class="sb-label">AP Units</div>
+      <div id="sbUnits"></div>
+    </div>
+    <div class="sb-divider"></div>
+    <div class="sb-promo" onclick="openModal()" id="sbPromo">
+      <div class="sb-promo-title">🔒 Unlock All 9 Units</div>
+      <div class="sb-promo-sub">810+ questions — paid students only</div>
+      <div class="sb-promo-btn">Get Access Code →</div>
+    </div>
+    <div id="sbMyWork" style="display:none;padding:0 12px;margin-top:8px">
+      <div class="sb-divider"></div>
+      <div class="sb-label">My Work</div>
+      <div class="sb-item" id="snav-myassignments" onclick="showPanel('myassignments')">
+        <div class="sb-icon" style="background:#fef3c7">📋</div>
+        <span>Assignments</span>
+        <span class="sb-badge sb-lock" id="assignBadge" style="display:none"></span>
+      </div>
+      <div class="sb-item" id="snav-mytests" onclick="showPanel('mytests')">
+        <div class="sb-icon" style="background:#fee2e2">📝</div>
+        <span>Tests</span>
+        <span class="sb-badge sb-lock" id="testBadge" style="display:none"></span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <div class="main-wrap">
+    <div class="mob-unit-toggle" onclick="toggleMobileSidebar()">
+      <i class="fas fa-bars"></i> Units & Navigation
+    </div>
+
+    <!-- TAB BAR -->
+    <div class="tab-bar">
+      <div class="tab-btn active" onclick="showPanel('builder')" id="tab-builder">
+        <i class="fas fa-flask"></i> Build a Test
+      </div>
+      <div class="tab-btn" onclick="showPanel('practice')" id="tab-practice">
+        <i class="fas fa-bolt"></i> Quick Practice
+      </div>
+      <div class="tab-btn" id="tab-myassignments" style="display:none" onclick="showPanel('myassignments')">
+        <i class="fas fa-tasks"></i> Assignments <span id="tabAssignBadge"></span>
+      </div>
+      <div class="tab-btn" id="tab-mytests" style="display:none" onclick="showPanel('mytests')">
+        <i class="fas fa-file-alt"></i> Tests <span id="tabTestBadge"></span>
+      </div>
+    </div>
+
+    <!-- ── BUILD A TEST PANEL ── -->
+    <div class="panel active" id="panel-builder">
+      <div class="hero-banner">
+        <h1>🧪 Build Your Custom AP Chem Test</h1>
+        <p>Choose units, question types, and quantity — instantly generate your personalised practice test. <strong style="color:#34d399">Unit 1 is free for everyone!</strong></p>
+        <div class="hero-stats">
+          <div class="hs"><div class="hs-num" id="stat-total">116</div><div class="hs-lbl">Questions</div></div>
+          <div class="hs"><div class="hs-num">30</div><div class="hs-lbl">Free (Unit 1)</div></div>
+          <div class="hs"><div class="hs-num">9</div><div class="hs-lbl">AP Units</div></div>
+          <div class="hs"><div class="hs-num">2021–25</div><div class="hs-lbl">PYQ Style</div></div>
+        </div>
+      </div>
+
+      <div class="builder-card">
+        <div class="bc-title">Configure Your Test</div>
+        <div class="bc-sub">Mix topics, types, and difficulty exactly like SaveMyExams — then start instantly.</div>
+
+        <!-- STEP 1: Units -->
+        <div class="builder-section">
+          <div class="step-header">
+            <div class="step-num">1</div>
+            <span>Select AP Units</span>
+            <span style="font-size:12px;font-weight:500;color:var(--muted);margin-left:auto" id="selCount">1 unit selected</span>
+          </div>
+          <div class="unit-grid" id="unitChips"></div>
+        </div>
+
+        <!-- STEP 2: Type -->
+        <div class="builder-section">
+          <div class="step-header">
+            <div class="step-num">2</div>
+            <span>Question Types</span>
+          </div>
+          <div class="type-row">
+            <div class="tc selected" id="type-MCQ" onclick="toggleType('MCQ')">
+              <i class="fas fa-list-ul"></i> MCQ <span style="font-size:11px;opacity:.7">(Multiple Choice)</span>
+            </div>
+            <div class="tc selected" id="type-FRQ" onclick="toggleType('FRQ')">
+              <i class="fas fa-pen-nib"></i> FRQ <span style="font-size:11px;opacity:.7">(Free Response)</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- STEP 3: Count -->
+        <div class="builder-section">
+          <div class="step-header">
+            <div class="step-num">3</div>
+            <span>Number of Questions</span>
+          </div>
+          <div class="count-val" id="countDisplay">10</div>
+          <div class="count-sub">questions selected</div>
+          <input type="range" id="countSlider" min="5" max="40" value="10" step="5"
+            oninput="updateCount(this.value)"/>
+          <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-top:5px;padding:0 2px">
+            <span>5</span><span>10</span><span>15</span><span>20</span><span>25</span><span>30</span><span>35</span><span>40</span>
+          </div>
+          <div id="availMsg" style="font-size:12px;color:var(--muted);margin-top:10px"></div>
+        </div>
+
+        <!-- START -->
+        <div class="start-row">
+          <button class="btn-start" onclick="buildTest()" id="buildBtn">
+            <i class="fas fa-play"></i> Start Test
+          </button>
+          <div id="buildMsg" class="warn-msg"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── MY ASSIGNMENTS PANEL ── -->
+    <div class="panel" id="panel-myassignments">
+      <div class="hero-banner">
+        <h1>📋 My Assignments</h1>
+        <p>Complete the assignments your teacher has given you.</p>
+      </div>
+      <div id="myAssignmentsList"></div>
+    </div>
+
+    <!-- ── MY TESTS PANEL ── -->
+    <div class="panel" id="panel-mytests">
+      <div class="hero-banner">
+        <h1>📝 My Tests</h1>
+        <p>Take the tests assigned by your teacher. Tests may be timed!</p>
+      </div>
+      <div id="myTestsList"></div>
+    </div>
+
+    <!-- ── QUICK PRACTICE PANEL ── -->
+    <div class="panel" id="panel-practice">
+      <div class="hero-banner">
+        <h1>⚡ Quick Practice</h1>
+        <p>Jump into 5 random AP Chemistry questions from your available units. Great for daily review!</p>
+        <div class="hero-stats">
+          <div class="hs"><div class="hs-num">5</div><div class="hs-lbl">Questions</div></div>
+          <div class="hs"><div class="hs-num">Random</div><div class="hs-lbl">Selection</div></div>
+          <div class="hs"><div class="hs-num">Instant</div><div class="hs-lbl">Feedback</div></div>
+        </div>
+      </div>
+      <div id="practiceContent"></div>
+    </div>
+
+    <!-- ── TEST AREA ── -->
+    <div id="testArea">
+      <div class="test-header">
+        <div class="test-title" id="testTitle">Your Custom Test</div>
+        <button class="btn-exit" onclick="exitTest()"><i class="fas fa-times"></i> Exit</button>
+      </div>
+      <div class="q-area">
+        <div class="progress-bar-wrap">
+          <div class="prog-text" id="progText">Question 1 of 10</div>
+          <div class="progress-bar-track">
+            <div class="progress-bar-fill" id="progFill" style="width:10%"></div>
+          </div>
+          <div class="score-text" id="scoreText">0 ✓</div>
+        </div>
+        <div id="qContainer"></div>
+      </div>
+    </div>
+
+    <!-- ── RESULTS AREA ── -->
+    <div id="resultsArea">
+      <div class="results-card">
+        <div class="score-ring" id="scoreRing">—</div>
+        <div class="res-title">Test Complete!</div>
+        <div class="res-msg" id="resMsg"></div>
+        <div class="res-stats">
+          <div class="res-stat"><div class="rs-num" id="rsCorrect">0</div><div class="rs-lbl">Correct</div></div>
+          <div class="res-stat"><div class="rs-num" id="rsWrong">0</div><div class="rs-lbl">Incorrect</div></div>
+          <div class="res-stat"><div class="rs-num" id="rsSkipped">0</div><div class="rs-lbl">Skipped</div></div>
+        </div>
+        <div class="res-actions">
+          <button class="btn-new-test" onclick="showPanel('builder')">
+            <i class="fas fa-redo"></i> New Test
+          </button>
+          <button class="btn-review" onclick="reviewAnswers()">
+            <i class="fas fa-eye"></i> Review Answers
+          </button>
+        </div>
+        <div class="upgrade-box" id="upgradeBox" style="display:none">
+          <div class="ub-title">🚀 Unlock 86 more questions across Units 2–9!</div>
+          <div class="ub-sub">Get your access code after signing up for a paid plan.</div>
+          <a href="https://mindspirelab.com/pricing" style="background:var(--p);color:#fff;padding:9px 18px;border-radius:9px;font-size:13px;font-weight:700;display:inline-flex;align-items:center;gap:6px"><i class="fas fa-unlock"></i> View Plans</a>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /main-wrap -->
+</div><!-- /page-wrap -->
+
+<!-- ACCESS MODAL -->
+<div class="modal-backdrop" id="accessModal" onclick="handleBackdropClick(event)">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div class="modal-icon">🔒</div>
+    <div class="modal-title">Unlock Full Access</div>
+    <div class="modal-sub">Units 2–9 require a paid plan. Enter your access code below, or contact Faridah to get one.</div>
+    <div class="code-row">
+      <input type="text" id="codeInput" class="code-input" placeholder="Enter access code..."
+        onkeydown="if(event.key==='Enter')validateCode()"/>
+      <button class="btn-unlock" onclick="validateCode()">Unlock</button>
+    </div>
+    <div class="code-msg" id="codeMsg"></div>
+    <div class="modal-divider"></div>
+    <div class="modal-cta-label">Don't have a code yet?</div>
+    <div class="modal-ctas">
+      <a href="https://wa.me/19162927162?text=Hi%20Faridah!%20I'd%20like%20to%20unlock%20the%20AP%20Chemistry%20platform." 
+         target="_blank" class="btn-wa"><i class="fab fa-whatsapp"></i> WhatsApp Faridah</a>
+      <a href="https://mindspirelab.com/pricing" class="btn-plans"><i class="fas fa-tag"></i> View Plans</a>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ═══════════════════════════════════════════════════════════════
+// SUPABASE
+// ═══════════════════════════════════════════════════════════════
+const SUPABASE_URL = 'https://qmrpbxiiwbqnmczdxoqr.supabase.co';
+const SUPABASE_ANON = 'sb_publishable_t8Q_10VZIilu1bZlJXyzsA_w-LUu_E2';
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
+let currentUser = null;
+let currentProfile = null;
+let currentSessionId = 'sess_' + Date.now();
+let currentTestSource = 'practice';
+let currentAssignmentId = null;
+let currentTestId = null;
+let testStudentId = null;
+let testTimerInterval = null;
+
+// ═══════════════════════════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════════════════════════
+let isPaid = false;
+let selUnits = [1];
+let selTypes = ['MCQ', 'FRQ'];
+let qCount = 10;
+let testQs = [];
+let currQ = 0;
+let scoreCount = 0;
+let skippedCount = 0;
+let answers = [];
+let inReview = false;
+const VALID_CODES = ['MINDSPIRE2026','APCHEM2026','FARIDAH2026','PAID2026','MINDSPIRE25','APCHEM25'];
+
+// Restore saved access (fallback)
+try { if (localStorage.getItem('msl_paid') === '1') { isPaid = true; } } catch(e) {}
+
+// ═══════════════════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════════════════
+document.addEventListener('DOMContentLoaded', async () => {
+  // Auth check
+  const { data: { session } } = await sb.auth.getSession();
+  if (!session) { window.location.href = '/login.html'; return; }
+  currentUser = session.user;
+  const { data: profile } = await sb.from('profiles').select('*').eq('id', currentUser.id).single();
+  currentProfile = profile;
+  if (profile?.role === 'teacher') { window.location.href = '/teacher.html'; return; }
+  if (profile?.is_paid) {
+    isPaid = true;
+    try { localStorage.setItem('msl_paid', '1'); } catch(e) {}
+  }
+  const name = profile?.full_name || currentUser.email.split('@')[0];
+  document.getElementById('userPillName').textContent = name;
+  document.getElementById('userPill').style.cssText = 'display:flex;font-size:12px;font-weight:700;color:#374151;padding:5px 12px;border-radius:20px;border:1.5px solid #e5e7eb;align-items:center;gap:6px';
+  document.getElementById('logoutBtn').style.display = 'block';
+  document.getElementById('sbMyWork').style.display = 'block';
+  document.getElementById('tab-myassignments').style.display = 'flex';
+  document.getElementById('tab-mytests').style.display = 'flex';
+  renderUnitChips();
+  renderSidebarUnits();
+  updateAccessUI();
+  updateAvail();
+  renderPractice();
+  document.getElementById('stat-total').textContent = TOTAL_QUESTIONS;
+  loadMyAssignments();
+  loadMyTests();
+});
+
+async function doLogout() {
+  await sb.auth.signOut();
+  try { localStorage.removeItem('msl_paid'); } catch(e) {}
+  window.location.href = '/login.html';
+}
+
+// ═══════════════════════════════════════════════════════════════
+// ACCESS UI
+// ═══════════════════════════════════════════════════════════════
+function updateAccessUI() {
+  const pill = document.getElementById('accessPill');
+  const txt = document.getElementById('accessText');
+  if (isPaid) {
+    pill.className = 'access-pill full-access';
+    pill.onclick = null;
+    pill.innerHTML = '<i class="fas fa-unlock"></i> Full Access';
+  } else {
+    pill.className = 'access-pill locked-access';
+    pill.onclick = openModal;
+    pill.innerHTML = '<i class="fas fa-lock"></i> <span id="accessText">Unit 1 Free</span>';
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════
+// UNIT CHIPS (Builder)
+// ═══════════════════════════════════════════════════════════════
+function renderUnitChips() {
+  const c = document.getElementById('unitChips');
+  c.innerHTML = UNITS.map(u => {
+    const canUse = u.free || isPaid;
+    const sel = selUnits.includes(u.id);
+    const cnt = AP_QUESTIONS.filter(q => q.unit === u.id && canAccess(q, isPaid)).length;
+    return `<div class="uc ${sel?'selected':''} ${!canUse?'locked':''}" 
+               id="uc-${u.id}" onclick="toggleUnit(${u.id})"
+               style="${sel?`border-color:${u.color};background:${u.color}12;color:${u.color}`:''}">
+      <div class="uc-checkmark" style="${sel?`background:${u.color};border-color:${u.color}`:''}">
+        ${sel?'<i class="fas fa-check" style="font-size:8px"></i>':''}
+      </div>
+      <span>${u.icon}</span>
+      <span style="font-size:11px;line-height:1.2">Unit ${u.id}</span>
+      ${!canUse ? '<span class="lock-tag">🔒 Paid</span>' : `<span class="cnt-tag">${cnt}q</span>`}
+    </div>`;
+  }).join('');
+  document.getElementById('selCount').textContent = `${selUnits.length} unit${selUnits.length>1?'s':''} selected`;
+}
+
+function renderSidebarUnits() {
+  const c = document.getElementById('sbUnits');
+  c.innerHTML = UNITS.map(u => {
+    const sel = selUnits.includes(u.id);
+    return `<div class="sb-item ${sel?'active':''}" onclick="toggleUnit(${u.id})" id="sbunit-${u.id}">
+      <div class="sb-icon" style="background:${u.color}20">${u.icon}</div>
+      <span style="font-size:12px">Unit ${u.id}</span>
+      <span class="sb-badge ${u.free?'sb-free':'sb-lock'}">${u.free?'Free':'🔒'}</span>
+    </div>`;
+  }).join('');
+}
+
+function toggleUnit(id) {
+  const u = UNITS.find(x => x.id === id);
+  if (!u.free && !isPaid) { openModal(); return; }
+  if (selUnits.includes(id)) {
+    if (selUnits.length === 1) { showToast('Select at least one unit!'); return; }
+    selUnits = selUnits.filter(x => x !== id);
+  } else {
+    selUnits.push(id);
+  }
+  renderUnitChips();
+  renderSidebarUnits();
+  updateAvail();
+}
+
+// ═══════════════════════════════════════════════════════════════
+// TYPE SELECTION
+// ═══════════════════════════════════════════════════════════════
+function toggleType(t) {
+  const el = document.getElementById('type-' + t);
+  if (selTypes.includes(t)) {
+    if (selTypes.length === 1) { showToast('Select at least one type!'); return; }
+    selTypes = selTypes.filter(x => x !== t);
+    el.classList.remove('selected');
+  } else {
+    selTypes.push(t);
+    el.classList.add('selected');
+  }
+  updateAvail();
+}
+
+// ═══════════════════════════════════════════════════════════════
+// COUNT SLIDER
+// ═══════════════════════════════════════════════════════════════
+function updateCount(v) {
+  qCount = parseInt(v);
+  document.getElementById('countDisplay').textContent = v;
+  updateAvail();
+}
+
+function updateAvail() {
+  const pool = getQuestions({ units: selUnits, types: selTypes, isPaidUser: isPaid });
+  const avail = pool.length;
+  const msg = document.getElementById('availMsg');
+  const warn = document.getElementById('buildMsg');
+  const btn = document.getElementById('buildBtn');
+  msg.textContent = `${avail} question${avail !== 1 ? 's' : ''} available with current selection`;
+  if (avail === 0) {
+    warn.textContent = '⚠️ No questions match — adjust your filters';
+    btn.disabled = true;
+  } else {
+    warn.textContent = avail < qCount ? `⚡ Will use all ${avail} available questions` : '';
+    btn.disabled = false;
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════
+// BUILD TEST
+// ═══════════════════════════════════════════════════════════════
+function buildTest() {
+  const pool = getQuestions({ units: selUnits, types: selTypes, count: qCount, isPaidUser: isPaid });
+  if (!pool.length) { showToast('No questions available!'); return; }
+  testQs = pool;
+  currQ = 0;
+  scoreCount = 0;
+  skippedCount = 0;
+  answers = new Array(pool.length).fill(null);
+  inReview = false;
+  document.getElementById('testTitle').textContent = `Custom Test — ${pool.length} Questions`;
+  hideAllPanels();
+  document.getElementById('testArea').style.display = 'block';
+  window.scrollTo(0, 0);
+  renderQuestion();
+}
+
+function exitTest() {
+  document.getElementById('testArea').style.display = 'none';
+  showPanel('builder');
+}
+
+// ═══════════════════════════════════════════════════════════════
+// RENDER QUESTION
+// ═══════════════════════════════════════════════════════════════
+function renderQuestion() {
+  const q = testQs[currQ];
+  const total = testQs.length;
+  const pct = Math.round(((currQ + 1) / total) * 100);
+  document.getElementById('progText').textContent = `Question ${currQ + 1} of ${total}`;
+  document.getElementById('progFill').style.width = pct + '%';
+  document.getElementById('scoreText').textContent = `${scoreCount} ✓`;
+
+  const unitInfo = UNITS.find(u => u.id === q.unit);
+  const answered = answers[currQ] !== null;
+  
+  let html = `<div class="q-card">
+    <div class="q-meta">
+      <span class="tag tag-unit">${unitInfo?.icon} Unit ${q.unit}</span>
+      <span class="tag tag-${q.type.toLowerCase()}">${q.type}</span>
+      <span class="tag tag-${q.difficulty.toLowerCase()}">${q.difficulty}</span>
+      <span class="tag-topic">${q.topic}</span>
+    </div>
+    <div class="q-text">${q.q}</div>`;
+
+  if (q.type === 'MCQ') {
+    html += `<div class="choices-list">`;
+    q.choices.forEach(c => {
+      const letter = c[0];
+      const text = c.slice(3);
+      let cls = '';
+      if (answered) {
+        if (letter === q.answer) cls = 'correct';
+        else if (letter === answers[currQ]) cls = 'wrong';
+      }
+      html += `<button class="choice-btn ${cls}" 
+        ${answered ? 'disabled' : `onclick="selectChoice('${letter}')"`}
+        id="ch-${letter}">
+        <div class="choice-letter">${letter}</div>
+        <div>${text}</div>
+      </button>`;
+    });
+    html += `</div>`;
+  } else {
+    const savedAnswer = answered && answers[currQ] !== 'SKIPPED' ? answers[currQ] : '';
+    html += `<div style="margin-bottom:14px">
+      <textarea class="frq-textarea" id="frqBox" 
+        placeholder="Write your answer here. Show all work for full credit."
+        ${answered ? 'disabled' : ''}>${savedAnswer}</textarea>
+    </div>`;
+  }
+
+  // Show feedback if answered
+  if (answered && answers[currQ] !== 'SKIPPED') {
+    if (q.type === 'MCQ') {
+      const correct = answers[currQ] === q.answer;
+      html += `<div class="explanation-box ${correct?'exp-correct':'exp-wrong'}">
+        <div class="exp-title">${correct ? '✅ Correct!' : `❌ Incorrect — Answer: ${q.answer}`}</div>
+        <div class="exp-body">${q.explanation}</div>
+      </div>`;
+    } else {
+      html += `<div class="explanation-box exp-frq">
+        <div class="exp-title">✅ Model Answer</div>
+        <div class="exp-answer">${q.answer}</div>
+      </div>
+      <div class="explanation-box exp-note" style="margin-top:8px">
+        <div class="exp-title">📝 Scoring Notes</div>
+        <div class="exp-body">${q.explanation}</div>
+      </div>`;
+    }
+  } else if (answered && answers[currQ] === 'SKIPPED') {
+    html += `<div class="explanation-box exp-frq" style="background:#fafafa;border-color:var(--border)">
+      <div class="exp-title" style="color:var(--muted)">⏭ Skipped</div>
+      <div class="exp-body" style="color:var(--muted)">You skipped this question.</div>
+    </div>`;
+  }
+
+  html += `</div>`;
+
+  // Action buttons
+  html += `<div class="q-actions">`;
+  if (!answered) {
+    if (q.type === 'MCQ') {
+      html += `<button class="btn btn-submit" id="submitBtn" disabled onclick="submitMCQ()">
+        <i class="fas fa-check"></i> Submit Answer</button>`;
+    } else {
+      html += `<button class="btn btn-submit" onclick="submitFRQ()">
+        <i class="fas fa-check"></i> Check Answer</button>`;
+    }
+    html += `<button class="btn btn-skip" onclick="skipQ()">
+      <i class="fas fa-forward"></i> Skip</button>`;
+  } else {
+    if (currQ < testQs.length - 1) {
+      html += `<button class="btn btn-next" onclick="nextQ()">
+        <i class="fas fa-arrow-right"></i> Next Question</button>`;
+    } else {
+      html += `<button class="btn btn-finish" onclick="showResults()">
+        <i class="fas fa-flag-checkered"></i> Finish & See Results</button>`;
+    }
+    if (inReview && currQ > 0) {
+      html += `<button class="btn btn-skip" onclick="prevQ()">
+        <i class="fas fa-arrow-left"></i> Previous</button>`;
+    }
+  }
+  html += `</div>`;
+
+  document.getElementById('qContainer').innerHTML = html;
+}
+
+function selectChoice(letter) {
+  if (answers[currQ] !== null) return;
+  document.querySelectorAll('.choice-btn').forEach(b => b.classList.remove('selected'));
+  const btn = document.getElementById('ch-' + letter);
+  if (btn) {
+    btn.classList.add('selected');
+    document.getElementById('submitBtn').disabled = false;
+    document.getElementById('submitBtn').dataset.choice = letter;
+  }
+}
+
+function submitMCQ() {
+  const btn = document.getElementById('submitBtn');
+  const choice = btn.dataset.choice;
+  if (!choice) return;
+  const q = testQs[currQ];
+  answers[currQ] = choice;
+  const isCorrect = choice === q.answer;
+  if (isCorrect) scoreCount++;
+  saveAttempt(q, choice, isCorrect);
+  renderQuestion();
+}
+
+function submitFRQ() {
+  const val = document.getElementById('frqBox')?.value?.trim() || '';
+  answers[currQ] = val || '(no answer provided)';
+  const q = testQs[currQ];
+  saveAttempt(q, answers[currQ], null);
+  renderQuestion();
+}
+
+function skipQ() {
+  answers[currQ] = 'SKIPPED';
+  skippedCount++;
+  if (currQ < testQs.length - 1) { currQ++; renderQuestion(); }
+  else showResults();
+}
+
+function nextQ() {
+  if (currQ < testQs.length - 1) { currQ++; renderQuestion(); }
+  else showResults();
+}
+
+function prevQ() {
+  if (currQ > 0) { currQ--; renderQuestion(); }
+}
+
+// ═══════════════════════════════════════════════════════════════
+// RESULTS
+// ═══════════════════════════════════════════════════════════════
+function showResults() {
+  // If timed test — save to Supabase
+  if (currentTestSource === 'test' && testStudentId) {
+    finishTest(); return;
+  }
+  // If assignment — mark completed
+  if (currentTestSource === 'assignment' && currentAssignmentId) {
+    const mcqTotal2 = testQs.filter(q => q.type === 'MCQ').length;
+    const correct2 = answers.filter((a,i) => a === testQs[i]?.answer).length;
+    const pct2 = mcqTotal2 > 0 ? Math.round((correct2/mcqTotal2)*100) : 0;
+    sb.from('assignment_students').update({
+      status: 'completed', score: correct2, total: mcqTotal2, pct: pct2,
+      submitted_at: new Date().toISOString()
+    }).eq('id', currentAssignmentId);
+    currentAssignmentId = null;
+  }
+  currentTestSource = 'practice';
+  document.getElementById('testArea').style.display = 'none';
+  document.getElementById('resultsArea').style.display = 'block';
+  window.scrollTo(0, 0);
+
+  const mcqTotal = testQs.filter(q => q.type === 'MCQ').length;
+  const correct = answers.filter((a, i) => a === testQs[i]?.answer).length;
+  const wrong = answers.filter((a, i) => a !== null && a !== 'SKIPPED' && a !== testQs[i]?.answer).length;
+  const skipped = answers.filter(a => a === 'SKIPPED').length;
+  const pct = mcqTotal > 0 ? Math.round((correct / mcqTotal) * 100) : '--';
+
+  const ring = document.getElementById('scoreRing');
+  ring.textContent = mcqTotal > 0 ? pct + '%' : '✓';
+  ring.style.background = pct >= 80
+    ? 'linear-gradient(135deg,#10b981,#059669)'
+    : pct >= 60
+    ? 'linear-gradient(135deg,#f59e0b,#d97706)'
+    : 'linear-gradient(135deg,#ef4444,#dc2626)';
+
+  document.getElementById('rsCorrect').textContent = correct;
+  document.getElementById('rsWrong').textContent = wrong;
+  document.getElementById('rsSkipped').textContent = skipped;
+
+  const msg = typeof pct === 'number'
+    ? pct >= 80 ? '🎉 Excellent work! You are well-prepared for this material.'
+    : pct >= 65 ? '👍 Good effort! Keep practising to boost your score.'
+    : pct >= 50 ? '📚 Keep studying — review the explanations carefully.'
+    : '💪 Don\'t give up! Review the material and try again.'
+    : '✅ FRQ test complete — review the model answers above.';
+  document.getElementById('resMsg').textContent = msg;
+
+  document.getElementById('upgradeBox').style.display = !isPaid ? 'block' : 'none';
+}
+
+function reviewAnswers() {
+  inReview = true;
+  currQ = 0;
+  document.getElementById('resultsArea').style.display = 'none';
+  document.getElementById('testArea').style.display = 'block';
+  document.getElementById('testTitle').textContent = 'Review — Your Answers';
+  renderQuestion();
+}
+
+// ═══════════════════════════════════════════════════════════════
+// QUICK PRACTICE
+// ═══════════════════════════════════════════════════════════════
+function renderPractice() {
+  const pool = getQuestions({ isPaidUser: isPaid, count: 5 });
+  const c = document.getElementById('practiceContent');
+  if (!pool.length) {
+    c.innerHTML = `<div class="lock-overlay"><div style="font-size:44px;margin-bottom:12px">📚</div>
+      <div style="font-size:18px;font-weight:800;color:var(--dark);margin-bottom:8px">No Questions Available</div>
+      <div style="color:var(--muted)">Unlock paid units to access more questions.</div></div>`;
+    return;
+  }
+
+  let html = `<div class="practice-toolbar">
+    <div class="practice-title">Quick Practice — ${pool.length} Random Questions</div>
+    <button class="btn-refresh" onclick="renderPractice()">
+      <i class="fas fa-sync-alt"></i> New Set
+    </button>
+  </div>`;
+
+  pool.forEach((q, i) => {
+    const unitInfo = UNITS.find(u => u.id === q.unit);
+    html += `<div class="q-card" id="pq-${i}" style="margin-bottom:14px">
+      <div class="q-meta">
+        <span class="tag tag-unit">${unitInfo?.icon} Unit ${q.unit}</span>
+        <span class="tag tag-${q.type.toLowerCase()}">${q.type}</span>
+        <span class="tag tag-${q.difficulty.toLowerCase()}">${q.difficulty}</span>
+        <span class="tag-topic">${q.topic}</span>
+      </div>
+      <div class="q-text">${q.q}</div>`;
+
+    if (q.type === 'MCQ') {
+      html += `<div class="choices-list" id="pchoices-${i}">`;
+      q.choices.forEach(ch => {
+        const letter = ch[0];
+        html += `<button class="choice-btn" id="pch-${i}-${letter}"
+          onclick="practiceSelectMCQ(${i}, '${letter}', '${q.answer}', ${q.id})">
+          <div class="choice-letter">${letter}</div>
+          <div>${ch.slice(3)}</div>
+        </button>`;
+      });
+      html += `</div>`;
+    } else {
+      html += `<textarea class="frq-textarea" id="pfrq-${i}" 
+        placeholder="Write your answer here..."></textarea>
+        <button class="btn btn-submit" style="margin-top:10px"
+          onclick="practiceCheckFRQ(${i}, ${q.id})">
+          <i class="fas fa-check"></i> Check Answer
+        </button>`;
+    }
+    html += `<div id="pexp-${i}"></div></div>`;
+  });
+
+  c.innerHTML = html;
+  // Store pool for reference
+  window._practicePool = pool;
+}
+
+function practiceSelectMCQ(idx, letter, correct, qId) {
+  const choiceContainer = document.getElementById('pchoices-' + idx);
+  if (!choiceContainer) return;
+  // Disable all choices
+  choiceContainer.querySelectorAll('.choice-btn').forEach(btn => {
+    btn.onclick = null;
+    const l = btn.querySelector('.choice-letter')?.textContent;
+    if (l === correct) btn.classList.add('correct');
+    else if (l === letter) btn.classList.add('wrong');
+    btn.disabled = true;
+  });
+  // Show explanation
+  const q = AP_QUESTIONS.find(x => x.id === qId);
+  if (q) {
+    const correct_ans = letter === correct;
+    // Save practice attempt
+    saveAttempt(q, letter, correct_ans);
+    document.getElementById('pexp-' + idx).innerHTML =
+      `<div class="explanation-box ${correct_ans?'exp-correct':'exp-wrong'}" style="margin-top:10px">
+        <div class="exp-title">${correct_ans ? '✅ Correct!' : `❌ Incorrect — Answer: ${correct}`}</div>
+        <div class="exp-body">${q.explanation}</div>
+      </div>`;
+  }
+}
+
+function practiceCheckFRQ(idx, qId) {
+  const q = AP_QUESTIONS.find(x => x.id === qId);
+  if (!q) return;
+  const ta = document.getElementById('pfrq-' + idx);
+  if (ta) ta.disabled = true;
+  document.getElementById('pexp-' + idx).innerHTML =
+    `<div class="explanation-box exp-frq" style="margin-top:10px">
+      <div class="exp-title">✅ Model Answer</div>
+      <div class="exp-answer">${q.answer}</div>
+    </div>
+    <div class="explanation-box exp-note" style="margin-top:8px">
+      <div class="exp-title">📝 Scoring Notes</div>
+      <div class="exp-body">${q.explanation}</div>
+    </div>`;
+}
+
+// ═══════════════════════════════════════════════════════════════
+// PANELS
+// ═══════════════════════════════════════════════════════════════
+function hideAllPanels() {
+  document.querySelectorAll('.panel').forEach(p => { p.style.display='none'; p.classList.remove('active'); });
+  document.getElementById('testArea').style.display = 'none';
+  document.getElementById('resultsArea').style.display = 'none';
+}
+
+function showPanel(name) {
+  hideAllPanels();
+  const p = document.getElementById('panel-' + name);
+  if (p) { p.style.display = 'block'; p.classList.add('active'); }
+  document.querySelectorAll('.tab-btn').forEach(t => t.classList.remove('active'));
+  const t = document.getElementById('tab-' + name);
+  if (t) t.classList.add('active');
+  document.querySelectorAll('.sb-item').forEach(i => i.classList.remove('active'));
+  const s = document.getElementById('snav-' + name);
+  if (s) s.classList.add('active');
+  if (name === 'practice') renderPractice();
+  window.scrollTo(0,0);
+}
+
+// ═══════════════════════════════════════════════════════════════
+// ACCESS MODAL
+// ═══════════════════════════════════════════════════════════════
+function openModal() {
+  document.getElementById('accessModal').classList.add('open');
+  setTimeout(() => document.getElementById('codeInput').focus(), 50);
+}
+function closeModal() {
+  document.getElementById('accessModal').classList.remove('open');
+  document.getElementById('codeInput').value = '';
+  document.getElementById('codeMsg').textContent = '';
+  document.getElementById('codeMsg').className = 'code-msg';
+}
+function handleBackdropClick(e) {
+  if (e.target === document.getElementById('accessModal')) closeModal();
+}
+
+function validateCode() {
+  const code = document.getElementById('codeInput').value.trim().toUpperCase();
+  const msg = document.getElementById('codeMsg');
+  if (!code) { msg.textContent = 'Please enter a code.'; msg.className = 'code-msg err'; return; }
+  
+  if (VALID_CODES.includes(code)) {
+    isPaid = true;
+    try { localStorage.setItem('msl_paid', '1'); } catch(e) {}
+    // Save to Supabase
+    if (currentUser) {
+      sb.from('profiles').update({ is_paid: true }).eq('id', currentUser.id);
+    }
+    msg.className = 'code-msg ok';
+    msg.textContent = '✅ Access unlocked! All 9 units are now available.';
+    updateAccessUI();
+    setTimeout(() => {
+      closeModal();
+      renderUnitChips();
+      renderSidebarUnits();
+      updateAvail();
+      showToast('🎉 Full access unlocked! All units available.');
+    }, 1200);
+  } else {
+    msg.className = 'code-msg err';
+    msg.textContent = '❌ Invalid code. Contact Faridah to get your code.';
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════
+// MOBILE SIDEBAR
+// ═══════════════════════════════════════════════════════════════
+function toggleMobileSidebar() {
+  const sb = document.getElementById('sidebar');
+  if (sb.style.display === 'block') {
+    sb.style.display = 'none';
+  } else {
+    sb.style.display = 'block';
+    sb.style.position = 'relative';
+    sb.style.width = '100%';
+    sb.style.height = 'auto';
+    sb.style.maxHeight = '60vh';
+    sb.style.overflow = 'auto';
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════
+// TOAST
+// ═══════════════════════════════════════════════════════════════
+function showToast(msg, dur=3000) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), dur);
+}
+
+// ═══════════════════════════════════════════════════════════════
+// SAVE ATTEMPT TO SUPABASE
+// ═══════════════════════════════════════════════════════════════
+async function saveAttempt(q, answerGiven, isCorrect) {
+  if (!currentUser) return;
+  try {
+    await sb.from('attempts').insert({
+      student_id: currentUser.id,
+      question_id: q.id,
+      unit: q.unit,
+      topic: q.topic || null,
+      type: q.type,
+      difficulty: q.difficulty || null,
+      correct: isCorrect,
+      answer_given: String(answerGiven),
+      correct_ans: String(q.answer),
+      source: currentTestSource || 'practice',
+      session_id: currentSessionId,
+    });
+  } catch(e) { console.warn('Could not save attempt:', e); }
+}
+
+// ═══════════════════════════════════════════════════════════════
+// MY ASSIGNMENTS
+// ═══════════════════════════════════════════════════════════════
+async function loadMyAssignments() {
+  if (!currentUser) return;
+  const { data: aStudents } = await sb.from('assignment_students')
+    .select('*,assignments(*)')
+    .eq('student_id', currentUser.id)
+    .order('created_at', { ascending: false });
+
+  const pending = (aStudents||[]).filter(a => a.status !== 'completed');
+  const badge = document.getElementById('assignBadge');
+  const tabBadge = document.getElementById('tabAssignBadge');
+  if (pending.length) {
+    badge.textContent = pending.length;
+    badge.style.display = 'inline-block';
+    tabBadge.textContent = ` (${pending.length})`;
+  }
+
+  const c = document.getElementById('myAssignmentsList');
+  if (!aStudents?.length) {
+    c.innerHTML = `<div style="text-align:center;padding:48px;color:#6b7280">
+      <div style="font-size:40px;margin-bottom:12px">📋</div>
+      <div style="font-size:15px;font-weight:700">No Assignments Yet</div>
+      <div style="font-size:13px;margin-top:6px">Your teacher hasn't assigned anything yet.</div></div>`;
+    return;
+  }
+
+  c.innerHTML = aStudents.map(as => {
+    const a = as.assignments;
+    if (!a) return '';
+    const due = a.due_date ? `Due: ${new Date(a.due_date).toLocaleDateString()}` : 'No due date';
+    const isOverdue = a.due_date && new Date(a.due_date) < new Date() && as.status !== 'completed';
+    const statusColor = as.status === 'completed' ? '#10b981' : isOverdue ? '#ef4444' : '#f59e0b';
+    const statusText = as.status === 'completed' ? '✅ Completed' : isOverdue ? '⚠️ Overdue' : '⏳ Pending';
+    return `<div style="background:#fff;border-radius:14px;border:1.5px solid #e5e7eb;padding:20px;margin-bottom:14px">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px">
+        <div>
+          <div style="font-size:16px;font-weight:800;color:#0f172a">${a.title}</div>
+          ${a.instructions ? `<div style="font-size:13px;color:#6b7280;margin-top:4px">${a.instructions}</div>` : ''}
+        </div>
+        <span style="background:${statusColor}20;color:${statusColor};padding:4px 10px;border-radius:20px;font-size:12px;font-weight:700;white-space:nowrap;margin-left:10px">${statusText}</span>
+      </div>
+      <div style="display:flex;gap:12px;flex-wrap:wrap;font-size:12px;color:#6b7280;margin-bottom:14px">
+        <span>📚 Units: ${(a.units||[]).map(u=>`Unit ${u}`).join(', ')}</span>
+        <span>❓ ${a.q_count} questions</span>
+        <span>📅 ${due}</span>
+        ${as.status === 'completed' ? `<span>🎯 Score: ${as.pct}%</span>` : ''}
+      </div>
+      ${as.status !== 'completed' ? `<button onclick="startAssignment(${as.assignment_id},${as.id},'${a.title.replace(/'/g,"\\'")}',${JSON.stringify(a.units)},${JSON.stringify(a.types||['MCQ'])},${a.q_count})"
+        style="background:#6c63ff;color:#fff;border:none;padding:10px 20px;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit">
+        <i class="fas fa-play"></i> Start Assignment
+      </button>` : `<div style="font-size:13px;color:#6b7280">Score: <strong style="color:#10b981">${as.pct}%</strong> — Well done!</div>`}
+    </div>`;
+  }).join('');
+}
+
+function startAssignment(assignmentId, asId, title, units, types, count) {
+  currentTestSource = 'assignment';
+  currentAssignmentId = asId;
+  currentSessionId = 'assign_' + Date.now();
+  selUnits = units;
+  selTypes = types;
+  qCount = count;
+  const pool = getQuestions({ units, types, count, isPaidUser: isPaid });
+  if (!pool.length) { showToast('No questions available for this assignment!'); return; }
+  testQs = pool;
+  currQ = 0; scoreCount = 0; skippedCount = 0;
+  answers = new Array(pool.length).fill(null);
+  inReview = false;
+  document.getElementById('testTitle').textContent = `📋 ${title}`;
+  hideAllPanels();
+  document.getElementById('testArea').style.display = 'block';
+  window.scrollTo(0, 0);
+  renderQuestion();
+}
+
+// ═══════════════════════════════════════════════════════════════
+// MY TESTS
+// ═══════════════════════════════════════════════════════════════
+async function loadMyTests() {
+  if (!currentUser) return;
+  const { data: tStudents } = await sb.from('test_students')
+    .select('*,tests(*)')
+    .eq('student_id', currentUser.id)
+    .order('created_at', { ascending: false });
+
+  const pending = (tStudents||[]).filter(t => t.status !== 'completed');
+  const badge = document.getElementById('testBadge');
+  const tabBadge = document.getElementById('tabTestBadge');
+  if (pending.length) {
+    badge.textContent = pending.length;
+    badge.style.display = 'inline-block';
+    tabBadge.textContent = ` (${pending.length})`;
+  }
+
+  const c = document.getElementById('myTestsList');
+  if (!tStudents?.length) {
+    c.innerHTML = `<div style="text-align:center;padding:48px;color:#6b7280">
+      <div style="font-size:40px;margin-bottom:12px">📝</div>
+      <div style="font-size:15px;font-weight:700">No Tests Yet</div>
+      <div style="font-size:13px;margin-top:6px">Your teacher hasn't assigned any tests yet.</div></div>`;
+    return;
+  }
+
+  c.innerHTML = tStudents.map(ts => {
+    const t = ts.tests;
+    if (!t) return '';
+    const due = t.due_date ? `Due: ${new Date(t.due_date).toLocaleDateString()}` : 'No due date';
+    const isOverdue = t.due_date && new Date(t.due_date) < new Date() && ts.status !== 'completed';
+    const statusColor = ts.status === 'completed' ? '#10b981' : isOverdue ? '#ef4444' : '#f59e0b';
+    const statusText = ts.status === 'completed' ? '✅ Submitted' : ts.status === 'in_progress' ? '🔄 In Progress' : isOverdue ? '⚠️ Overdue' : '⏳ Not Started';
+    const timeStr = t.time_limit ? `⏱ ${t.time_limit} min` : '⏱ No limit';
+    return `<div style="background:#fff;border-radius:14px;border:1.5px solid #e5e7eb;padding:20px;margin-bottom:14px">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px">
+        <div>
+          <div style="font-size:16px;font-weight:800;color:#0f172a">${t.title}</div>
+          ${t.instructions ? `<div style="font-size:13px;color:#6b7280;margin-top:4px">${t.instructions}</div>` : ''}
+        </div>
+        <span style="background:${statusColor}20;color:${statusColor};padding:4px 10px;border-radius:20px;font-size:12px;font-weight:700;white-space:nowrap;margin-left:10px">${statusText}</span>
+      </div>
+      <div style="display:flex;gap:12px;flex-wrap:wrap;font-size:12px;color:#6b7280;margin-bottom:14px">
+        <span>📚 Units: ${(t.units||[]).map(u=>`Unit ${u}`).join(', ')}</span>
+        <span>❓ ${t.q_count} questions</span>
+        <span>${timeStr}</span>
+        <span>📅 ${due}</span>
+        ${ts.status === 'completed' ? `<span>🎯 Score: ${ts.pct}%</span>` : ''}
+      </div>
+      ${ts.status !== 'completed' ? `<button onclick="startStudentTest(${ts.test_id},${ts.id},'${t.title.replace(/'/g,"\\'")}',${JSON.stringify(t.units)},${JSON.stringify(t.types||['MCQ'])},${t.q_count},${t.time_limit||0})"
+        style="background:#ef4444;color:#fff;border:none;padding:10px 20px;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit">
+        <i class="fas fa-play"></i> ${ts.status === 'in_progress' ? 'Continue Test' : 'Start Test'}
+      </button>` : `<div style="font-size:13px;color:#6b7280">Final Score: <strong style="color:#10b981">${ts.pct}%</strong> (${ts.score}/${ts.total} correct)</div>`}
+    </div>`;
+  }).join('');
+}
+
+function startStudentTest(testId, tsId, title, units, types, count, timeLimit) {
+  currentTestSource = 'test';
+  currentTestId = testId;
+  testStudentId = tsId;
+  currentSessionId = 'test_' + Date.now();
+  selUnits = units;
+  selTypes = types;
+  qCount = count;
+  const pool = getQuestions({ units, types, count, isPaidUser: isPaid });
+  if (!pool.length) { showToast('No questions available for this test!'); return; }
+  testQs = pool;
+  currQ = 0; scoreCount = 0; skippedCount = 0;
+  answers = new Array(pool.length).fill(null);
+  inReview = false;
+  document.getElementById('testTitle').textContent = `📝 ${title}`;
+
+  // Update status to in_progress
+  sb.from('test_students').update({ status: 'in_progress', started_at: new Date().toISOString() }).eq('id', tsId);
+
+  // Timer
+  if (timeLimit > 0) {
+    let remaining = timeLimit * 60;
+    const timerEl = document.createElement('div');
+    timerEl.id = 'testTimer';
+    timerEl.style.cssText = 'position:fixed;top:68px;right:20px;background:#ef4444;color:#fff;padding:8px 16px;border-radius:10px;font-size:14px;font-weight:800;z-index:100;box-shadow:0 4px 12px rgba(239,68,68,.4)';
+    document.body.appendChild(timerEl);
+    testTimerInterval = setInterval(() => {
+      remaining--;
+      const m = Math.floor(remaining/60), s = remaining%60;
+      timerEl.textContent = `⏱ ${m}:${s.toString().padStart(2,'0')}`;
+      if (remaining <= 300) timerEl.style.background = '#f59e0b';
+      if (remaining <= 0) {
+        clearInterval(testTimerInterval);
+        timerEl.remove();
+        showToast('⏰ Time is up! Submitting your test…');
+        finishTest();
+      }
+    }, 1000);
+  }
+
+  hideAllPanels();
+  document.getElementById('testArea').style.display = 'block';
+  window.scrollTo(0, 0);
+  renderQuestion();
+}
+
+async function finishTest() {
+  if (testTimerInterval) { clearInterval(testTimerInterval); testTimerInterval = null; }
+  const timerEl = document.getElementById('testTimer');
+  if (timerEl) timerEl.remove();
+
+  if (testStudentId) {
+    const mcqTotal = testQs.filter(q => q.type === 'MCQ').length;
+    const correct = answers.filter((a,i) => a === testQs[i]?.answer).length;
+    const pct = mcqTotal > 0 ? Math.round((correct/mcqTotal)*100) : 0;
+    await sb.from('test_students').update({
+      status: 'completed',
+      score: correct,
+      total: mcqTotal,
+      pct,
+      submitted_at: new Date().toISOString(),
+      answers: JSON.stringify(answers),
+    }).eq('id', testStudentId);
+    testStudentId = null;
+    currentTestSource = 'practice';
+  }
+
+  document.getElementById('testArea').style.display = 'none';
+  document.getElementById('resultsArea').style.display = 'block';
+  window.scrollTo(0,0);
+
+  const mcqTotal = testQs.filter(q => q.type === 'MCQ').length;
+  const correct = answers.filter((a,i) => a === testQs[i]?.answer).length;
+  const wrong = answers.filter((a,i) => a !== null && a !== 'SKIPPED' && a !== testQs[i]?.answer).length;
+  const skipped = answers.filter(a => a === 'SKIPPED').length;
+  const pct = mcqTotal > 0 ? Math.round((correct/mcqTotal)*100) : '--';
+  const ring = document.getElementById('scoreRing');
+  ring.textContent = mcqTotal > 0 ? pct + '%' : '✓';
+  ring.style.background = pct >= 80 ? 'linear-gradient(135deg,#10b981,#059669)' : pct >= 60 ? 'linear-gradient(135deg,#f59e0b,#d97706)' : 'linear-gradient(135deg,#ef4444,#dc2626)';
+  document.getElementById('rsCorrect').textContent = correct;
+  document.getElementById('rsWrong').textContent = wrong;
+  document.getElementById('rsSkipped').textContent = skipped;
+  document.getElementById('resMsg').textContent = typeof pct === 'number'
+    ? pct >= 80 ? '🎉 Excellent work! Test submitted to your teacher.'
+    : pct >= 65 ? '👍 Good effort! Results sent to your teacher.'
+    : '📚 Keep studying! Results sent to your teacher.'
+    : '✅ Test submitted.';
+  document.getElementById('upgradeBox').style.display = 'none';
+}
+</script>
+</body>
+</html>

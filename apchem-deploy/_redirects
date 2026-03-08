@@ -1,0 +1,7 @@
+# AP Chem subdomain redirects
+/practice /apchem/ 302
+/lessons / 302
+/signup /login.html 302
+/login /login.html 302
+/build-test / 302
+/reference / 302
